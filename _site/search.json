@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "ISSS608-VAA",
     "section": "",
-    "text": "Welcome to ISSS608 Visual Analytics and Applications. In this website, you will find my coursework prepared for this course."
+    "text": "Welcome to ISSS608 Visual Analytics and Applications. In this website, you will find my coursework prepared for this course.\n![](images/DALL·E 2025-02-01 15.42.06 - A modern and sleek digital illustration representing ‘Visual Analytics and Applications’. The image should feature a futuristic data dashboard with in.webp)"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html",
@@ -404,5 +404,145 @@
     "title": "Hands-on Exercise 3",
     "section": "Building an animated bubble plot: plot_ly() method",
     "text": "Building an animated bubble plot: plot_ly() method\n\nbp &lt;- globalPop %&gt;%\n  plot_ly(x = ~Old, \n          y = ~Young, \n          size = ~Population, \n          color = ~Continent,\n          sizes = c(2, 100),\n          frame = ~Year, \n          text = ~Country, \n          hoverinfo = \"text\",\n          type = 'scatter',\n          mode = 'markers'\n          ) %&gt;%\n  layout(showlegend = FALSE)\nbp\n\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values.\nWarning: `line.width` does not currently support multiple values."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html",
+    "title": "Hands-on Exercise 4",
+    "section": "",
+    "text": "The code chunk below will be used load these R packages into RStudio environment.\n\npacman::p_load(ggdist, ggridges, ggthemes,\n               colorspace, tidyverse)\n\n\n\n\nIn the code chunk below, read_csv() of readr package is used to import Exam_data.csv into R and saved it into a tibble data.frame.\n\nexam &lt;- read_csv(\"data/Exam_data.csv\")\n\nRows: 322 Columns: 7\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (4): ID, CLASS, GENDER, RACE\ndbl (3): ENGLISH, MATHS, SCIENCE\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html#installing-and-loading-the-packages",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html#installing-and-loading-the-packages",
+    "title": "Hands-on Exercise 4",
+    "section": "",
+    "text": "The code chunk below will be used load these R packages into RStudio environment.\n\npacman::p_load(ggdist, ggridges, ggthemes,\n               colorspace, tidyverse)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html#data-import",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html#data-import",
+    "title": "Hands-on Exercise 4",
+    "section": "",
+    "text": "In the code chunk below, read_csv() of readr package is used to import Exam_data.csv into R and saved it into a tibble data.frame.\n\nexam &lt;- read_csv(\"data/Exam_data.csv\")\n\nRows: 322 Columns: 7\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (4): ID, CLASS, GENDER, RACE\ndbl (3): ENGLISH, MATHS, SCIENCE\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html#plotting-ridgeline-graph-ggridges-method",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html#plotting-ridgeline-graph-ggridges-method",
+    "title": "Hands-on Exercise 4",
+    "section": "Plotting ridgeline graph: ggridges method",
+    "text": "Plotting ridgeline graph: ggridges method\nThe ridgeline plot below is plotted by using geom_density_ridges().\n\nggplot(exam, \n       aes(x = ENGLISH, \n           y = CLASS)) +\n  geom_density_ridges(\n    scale = 3,\n    rel_min_height = 0.01,\n    bandwidth = 3.4,\n    fill = lighten(\"#7097BB\", .3),\n    color = \"white\"\n  ) +\n  scale_x_continuous(\n    name = \"English grades\",\n    expand = c(0, 0)\n    ) +\n  scale_y_discrete(name = NULL, expand = expansion(add = c(0.2, 2.6))) +\n  theme_ridges()"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html#varying-fill-colors-along-the-x-axis",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html#varying-fill-colors-along-the-x-axis",
+    "title": "Hands-on Exercise 4",
+    "section": "Varying fill colors along the x axis",
+    "text": "Varying fill colors along the x axis\n\nggplot(exam, \n       aes(x = ENGLISH, \n           y = CLASS,\n           fill = stat(x))) +\n  geom_density_ridges_gradient(\n    scale = 3,\n    rel_min_height = 0.01) +\n  scale_fill_viridis_c(name = \"Temp. [F]\",\n                       option = \"C\") +\n  scale_x_continuous(\n    name = \"English grades\",\n    expand = c(0, 0)\n  ) +\n  scale_y_discrete(name = NULL, expand = expansion(add = c(0.2, 2.6))) +\n  theme_ridges()\n\nWarning: `stat(x)` was deprecated in ggplot2 3.4.0.\nℹ Please use `after_stat(x)` instead.\n\n\nPicking joint bandwidth of 3.18"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html#mapping-the-probabilities-directly-onto-colour",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html#mapping-the-probabilities-directly-onto-colour",
+    "title": "Hands-on Exercise 4",
+    "section": "Mapping the probabilities directly onto colour",
+    "text": "Mapping the probabilities directly onto colour\nFigure below is plotted by mapping the probabilities calculated by using stat(ecdf) which represent the empirical cumulative density function for the distribution of English score.\n\nggplot(exam,\n       aes(x = ENGLISH, \n           y = CLASS, \n           fill = 0.5 - abs(0.5-stat(ecdf)))) +\n  stat_density_ridges(geom = \"density_ridges_gradient\", \n                      calc_ecdf = TRUE) +\n  scale_fill_viridis_c(name = \"Tail probability\",\n                       direction = -1) +\n  theme_ridges()\n\nPicking joint bandwidth of 3.18"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html#ridgeline-plots-with-quantile-lines",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html#ridgeline-plots-with-quantile-lines",
+    "title": "Hands-on Exercise 4",
+    "section": "Ridgeline plots with quantile lines",
+    "text": "Ridgeline plots with quantile lines\nBy using geom_density_ridges_gradient(), we can colour the ridgeline plot by quantile, via the calculated stat(quantile) aesthetic as shown in the figure below.\n\nggplot(exam,\n       aes(x = ENGLISH, \n           y = CLASS, \n           fill = factor(stat(quantile))\n           )) +\n  stat_density_ridges(\n    geom = \"density_ridges_gradient\",\n    calc_ecdf = TRUE, \n    quantiles = 4,\n    quantile_lines = TRUE) +\n  scale_fill_viridis_d(name = \"Quartiles\") +\n  theme_ridges()\n\nPicking joint bandwidth of 3.18\n\n\n\n\n\n\n\n\n\nInstead of using number to define the quantiles, we can also specify quantiles by cut points such as 2.5% and 97.5% tails to colour the ridgeline plot as shown in the figure below.\n\nggplot(exam,\n       aes(x = ENGLISH, \n           y = CLASS, \n           fill = factor(stat(quantile))\n           )) +\n  stat_density_ridges(\n    geom = \"density_ridges_gradient\",\n    calc_ecdf = TRUE, \n    quantiles = c(0.025, 0.975)\n    ) +\n  scale_fill_manual(\n    name = \"Probability\",\n    values = c(\"#FF0000A0\", \"#A0A0A0A0\", \"#0000FFA0\"),\n    labels = c(\"(0, 0.025]\", \"(0.025, 0.975]\", \"(0.975, 1]\")\n  ) +\n  theme_ridges()\n\nPicking joint bandwidth of 3.18"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html#plotting-a-half-eye-graph",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html#plotting-a-half-eye-graph",
+    "title": "Hands-on Exercise 4",
+    "section": "Plotting a Half Eye graph",
+    "text": "Plotting a Half Eye graph\n\nggplot(exam, \n       aes(x = RACE, \n           y = ENGLISH)) +\n  stat_halfeye(adjust = 0.5,\n               justification = -0.2,\n               .width = 0,\n               point_colour = NA)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html#adding-the-boxplot-with-geom_boxplot",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html#adding-the-boxplot-with-geom_boxplot",
+    "title": "Hands-on Exercise 4",
+    "section": "Adding the boxplot with geom_boxplot()",
+    "text": "Adding the boxplot with geom_boxplot()\n\nggplot(exam, \n       aes(x = RACE, \n           y = ENGLISH)) +\n  stat_halfeye(adjust = 0.5,\n               justification = -0.2,\n               .width = 0,\n               point_colour = NA) +\n  geom_boxplot(width = .20,\n               outlier.shape = NA)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html#adding-the-dot-plots-with-stat_dots",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html#adding-the-dot-plots-with-stat_dots",
+    "title": "Hands-on Exercise 4",
+    "section": "Adding the Dot Plots with stat_dots()",
+    "text": "Adding the Dot Plots with stat_dots()\n\nggplot(exam, \n       aes(x = RACE, \n           y = ENGLISH)) +\n  stat_halfeye(adjust = 0.5,\n               justification = -0.2,\n               .width = 0,\n               point_colour = NA) +\n  geom_boxplot(width = .20,\n               outlier.shape = NA) +\n  stat_dots(side = \"left\", \n            justification = 1.2, \n            binwidth = .5,\n            dotsize = 2)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html",
+    "title": "Hands-on Exercise 4 (Part 1)",
+    "section": "",
+    "text": "The code chunk below will be used load these R packages into RStudio environment.\n\npacman::p_load(ggdist, ggridges, ggthemes,\n               colorspace, tidyverse)\n\n\n\n\nIn the code chunk below, read_csv() of readr package is used to import Exam_data.csv into R and saved it into a tibble data.frame.\n\nexam &lt;- read_csv(\"data/Exam_data.csv\")\n\nRows: 322 Columns: 7\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (4): ID, CLASS, GENDER, RACE\ndbl (3): ENGLISH, MATHS, SCIENCE\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#installing-and-loading-the-packages",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#installing-and-loading-the-packages",
+    "title": "Hands-on Exercise 4 (Part 1)",
+    "section": "",
+    "text": "The code chunk below will be used load these R packages into RStudio environment.\n\npacman::p_load(ggdist, ggridges, ggthemes,\n               colorspace, tidyverse)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#data-import",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#data-import",
+    "title": "Hands-on Exercise 4 (Part 1)",
+    "section": "",
+    "text": "In the code chunk below, read_csv() of readr package is used to import Exam_data.csv into R and saved it into a tibble data.frame.\n\nexam &lt;- read_csv(\"data/Exam_data.csv\")\n\nRows: 322 Columns: 7\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (4): ID, CLASS, GENDER, RACE\ndbl (3): ENGLISH, MATHS, SCIENCE\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#plotting-ridgeline-graph-ggridges-method",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#plotting-ridgeline-graph-ggridges-method",
+    "title": "Hands-on Exercise 4 (Part 1)",
+    "section": "Plotting ridgeline graph: ggridges method",
+    "text": "Plotting ridgeline graph: ggridges method\nThe ridgeline plot below is plotted by using geom_density_ridges().\n\nggplot(exam, \n       aes(x = ENGLISH, \n           y = CLASS)) +\n  geom_density_ridges(\n    scale = 3,\n    rel_min_height = 0.01,\n    bandwidth = 3.4,\n    fill = lighten(\"#7097BB\", .3),\n    color = \"white\"\n  ) +\n  scale_x_continuous(\n    name = \"English grades\",\n    expand = c(0, 0)\n    ) +\n  scale_y_discrete(name = NULL, expand = expansion(add = c(0.2, 2.6))) +\n  theme_ridges()"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#varying-fill-colors-along-the-x-axis",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#varying-fill-colors-along-the-x-axis",
+    "title": "Hands-on Exercise 4 (Part 1)",
+    "section": "Varying fill colors along the x axis",
+    "text": "Varying fill colors along the x axis\n\nggplot(exam, \n       aes(x = ENGLISH, \n           y = CLASS,\n           fill = stat(x))) +\n  geom_density_ridges_gradient(\n    scale = 3,\n    rel_min_height = 0.01) +\n  scale_fill_viridis_c(name = \"Temp. [F]\",\n                       option = \"C\") +\n  scale_x_continuous(\n    name = \"English grades\",\n    expand = c(0, 0)\n  ) +\n  scale_y_discrete(name = NULL, expand = expansion(add = c(0.2, 2.6))) +\n  theme_ridges()\n\nWarning: `stat(x)` was deprecated in ggplot2 3.4.0.\nℹ Please use `after_stat(x)` instead.\n\n\nPicking joint bandwidth of 3.18"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#mapping-the-probabilities-directly-onto-colour",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#mapping-the-probabilities-directly-onto-colour",
+    "title": "Hands-on Exercise 4 (Part 1)",
+    "section": "Mapping the probabilities directly onto colour",
+    "text": "Mapping the probabilities directly onto colour\nFigure below is plotted by mapping the probabilities calculated by using stat(ecdf) which represent the empirical cumulative density function for the distribution of English score.\n\nggplot(exam,\n       aes(x = ENGLISH, \n           y = CLASS, \n           fill = 0.5 - abs(0.5-stat(ecdf)))) +\n  stat_density_ridges(geom = \"density_ridges_gradient\", \n                      calc_ecdf = TRUE) +\n  scale_fill_viridis_c(name = \"Tail probability\",\n                       direction = -1) +\n  theme_ridges()\n\nPicking joint bandwidth of 3.18"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#ridgeline-plots-with-quantile-lines",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#ridgeline-plots-with-quantile-lines",
+    "title": "Hands-on Exercise 4 (Part 1)",
+    "section": "Ridgeline plots with quantile lines",
+    "text": "Ridgeline plots with quantile lines\nBy using geom_density_ridges_gradient(), we can colour the ridgeline plot by quantile, via the calculated stat(quantile) aesthetic as shown in the figure below.\n\nggplot(exam,\n       aes(x = ENGLISH, \n           y = CLASS, \n           fill = factor(stat(quantile))\n           )) +\n  stat_density_ridges(\n    geom = \"density_ridges_gradient\",\n    calc_ecdf = TRUE, \n    quantiles = 4,\n    quantile_lines = TRUE) +\n  scale_fill_viridis_d(name = \"Quartiles\") +\n  theme_ridges()\n\nPicking joint bandwidth of 3.18\n\n\n\n\n\n\n\n\n\nInstead of using number to define the quantiles, we can also specify quantiles by cut points such as 2.5% and 97.5% tails to colour the ridgeline plot as shown in the figure below.\n\nggplot(exam,\n       aes(x = ENGLISH, \n           y = CLASS, \n           fill = factor(stat(quantile))\n           )) +\n  stat_density_ridges(\n    geom = \"density_ridges_gradient\",\n    calc_ecdf = TRUE, \n    quantiles = c(0.025, 0.975)\n    ) +\n  scale_fill_manual(\n    name = \"Probability\",\n    values = c(\"#FF0000A0\", \"#A0A0A0A0\", \"#0000FFA0\"),\n    labels = c(\"(0, 0.025]\", \"(0.025, 0.975]\", \"(0.975, 1]\")\n  ) +\n  theme_ridges()\n\nPicking joint bandwidth of 3.18"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#plotting-a-half-eye-graph",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#plotting-a-half-eye-graph",
+    "title": "Hands-on Exercise 4 (Part 1)",
+    "section": "Plotting a Half Eye graph",
+    "text": "Plotting a Half Eye graph\n\nggplot(exam, \n       aes(x = RACE, \n           y = ENGLISH)) +\n  stat_halfeye(adjust = 0.5,\n               justification = -0.2,\n               .width = 0,\n               point_colour = NA)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#adding-the-boxplot-with-geom_boxplot",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#adding-the-boxplot-with-geom_boxplot",
+    "title": "Hands-on Exercise 4 (Part 1)",
+    "section": "Adding the boxplot with geom_boxplot()",
+    "text": "Adding the boxplot with geom_boxplot()\n\nggplot(exam, \n       aes(x = RACE, \n           y = ENGLISH)) +\n  stat_halfeye(adjust = 0.5,\n               justification = -0.2,\n               .width = 0,\n               point_colour = NA) +\n  geom_boxplot(width = .20,\n               outlier.shape = NA)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#adding-the-dot-plots-with-stat_dots",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#adding-the-dot-plots-with-stat_dots",
+    "title": "Hands-on Exercise 4 (Part 1)",
+    "section": "Adding the Dot Plots with stat_dots()",
+    "text": "Adding the Dot Plots with stat_dots()\n\nggplot(exam, \n       aes(x = RACE, \n           y = ENGLISH)) +\n  stat_halfeye(adjust = 0.5,\n               justification = -0.2,\n               .width = 0,\n               point_colour = NA) +\n  geom_boxplot(width = .20,\n               outlier.shape = NA) +\n  stat_dots(side = \"left\", \n            justification = 1.2, \n            binwidth = .5,\n            dotsize = 2)"
   }
 ]
