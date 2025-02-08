@@ -1,0 +1,38 @@
+---
+title: "In-class Exercise 4"
+author: "Kenneth Yong"
+---
+# Getting Started 
+
+## Load Packages and Data
+
+```{r}
+pacman::p_load(ggdist, ggridges, ggthemes,
+               colorspace, tidyverse)
+```
+
+```{r}
+exam <- read_csv("data/Exam_data.csv")
+```
+
+# Visualising the target
+
+## Boxplot
+
+```{r}
+ggplot(data = exam,
+       aes(x = ENGLISH,
+           y = CLASS)) +
+  geom_boxplot()
+```
+
+## Ridgeline Plot
+
+```{r}
+ggplot(data = exam,
+       aes(x = ENGLISH,
+           y = CLASS)) +
+  geom_density_ridges(
+    bandwidth = 3.4,
+    color = "white")
+```

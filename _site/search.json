@@ -747,5 +747,40 @@
     "title": "Hands-on Exercise 4 (Part 2)",
     "section": "Visualising Regression Parameters: ggcoefstats() methods",
     "text": "Visualising Regression Parameters: ggcoefstats() methods\nIn the code below, ggcoefstats() of ggstatsplot package to visualise the parameters of a regression model.\n\nggcoefstats(model1, \n            output = \"plot\")"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex04/In-class_Ex04.html",
+    "href": "In-class_Ex/In-class_Ex04/In-class_Ex04.html",
+    "title": "In-class Exercise 4",
+    "section": "",
+    "text": "pacman::p_load(ggdist, ggridges, ggthemes,\n               colorspace, tidyverse)\n\n\nexam &lt;- read_csv(\"data/Exam_data.csv\")\n\nRows: 322 Columns: 7\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (4): ID, CLASS, GENDER, RACE\ndbl (3): ENGLISH, MATHS, SCIENCE\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex04/In-class_Ex04.html#load-packages-and-data",
+    "href": "In-class_Ex/In-class_Ex04/In-class_Ex04.html#load-packages-and-data",
+    "title": "In-class Exercise 4",
+    "section": "",
+    "text": "pacman::p_load(ggdist, ggridges, ggthemes,\n               colorspace, tidyverse)\n\n\nexam &lt;- read_csv(\"data/Exam_data.csv\")\n\nRows: 322 Columns: 7\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (4): ID, CLASS, GENDER, RACE\ndbl (3): ENGLISH, MATHS, SCIENCE\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex04/In-class_Ex04.html#visualising-the-target",
+    "href": "In-class_Ex/In-class_Ex04/In-class_Ex04.html#visualising-the-target",
+    "title": "In-class Exercise 4",
+    "section": "",
+    "text": "ggplot(data = exam,\n       aes(x = ENGLISH,\n           y = CLASS)) +\n  geom_boxplot()\n\n\n\n\n\n\n\n\n\nggplot(data = exam,\n       aes(x = ENGLISH,\n           y = CLASS)) +\n  geom_density_ridges(color = \"white\")\n\nPicking joint bandwidth of 3.18"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex04/In-class_Ex04.html#boxplot",
+    "href": "In-class_Ex/In-class_Ex04/In-class_Ex04.html#boxplot",
+    "title": "In-class Exercise 4",
+    "section": "Boxplot",
+    "text": "Boxplot\n\nggplot(data = exam,\n       aes(x = ENGLISH,\n           y = CLASS)) +\n  geom_boxplot()"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex04/In-class_Ex04.html#ridgeline-plot",
+    "href": "In-class_Ex/In-class_Ex04/In-class_Ex04.html#ridgeline-plot",
+    "title": "In-class Exercise 4",
+    "section": "Ridgeline Plot",
+    "text": "Ridgeline Plot\n\nggplot(data = exam,\n       aes(x = ENGLISH,\n           y = CLASS)) +\n  geom_density_ridges(\n    bandwidth = 3.4,\n    color = \"white\")"
   }
 ]
