@@ -1,0 +1,39 @@
+---
+title: "In-class Exercise 5"
+author: "Kenneth Yong"
+---
+
+# Getting Started
+
+```{r}
+pacman::p_load(tidyverse, readxl, SmartEDA, easystats, gtsummary)
+```
+
+# Importing Data
+
+```{r}
+car_resale <- read_xls("data/ToyotaCorolla.xls", "data")
+```
+
+```{r}
+summary(car_resale)
+```
+
+```{r}
+glimpse(car_resale)
+```
+```{r}
+list(car_resale)
+```
+
+Data Overview
+
+```{r}
+car_resale %>%
+  ExpData(type = 1)
+```
+
+```{r}
+car_resale %>%
+  ExpData(type = 2)
+```
