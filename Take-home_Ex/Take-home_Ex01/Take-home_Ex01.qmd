@@ -136,7 +136,7 @@ By running the code chunk below, we can confirm that there are no missing values
 colSums(is.na(df))
 ```
 
-### Recoding
+### Data Manipulation
 
 This code chunk below uses the `mutate()` function to create a new column called Profit in the data frame `df`. It calculates profit by subtracting Operational_Cost_USD from Revenue_per_Voyage_USD for each row. This operation preserves the existing columns while adding the new Profit column.
 
@@ -252,4 +252,49 @@ p <- ggplot(df_monthly, aes(x = Month, y = Average_Profit, group = 1,
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ggplotly(p, tooltip = "text")
+```
+
+```{r}
+# Aggregate by month
+df_monthly <- df %>%
+  mutate(Month = format(Date, "%Y-%m")) %>%
+  group_by(Month) %>%
+  summarize(Average_Revenue = mean(Revenue_per_Voyage_USD, na.rm = TRUE),
+            Average_Cost = mean(Operational_Cost_USD, na.rm = TRUE),
+            Average_Profit = mean(Profit, na.rm = TRUE)) %>%
+  mutate(Month = as.Date(paste0(Month, "-01")))
+
+# Revenue Plot
+p1 <- ggplot(df_monthly, aes(x = Month, y = Average_Revenue)) +
+  geom_line(color = "green") +
+  labs(title = "Monthly Revenue Trend",
+       x = "Month",
+       y = "Revenue (USD)") +
+  scale_x_date(date_breaks = "1 month", date_labels = "%b %Y") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Operational Cost Plot
+p2 <- ggplot(df_monthly, aes(x = Month, y = Average_Cost)) +
+  geom_line(color = "red") +
+  labs(title = "Monthly Operational Cost Trend",
+       x = "Month",
+       y = "Operational Cost (USD)") +
+  scale_x_date(date_breaks = "1 month", date_labels = "%b %Y") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Profit Plot
+p3 <- ggplot(df_monthly, aes(x = Month, y = Average_Profit)) +
+  geom_line(color = "steelblue") +
+  labs(title = "Monthly Profit Trend",
+       x = "Month",
+       y = "Profit (USD)") +
+  scale_x_date(date_breaks = "1 month", date_labels = "%b %Y") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Combine plots using patchwork
+combined_plot <- p1 / p2 / p3
+combined_plot
 ```
