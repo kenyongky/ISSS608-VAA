@@ -1264,7 +1264,7 @@
     "href": "In-class_Ex/In-class_Ex05/In-class_Ex05.html",
     "title": "In-class Exercise 5",
     "section": "",
-    "text": "pacman::p_load(tidyverse, readxl, SmartEDA, easystats, gtsummary)"
+    "text": "pacman::p_load(tidyverse, readxl, SmartEDA, easystats, gtsummary, ggstatsplot)"
   },
   {
     "objectID": "In-class_Ex/In-class_Ex05/In-class_Ex05.html#check-for-multicollinearity",
@@ -1293,5 +1293,12 @@
     "title": "In-class Exercise 5",
     "section": "Regression Model",
     "text": "Regression Model\n\nmodel &lt;- lm(Price ~ Age_08_04 + Mfg_Year + KM +\n              Weight + Guarantee_Period, data = car_resale)\nmodel\n\n\nCall:\nlm(formula = Price ~ Age_08_04 + Mfg_Year + KM + Weight + Guarantee_Period, \n    data = car_resale)\n\nCoefficients:\n     (Intercept)         Age_08_04          Mfg_Year                KM  \n      -2.637e+06        -1.409e+01         1.315e+03        -2.323e-02  \n          Weight  Guarantee_Period  \n       1.903e+01         2.770e+01  \n\nplot(model)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex05/In-class_Ex05.html#summary-of-parameters",
+    "href": "In-class_Ex/In-class_Ex05/In-class_Ex05.html#summary-of-parameters",
+    "title": "In-class Exercise 5",
+    "section": "Summary of Parameters",
+    "text": "Summary of Parameters\n\np_model1 &lt;- parameters(model1)\np_model1\n\nParameter        | Coefficient |       SE |              95% CI | t(1431) |      p\n----------------------------------------------------------------------------------\n(Intercept)      |    -2185.52 |   972.19 | [-4092.59, -278.45] |   -2.25 | 0.025 \nAge 08 04        |     -119.49 |     2.76 | [ -124.91, -114.08] |  -43.29 | &lt; .001\nKM               |       -0.02 | 1.20e-03 | [   -0.03,   -0.02] |  -20.04 | &lt; .001\nWeight           |       19.72 |     0.84 | [   18.08,   21.36] |   23.53 | &lt; .001\nGuarantee Period |       26.82 |    12.61 | [    2.08,   51.56] |    2.13 | 0.034 \n\n\n\nUncertainty intervals (equal-tailed) and p-values (two-tailed) computed\n  using a Wald t-distribution approximation.\n\n\n\nplot(parameters(model1))\n\n\n\n\n\n\n\n\n\nggcoefstats(model1,\n            output = \"plot\"\n            )"
   }
 ]

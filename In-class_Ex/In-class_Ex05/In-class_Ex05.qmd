@@ -6,7 +6,7 @@ author: "Kenneth Yong"
 # Getting Started
 
 ```{r}
-pacman::p_load(tidyverse, readxl, SmartEDA, easystats, gtsummary)
+pacman::p_load(tidyverse, readxl, SmartEDA, easystats, gtsummary, ggstatsplot)
 ```
 
 # Importing Data
@@ -140,4 +140,21 @@ plot(checkn)
 checkh <- check_heteroscedasticity(model1)
 checkh
 plot(checkh)
+```
+
+## Summary of Parameters
+
+```{r}
+p_model1 <- parameters(model1)
+p_model1
+```
+
+```{r}
+plot(parameters(model1))
+```
+
+```{r}
+ggcoefstats(model1,
+            output = "plot"
+            )
 ```

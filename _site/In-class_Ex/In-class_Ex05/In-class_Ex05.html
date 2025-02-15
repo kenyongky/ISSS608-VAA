@@ -240,6 +240,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#check-for-multicollinearity" id="toc-check-for-multicollinearity" class="nav-link" data-scroll-target="#check-for-multicollinearity">Check for multicollinearity</a></li>
   <li><a href="#check-for-normality" id="toc-check-for-normality" class="nav-link" data-scroll-target="#check-for-normality">Check for normality</a></li>
   <li><a href="#check-for-heteroscedasticity" id="toc-check-for-heteroscedasticity" class="nav-link" data-scroll-target="#check-for-heteroscedasticity">Check for heteroscedasticity</a></li>
+  <li><a href="#summary-of-parameters" id="toc-summary-of-parameters" class="nav-link" data-scroll-target="#summary-of-parameters">Summary of Parameters</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -275,7 +276,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="getting-started" class="level1">
 <h1>Getting Started</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, readxl, SmartEDA, easystats, gtsummary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, readxl, SmartEDA, easystats, gtsummary, ggstatsplot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="importing-data" class="level1">
@@ -769,6 +770,49 @@ High Correlation
 <div>
 <figure class="figure">
 <p><img src="In-class_Ex05_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="summary-of-parameters" class="level2">
+<h2 class="anchored" data-anchor-id="summary-of-parameters">Summary of Parameters</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>p_model1 <span class="ot">&lt;-</span> <span class="fu">parameters</span>(model1)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>p_model1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Parameter        | Coefficient |       SE |              95% CI | t(1431) |      p
+----------------------------------------------------------------------------------
+(Intercept)      |    -2185.52 |   972.19 | [-4092.59, -278.45] |   -2.25 | 0.025 
+Age 08 04        |     -119.49 |     2.76 | [ -124.91, -114.08] |  -43.29 | &lt; .001
+KM               |       -0.02 | 1.20e-03 | [   -0.03,   -0.02] |  -20.04 | &lt; .001
+Weight           |       19.72 |     0.84 | [   18.08,   21.36] |   23.53 | &lt; .001
+Guarantee Period |       26.82 |    12.61 | [    2.08,   51.56] |    2.13 | 0.034 </code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed
+  using a Wald t-distribution approximation.</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">parameters</span>(model1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="In-class_Ex05_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggcoefstats</span>(model1,</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">output =</span> <span class="st">"plot"</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>            )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="In-class_Ex05_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
