@@ -1,6 +1,255 @@
 ---
-title: "Take-home Exercise 1"
+title: "Take-home Exercise 1: Exploring Ship Performance via Data Visualisation"
 author: "Kenneth Yong"
 date: "February 1, 2025"
 date-modified: "last-modified"
 ---
+
+# Overview
+
+## Background
+
+The maritime industry is a key driver of global trade, directly impacting supply chains and economic growth. Efficient ship performance management is essential for maximizing profitability, reducing operational costs, and maintaining competitive advantages. By analyzing revenue generation, cost structures, and profitability across different ship types and routes, businesses can optimize fleet management strategies. Additionally, understanding operational efficiency and seasonal impacts allows companies to make data-driven decisions, improve resource allocation, and enhance overall financial performance, ultimately driving sustainable growth and profitability.
+
+## Objectives
+
+As a graphical editor of a media company, this article aims to:
+
+1.  **Optimize Financial Performance**: Analyze revenue, cost structures, and profitability across ship types and routes to identify key drivers of financial success.
+2.  **Enhance Operational Efficiency**: Examine operational metrics to discover cost-saving opportunities and improve fleet utilization.
+3.  **Inform Strategic Decision-Making**: Leverage data insights to guide investment decisions, route planning, and capacity management for sustainable growth.
+
+# Getting Started
+
+## Installing and loading packages
+
+The following R packages will be used:
+
+-   **tidyverse:** A collection of R packages designed for data manipulation, exploration, and visualization, providing a consistent and easy-to-use syntax.
+
+-   **plotly**: R package for creating interactive and dynamic data visualizations.
+
+-   **ggrepel:** Enhances ggplot2 plots by preventing text labels from overlapping, ensuring clear and readable annotations.
+
+-   **ggthemes:** Offers additional themes and color schemes for ggplot2, enabling more visually appealing and customized plots.
+
+-   **patchwork:** Facilitates combining multiple ggplot2 plots into a single layout, making it easy to create complex multi-panel visualizations.
+
+-   **ggridges:** Creates ridge plots (or joy plots) to visualize the distribution of a continuous variable across multiple categories.
+
+-   **ggdist:** Provides tools for visualizing distributions and uncertainty, including interval plots and density plots.
+
+-   **scales:** Allows customization of axis labels, breaks, and scales in ggplot2, improving plot readability and presentation.
+
+```{r}
+pacman::p_load(tidyverse, plotly,
+               ggrepel, ggthemes,
+               ggridges, ggdist,
+               patchwork, scales)
+```
+
+## The Dataset
+
+### About this dataset
+
+The Ship Performance Dataset is a synthetic, yet realistic collection of data designed to represent key operational metrics and attributes of various ship types operating in the Gulf of Guinea. It includes a wide range of variables such as speed, engine power, maintenance status, cargo weight, operational costs, revenue, and efficiency. This dataset can be found on Kaggle at this [link](https://www.kaggle.com/datasets/jeleeladekunlefijabi/ship-performance-clustering-dataset/data).
+
+**Key Information:**
+
+-   File Format: CSV
+
+-   Number of Rows: 2736
+
+-   Number of Columns: 18
+
+**Column Information:**
+
+Categorical Variables:
+
+-   Ship_Type
+
+-   Route_Type
+
+-   Engine_Type
+
+-   Maintenance_Status
+
+-   Weather_Condition
+
+Continuous Variables:
+
+-   Date
+
+-   Speed_Over_Ground_knots
+
+-   Engine_Power_kW
+
+-   Distance_Traveled_nm
+
+-   Draft_meters
+
+-   Cargo_Weight_tons
+
+-   Operational_Cost_USD
+
+-   Revenue_per_Voyage_USD
+
+-   Turnaround_Time_hours
+
+-   Efficiency_nm_per_kWh
+
+-   Seasonal_Impact_Score
+
+-   Weekly_Voyage_Count
+
+-   Average_Load_Percentage
+
+### Importing the data
+
+Dataset is initialised to `df`.
+
+```{r}
+df <- read_csv("data/Ship_Performance_Dataset.csv")
+```
+
+## Data Preparation
+
+A brief look at the data using `glimpse().`
+
+```{r}
+glimpse(df)
+```
+
+### Checking for duplicates
+
+By using `duplicated`, we can confirm that there are no duplicated entries in the dataset.
+
+```{r}
+df[duplicated(df),]
+```
+
+### Checking for missing values
+
+By running the code chunk below, we can confirm that there are no missing values in each column.
+
+```{r}
+colSums(is.na(df))
+```
+
+### Recoding
+
+This code chunk below uses the `mutate()` function to create a new column called Profit in the data frame `df`. It calculates profit by subtracting Operational_Cost_USD from Revenue_per_Voyage_USD for each row. This operation preserves the existing columns while adding the new Profit column.
+
+```{r}
+df <- df %>%
+  mutate(Profit = Revenue_per_Voyage_USD - Operational_Cost_USD)
+```
+
+Final glimpse at the dataset:
+
+```{r}
+glimpse(df)
+```
+
+# EDA 1: Distribution of profit across ship types and shipping routes
+
+::: panel-tabset
+## Profit by Ship Type
+
+```{r}
+p <- ggplot(df, aes(x = Ship_Type, y = Profit, fill = Ship_Type)) +
+  geom_boxplot() +
+  labs(title = "Distribution of Profit Across Ship Types", 
+       x = "Ship Type", 
+       y = "Profit (USD)") +
+  scale_fill_brewer(palette = "Set3") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+ggplotly(p, tooltip = "y")
+```
+
+## Profit by Route Type
+
+```{r}
+p <- ggplot(df, aes(x = Route_Type, y = Profit, fill = Route_Type)) +
+  geom_boxplot() +
+  labs(title = "Distribution of Profit Across Shipping Routes", 
+       x = "Route Type", 
+       y = "Profit (USD)") +
+  scale_fill_brewer(palette = "Set3") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+ggplotly(p, tooltip = "y")
+```
+
+## Profit by Engine Type
+
+```{r}
+p <- ggplot(df, aes(x = Engine_Type, y = Profit, fill = Engine_Type)) +
+  geom_boxplot() +
+  labs(title = "Distribution of Profit Across Engine Types", 
+       x = "Engine Type", 
+       y = "Profit (USD)") +
+  scale_fill_brewer(palette = "Set3") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+ggplotly(p, tooltip = "y")
+```
+
+## Profit by Maintenance Status
+
+```{r}
+p <- ggplot(df, aes(x = Maintenance_Status, y = Profit, fill = Maintenance_Status)) +
+  geom_boxplot() +
+  labs(title = "Distribution of Profit Across Maintenance Status", 
+       x = "Maintenance Status", 
+       y = "Profit (USD)") +
+  scale_fill_brewer(palette = "Set3") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+ggplotly(p, tooltip = "y")
+```
+
+## Profit by Weather Condition
+
+```{r}
+p <- ggplot(df, aes(x = Weather_Condition, y = Profit, fill = Weather_Condition)) +
+  geom_boxplot() +
+  labs(title = "Distribution of Profit Across Weather Conditions", 
+       x = "Weather Condition", 
+       y = "Profit (USD)") +
+  scale_fill_brewer(palette = "Set3") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+ggplotly(p, tooltip = "y")
+```
+:::
+
+# EDA 2: Time Series: Profit Trend Over Time
+
+```{r}
+df_monthly <- df %>%
+  mutate(Month = format(Date, "%Y-%m")) %>%
+  group_by(Month) %>%
+  summarize(Average_Profit = mean(Profit, na.rm = TRUE)) %>%
+  mutate(Month = as.Date(paste0(Month, "-01")))
+
+p <- ggplot(df_monthly, aes(x = Month, y = Average_Profit, group = 1, 
+                            text = paste("Month:", format(Month, "%b %Y"), 
+                                         "<br>Avg Profit:", round(Average_Profit, 2)))) +
+  geom_line(color = "steelblue") +
+  geom_point(color = "darkblue", size = 2) +
+  labs(title = "Monthly Trend of Profit",
+       x = "Month",
+       y = "Average Profit (USD)") +
+  scale_x_date(date_breaks = "1 month", date_labels = "%b %Y") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplotly(p, tooltip = "text")
+```
