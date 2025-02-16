@@ -1,8 +1,12 @@
 ---
-title: "Take-home Exercise 1: Exploring Ship Performance via Data Visualisation"
+title: "Take-home Exercise 1: Exploring Ship Performance: Financial Insights via Visualisation"
 author: "Kenneth Yong"
 date: "February 1, 2025"
 date-modified: "last-modified"
+format: 
+  html: 
+    code-fold: true
+    code-summary: Show the code
 ---
 
 # Overview
@@ -48,9 +52,9 @@ pacman::p_load(tidyverse, plotly,
                patchwork, scales)
 ```
 
-## The Dataset
+# The Dataset
 
-### About this dataset
+## About this dataset
 
 The Ship Performance Dataset is a synthetic, yet realistic collection of data designed to represent key operational metrics and attributes of various ship types operating in the Gulf of Guinea. It includes a wide range of variables such as speed, engine power, maintenance status, cargo weight, operational costs, revenue, and efficiency. This dataset can be found on Kaggle at this [link](https://www.kaggle.com/datasets/jeleeladekunlefijabi/ship-performance-clustering-dataset/data).
 
@@ -104,7 +108,7 @@ Continuous Variables:
 
 -   Average_Load_Percentage
 
-### Importing the data
+## Importing the data
 
 Dataset is initialised to `df`.
 
@@ -145,19 +149,107 @@ df <- df %>%
   mutate(Profit = Revenue_per_Voyage_USD - Operational_Cost_USD)
 ```
 
-Final glimpse at the dataset:
+The following code chunks prepare monthly aggregated data for each ship type by converting `Date` into a monthly format, grouping the data by month, and calculating average values for `Revenue_per_Voyage_USD`, `Operational_Cost_USD`, and `Profit` while ignoring missing values. It then converts the month back to a date format for consistent plotting, enabling trend analysis of revenue, cost, and profit over time.
+
+**Overall**
+
+```{r}
+df_monthly <- df %>%
+  mutate(Month = format(Date, "%Y-%m")) %>%
+  group_by(Month) %>%
+  summarize(Average_Revenue = mean(Revenue_per_Voyage_USD, na.rm = TRUE),
+            Average_Cost = mean(Operational_Cost_USD, na.rm = TRUE),
+            Average_Profit = mean(Profit, na.rm = TRUE)) %>%
+  mutate(Month = as.Date(paste0(Month, "-01")))
+```
+
+**Bulk Carrier**
+
+```{r}
+df_bulk_monthly <- df %>%
+  filter(Ship_Type == "Bulk Carrier") %>%
+  mutate(Month = format(Date, "%Y-%m")) %>%
+  group_by(Month) %>%
+  summarize(Average_Revenue = mean(Revenue_per_Voyage_USD, na.rm = TRUE),
+            Average_Cost = mean(Operational_Cost_USD, na.rm = TRUE),
+            Average_Profit = mean(Profit, na.rm = TRUE)) %>%
+  mutate(Month = as.Date(paste0(Month, "-01")))
+```
+
+**Container Ship**
+
+```{r}
+df_container_monthly <- df %>%
+  filter(Ship_Type == "Container Ship") %>%
+  mutate(Month = format(Date, "%Y-%m")) %>%
+  group_by(Month) %>%
+  summarize(Average_Revenue = mean(Revenue_per_Voyage_USD, na.rm = TRUE),
+            Average_Cost = mean(Operational_Cost_USD, na.rm = TRUE),
+            Average_Profit = mean(Profit, na.rm = TRUE)) %>%
+  mutate(Month = as.Date(paste0(Month, "-01")))
+```
+
+**Fish Carrier**
+
+```{r}
+df_fish_monthly <- df %>%
+  filter(Ship_Type == "Fish Carrier") %>%
+  mutate(Month = format(Date, "%Y-%m")) %>%
+  group_by(Month) %>%
+  summarize(Average_Revenue = mean(Revenue_per_Voyage_USD, na.rm = TRUE),
+            Average_Cost = mean(Operational_Cost_USD, na.rm = TRUE),
+            Average_Profit = mean(Profit, na.rm = TRUE)) %>%
+  mutate(Month = as.Date(paste0(Month, "-01")))
+```
+
+**Tanker**
+
+```{r}
+df_tanker_monthly <- df %>%
+  filter(Ship_Type == "Tanker") %>%
+  mutate(Month = format(Date, "%Y-%m")) %>%
+  group_by(Month) %>%
+  summarize(Average_Revenue = mean(Revenue_per_Voyage_USD, na.rm = TRUE),
+            Average_Cost = mean(Operational_Cost_USD, na.rm = TRUE),
+            Average_Profit = mean(Profit, na.rm = TRUE)) %>%
+  mutate(Month = as.Date(paste0(Month, "-01")))
+```
+
+Final glimpse at the datasets:
 
 ```{r}
 glimpse(df)
 ```
 
-# EDA 1: Distribution of profit across ship types and shipping routes
-
-::: panel-tabset
-## Profit by Ship Type
+```{r}
+glimpse(df_monthly)
+```
 
 ```{r}
-p <- ggplot(df, aes(x = Ship_Type, y = Profit, fill = Ship_Type)) +
+glimpse(df_bulk_monthly)
+```
+
+```{r}
+glimpse(df_container_monthly)
+```
+
+```{r}
+glimpse(df_fish_monthly)
+```
+
+```{r}
+glimpse(df_tanker_monthly)
+```
+
+# EDA 1: Distribution of profit across ship types and shipping routes
+
+```{r}
+# Exclude Ship_Type and Route_Type = "None"
+df_filtered1 <- df %>% filter(Ship_Type != "None")
+df_filtered2 <- df %>% filter(Route_Type != "None")
+
+# Plot
+p1 <- ggplot(df_filtered1, aes(x = Ship_Type, y = Profit, fill = Ship_Type)) +
   geom_boxplot() +
   labs(title = "Distribution of Profit Across Ship Types", 
        x = "Ship Type", 
@@ -166,71 +258,37 @@ p <- ggplot(df, aes(x = Ship_Type, y = Profit, fill = Ship_Type)) +
   theme_minimal() +
   theme(legend.position = "none")
 
-ggplotly(p, tooltip = "y")
-```
-
-## Profit by Route Type
-
-```{r}
-p <- ggplot(df, aes(x = Route_Type, y = Profit, fill = Route_Type)) +
+p2 <- ggplot(df_filtered2, aes(x = Route_Type, y = Profit, fill = Route_Type)) +
   geom_boxplot() +
-  labs(title = "Distribution of Profit Across Shipping Routes", 
+  labs(title = "Distribution of Profit Across Route Types", 
        x = "Route Type", 
        y = "Profit (USD)") +
   scale_fill_brewer(palette = "Set3") +
   theme_minimal() +
   theme(legend.position = "none")
 
-ggplotly(p, tooltip = "y")
+ggplotly(p1, tooltip = "y")
+
+ggplotly(p2, tooltip = "y")
 ```
 
-## Profit by Engine Type
+::: {.callout-note icon="false"}
+## Insights
 
-```{r}
-p <- ggplot(df, aes(x = Engine_Type, y = Profit, fill = Engine_Type)) +
-  geom_boxplot() +
-  labs(title = "Distribution of Profit Across Engine Types", 
-       x = "Engine Type", 
-       y = "Profit (USD)") +
-  scale_fill_brewer(palette = "Set3") +
-  theme_minimal() +
-  theme(legend.position = "none")
+-   The median profit (middle line of each box) appears similar across all ship types and shipping routes, with Fish Carriers and Long Haul being marginally more profitable than the rest.
 
-ggplotly(p, tooltip = "y")
-```
+-   All ship and route types exhibit a wide interquartile range (IQR), indicating significant variability in profit. This suggests that while some voyages are highly profitable, others operate at much lower margins.
 
-## Profit by Maintenance Status
+-   The lower whiskers extend below zero for all ship types, meaning that some voyages result in financial losses. This is due to high operational costs and low revenue.
 
-```{r}
-p <- ggplot(df, aes(x = Maintenance_Status, y = Profit, fill = Maintenance_Status)) +
-  geom_boxplot() +
-  labs(title = "Distribution of Profit Across Maintenance Status", 
-       x = "Maintenance Status", 
-       y = "Profit (USD)") +
-  scale_fill_brewer(palette = "Set3") +
-  theme_minimal() +
-  theme(legend.position = "none")
+-   The upper whiskers suggest that some voyages achieve much higher-than-average profits. These might correspond to optimized routes, high cargo loads, or cost-efficient operations.
 
-ggplotly(p, tooltip = "y")
-```
-
-## Profit by Weather Condition
-
-```{r}
-p <- ggplot(df, aes(x = Weather_Condition, y = Profit, fill = Weather_Condition)) +
-  geom_boxplot() +
-  labs(title = "Distribution of Profit Across Weather Conditions", 
-       x = "Weather Condition", 
-       y = "Profit (USD)") +
-  scale_fill_brewer(palette = "Set3") +
-  theme_minimal() +
-  theme(legend.position = "none")
-
-ggplotly(p, tooltip = "y")
-```
+-   Since the profit distributions and spread are quite similar, no single ship and route type appear to have a significantly better or worse risk-reward profile compared to the others.
 :::
 
-# EDA 2: Time Series: Profit Trend Over Time
+# EDA 2: Revenue, Operational Cost and Profit Trends Over Time
+
+**An overview of the overall monthly profit trend:**
 
 ```{r}
 df_monthly <- df %>%
@@ -239,7 +297,7 @@ df_monthly <- df %>%
   summarize(Average_Profit = mean(Profit, na.rm = TRUE)) %>%
   mutate(Month = as.Date(paste0(Month, "-01")))
 
-p <- ggplot(df_monthly, aes(x = Month, y = Average_Profit, group = 1, 
+pp <- ggplot(df_monthly, aes(x = Month, y = Average_Profit, group = 1, 
                             text = paste("Month:", format(Month, "%b %Y"), 
                                          "<br>Avg Profit:", round(Average_Profit, 2)))) +
   geom_line(color = "steelblue") +
@@ -251,50 +309,236 @@ p <- ggplot(df_monthly, aes(x = Month, y = Average_Profit, group = 1,
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-ggplotly(p, tooltip = "text")
+ggplotly(pp, tooltip = "text")
 ```
+
+**Revenue, Operational Cost and Profit trend lines stacked:**
 
 ```{r}
-# Aggregate by month
-df_monthly <- df %>%
-  mutate(Month = format(Date, "%Y-%m")) %>%
-  group_by(Month) %>%
-  summarize(Average_Revenue = mean(Revenue_per_Voyage_USD, na.rm = TRUE),
-            Average_Cost = mean(Operational_Cost_USD, na.rm = TRUE),
-            Average_Profit = mean(Profit, na.rm = TRUE)) %>%
-  mutate(Month = as.Date(paste0(Month, "-01")))
+# Aggregate by month 
+
+df_monthly <- df %>% mutate(Month = format(Date, "%Y-%m")) %>% group_by(Month) %>% summarize(Average_Revenue = mean(Revenue_per_Voyage_USD, na.rm = TRUE), Average_Cost = mean(Operational_Cost_USD, na.rm = TRUE), Average_Profit = mean(Profit, na.rm = TRUE)) %>% mutate(Month = as.Date(paste0(Month, "-01")))
 
 # Revenue Plot
-p1 <- ggplot(df_monthly, aes(x = Month, y = Average_Revenue)) +
-  geom_line(color = "green") +
-  labs(title = "Monthly Revenue Trend",
-       x = "Month",
-       y = "Revenue (USD)") +
-  scale_x_date(date_breaks = "1 month", date_labels = "%b %Y") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+pr1 <- ggplot(df_monthly, aes(x = Month, y = Average_Revenue)) + geom_line(color = "green") + labs(title = "Monthly Revenue Trend", x = "Month", y = "Revenue (USD)") + scale_x_date(date_breaks = "1 month", date_labels = "%b %Y") + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 # Operational Cost Plot
-p2 <- ggplot(df_monthly, aes(x = Month, y = Average_Cost)) +
-  geom_line(color = "red") +
-  labs(title = "Monthly Operational Cost Trend",
-       x = "Month",
-       y = "Operational Cost (USD)") +
-  scale_x_date(date_breaks = "1 month", date_labels = "%b %Y") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+po1 <- ggplot(df_monthly, aes(x = Month, y = Average_Cost)) + geom_line(color = "red") + labs(title = "Monthly Operational Cost Trend", x = "Month", y = "Operational Cost (USD)") + scale_x_date(date_breaks = "1 month", date_labels = "%b %Y") + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 # Profit Plot
-p3 <- ggplot(df_monthly, aes(x = Month, y = Average_Profit)) +
-  geom_line(color = "steelblue") +
-  labs(title = "Monthly Profit Trend",
-       x = "Month",
-       y = "Profit (USD)") +
-  scale_x_date(date_breaks = "1 month", date_labels = "%b %Y") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-# Combine plots using patchwork
-combined_plot <- p1 / p2 / p3
-combined_plot
+pp1 <- ggplot(df_monthly, aes(x = Month, y = Average_Profit)) + geom_line(color = "steelblue") + labs(title = "Monthly Profit Trend", x = "Month", y = "Profit (USD)") + scale_x_date(date_breaks = "1 month", date_labels = "%b %Y") + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+pr1 / po1 / pp1
 ```
+
+::: {.callout-note icon="false"}
+## Insights
+
+-   **October 2023 and January to February 2024** show the lowest profit levels while March 2024 shows the highest profit level.
+
+-   The dip in **October 2023** is more attributed to high operational cost while the dips in **January to February 2024** are attributed to low revenue.
+
+-   Conversely, the peak profit in **March 2024** is attributed to high revenue and extremely low operational cost (lowest month in the data)
+:::
+
+# EDA 3: Revenue, Operational Cost and Profit trend lines Across Different Ships
+
+::: panel-tabset
+## Bulk Carrier
+
+```{r}
+# Revenue Trend
+p1 <- ggplot(df_bulk_monthly, aes(x = Month, y = Average_Revenue)) + geom_line(color = "green") + labs(title = "Revenue Trend for Bulk Carrier", x = "Month", y = "Revenue (USD)") + scale_x_date(date_breaks = "1 month", date_labels = "%b %Y") + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Operational Cost Trend
+p2 <- ggplot(df_bulk_monthly, aes(x = Month, y = Average_Cost)) + geom_line(color = "red") + labs(title = "Operational Cost Trend for Bulk Carrier", x = "Month", y = "Operational Cost (USD)") + scale_x_date(date_breaks = "1 month", date_labels = "%b %Y") + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Profit Trend
+p3 <- ggplot(df_bulk_monthly, aes(x = Month, y = Average_Profit)) + geom_line(color = "steelblue") + labs(title = "Profit Trend for Bulk Carrier", x = "Month", y = "Profit (USD)") + scale_x_date(date_breaks = "1 month", date_labels = "%b %Y") + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+p1 / p2 / p3
+```
+
+## Container Ship
+
+```{r}
+# Revenue Trend
+p1 <- ggplot(df_container_monthly, aes(x = Month, y = Average_Revenue)) + geom_line(color = "green") + labs(title = "Revenue Trend for Container Ship", x = "Month", y = "Revenue (USD)") + scale_x_date(date_breaks = "1 month", date_labels = "%b %Y") + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Operational Cost Trend
+p2 <- ggplot(df_container_monthly, aes(x = Month, y = Average_Cost)) + geom_line(color = "red") + labs(title = "Operational Cost Trend for Container Ship", x = "Month", y = "Operational Cost (USD)") + scale_x_date(date_breaks = "1 month", date_labels = "%b %Y") + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Profit Trend
+p3 <- ggplot(df_container_monthly, aes(x = Month, y = Average_Profit)) + geom_line(color = "steelblue") + labs(title = "Profit Trend for Container Ship", x = "Month", y = "Profit (USD)") + scale_x_date(date_breaks = "1 month", date_labels = "%b %Y") + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+p1 / p2 / p3
+```
+
+## Fish Carrier
+
+```{r}
+# Revenue Trend
+p1 <- ggplot(df_fish_monthly, aes(x = Month, y = Average_Revenue)) + geom_line(color = "green") + labs(title = "Revenue Trend for Fish Carrier", x = "Month", y = "Revenue (USD)") + scale_x_date(date_breaks = "1 month", date_labels = "%b %Y") + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Operational Cost Trend
+p2 <- ggplot(df_fish_monthly, aes(x = Month, y = Average_Cost)) + geom_line(color = "red") + labs(title = "Operational Cost Trend for Fish Carrier", x = "Month", y = "Operational Cost (USD)") + scale_x_date(date_breaks = "1 month", date_labels = "%b %Y") + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Profit Trend
+p3 <- ggplot(df_fish_monthly, aes(x = Month, y = Average_Profit)) + geom_line(color = "steelblue") + labs(title = "Profit Trend for Fish Carrier", x = "Month", y = "Profit (USD)") + scale_x_date(date_breaks = "1 month", date_labels = "%b %Y") + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+p1 / p2 / p3
+
+
+```
+
+## Tanker
+
+```{r}
+# Revenue Trend
+p1 <- ggplot(df_tanker_monthly, aes(x = Month, y = Average_Revenue)) + geom_line(color = "green") + labs(title = "Revenue Trend for Tanker", x = "Month", y = "Revenue (USD)") + scale_x_date(date_breaks = "1 month", date_labels = "%b %Y") + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Operational Cost Trend
+p2 <- ggplot(df_tanker_monthly, aes(x = Month, y = Average_Cost)) + geom_line(color = "red") + labs(title = "Operational Cost Trend for Tanker", x = "Month", y = "Operational Cost (USD)") + scale_x_date(date_breaks = "1 month", date_labels = "%b %Y") + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Profit Trend
+p3 <- ggplot(df_tanker_monthly, aes(x = Month, y = Average_Profit)) + geom_line(color = "steelblue") + labs(title = "Profit Trend for Tanker", x = "Month", y = "Profit (USD)") + scale_x_date(date_breaks = "1 month", date_labels = "%b %Y") + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+p1 / p2 / p3
+
+
+```
+:::
+
+::: {.callout-note icon="false"}
+## Insights
+
+-   The ship types have their different seasonal trends.
+
+-   For Bulk Carrier, the most profitable months are August and May.
+
+-   For Container Ships, the most profitable months are November and January.
+
+-   For Fish Carriers, the most profitable month is September with dips in August and October.
+
+-   For Tankers, the most profitable months are the middle of the year.
+:::
+
+# EDA 4: Average Revenue versus Operational Cost by Ship Type
+
+```{r}
+# Calculate the average Revenue and Operational Cost for each Ship Type
+df_avg <- df %>%
+  filter(Ship_Type %in% c("Bulk Carrier", "Container Ship", "Fish Carrier", "Tanker")) %>%
+  group_by(Ship_Type) %>%
+  summarize(Average_Revenue = mean(Revenue_per_Voyage_USD, na.rm = TRUE),
+            Average_Cost = mean(Operational_Cost_USD, na.rm = TRUE))
+
+# Scatterplot of Average Revenue vs Average Operational Cost
+p <- ggplot(df_avg, aes(x = Average_Cost, y = Average_Revenue, color = Ship_Type)) +
+  geom_point(size = 4) +
+  labs(title = "Average Revenue vs Average Operational Cost by Ship Type", 
+       x = "Average Operational Cost (USD)", 
+       y = "Average Revenue per Voyage (USD)") +
+  theme_minimal() +
+  scale_color_brewer(palette = "Set1")
+
+ggplotly(p)
+```
+
+::: {.callout-note icon="false"}
+## Insights
+
+-   **Fish Carriers** generate the highest revenue with moderate operational costs, making them the most cost-efficient.
+
+-   **Container Ships** have high revenue but also the highest operational costs, potentially impacting profitability.
+
+-   **Bulk Carriers** maintain a balanced revenue-to-cost ratio, indicating stable financial performance.
+
+-   **Tankers** have the lowest revenue and operational costs, suggesting lower profit margins.
+:::
+
+# EDA 5: Average Profit by Ship Type and Engine Type
+
+```{r}
+# Calculate average profit by Engine_Type and Ship_Type
+df_avg_profit <- df %>%
+  filter(Ship_Type %in% c("Bulk Carrier", "Container Ship", "Fish Carrier", "Tanker")) %>%
+  group_by(Engine_Type, Ship_Type) %>%
+  summarize(Average_Profit = mean(Profit, na.rm = TRUE), .groups = "drop")
+
+df_avg_profit <- df_avg_profit %>%
+  filter(Engine_Type != "None")
+
+# Set custom colors for Engine_Type
+engine_colors <- c(
+  "Diesel" = "#FF9999",
+  "Heavy Fuel Oil (HFO)" = "#99CCFF",
+  "Steam Turbine" = "#99FF99")
+
+# Create the bar chart
+p <- ggplot(df_avg_profit, aes(x = Ship_Type, y = Average_Profit, fill = Engine_Type)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Average Profit by Ship Type and Engine Type", 
+       x = "Ship Type", 
+       y = "Average Profit (USD)") +
+  scale_fill_manual(values = engine_colors) +
+  scale_y_continuous(labels = comma) +
+  theme_minimal()
+
+ggplotly(p)
+```
+
+::: {.callout-note icon="false"}
+## Insights
+
+-   For Bulk Carriers, Diesel has the highest profitability with Steam Turbine the lowest.
+
+-   For Container Ships, Steam Turbine has the highest profitability with Diesel the lowest.
+
+-   For Fish Carriers, Diesel has the highest profitability with HFO the lowest.
+
+-   For Tankers, it is relatively even across the board but Steam Turbine edges out Diesel marginally with HFO the lowest.
+:::
+
+# EDA 6: Average efficiency by Ship Type and Engine Type
+
+```{r}
+# Filter out "None" for Ship_Type and Engine_Type
+df_filtered <- df %>%
+  filter(Ship_Type != "None", Engine_Type != "None")
+
+# Calculate average efficiency by Ship_Type and Engine_Type
+df_avg_efficiency <- df_filtered %>%
+  group_by(Ship_Type, Engine_Type) %>%
+  summarize(Average_Efficiency = mean(Efficiency_nm_per_kWh, na.rm = TRUE), .groups = "drop")
+
+# Create the bar chart
+p <- ggplot(df_avg_efficiency, aes(x = Ship_Type, y = Average_Efficiency, fill = Engine_Type)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Average Efficiency by Ship Type and Engine Type", 
+       x = "Ship Type", 
+       y = "Average Efficiency (nm/kWh)") +
+  theme_minimal()
+
+# Display the plot
+ggplotly(p)
+```
+
+::: {.callout-note icon="false"}
+## Insights
+
+-   Efficiency is relatively even across all ship types and engine types.
+:::
+
+# Conclusion
+
+This study analyzes ship profitability, operational costs, and revenue across ship types, routes, and seasonal trends. **Fish Carriers** are the most cost-efficient, while **Container Ships** face profitability challenges due to high operational costs. **Bulk Carriers** maintain a stable revenue-to-cost balance, and **Tankers** operate with thinner profit margins.
+
+**Seasonal trends significantly impact profitability**, with **low profits in October 2023 and January–February 2024** due to high costs and low revenue, while **March 2024 saw peak profits** driven by high revenue and low costs. Each ship type has distinct profitability peaks, emphasizing the need for **strategic fleet and route planning**.
+
+**Diesel engines are the most profitable for Bulk Carriers and Fish Carriers, while Steam Turbines lead for Container Ships.** Tankers show minimal differences across engine types. **Efficiency remains consistent across ships and engines**, suggesting that engine selection depends on affordability and use case.
+
+No single ship type, route, or engine type has a clear financial advantage, highlighting the need for **cost optimization and strategic revenue management**. Future research should examine **fuel price impact, cargo load variations, and route-specific performance metrics** to enhance decision-making.
