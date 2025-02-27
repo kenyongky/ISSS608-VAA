@@ -1314,5 +1314,75 @@
     "title": "Take-home Exercise 1: Exploring Ship Performance: Financial Insights via Visualisation",
     "section": "Importing the data",
     "text": "Importing the data\nDataset is initialised to df.\n\n\nShow the code\ndf &lt;- read_csv(\"data/Ship_Performance_Dataset.csv\")\n\n\nRows: 2736 Columns: 18\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr   (5): Ship_Type, Route_Type, Engine_Type, Maintenance_Status, Weather_C...\ndbl  (12): Speed_Over_Ground_knots, Engine_Power_kW, Distance_Traveled_nm, D...\ndate  (1): Date\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html",
+    "title": "Hands-on Exercise 7",
+    "section": "",
+    "text": "pacman::p_load(scales, viridis, lubridate, ggthemes, gridExtra, readxl, knitr, data.table, CGPfunctions, ggHoriPlot, tidyverse)\n\n\n\n\n\nattacks &lt;- read_csv(\"data/eventlog.csv\")\n\nRows: 199999 Columns: 3\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr  (2): source_country, tz\ndttm (1): timestamp\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html#installing-and-loading-packages",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html#installing-and-loading-packages",
+    "title": "Hands-on Exercise 7",
+    "section": "",
+    "text": "pacman::p_load(scales, viridis, lubridate, ggthemes, gridExtra, readxl, knitr, data.table, CGPfunctions, ggHoriPlot, tidyverse)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html#importing-the-data",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html#importing-the-data",
+    "title": "Hands-on Exercise 7",
+    "section": "",
+    "text": "attacks &lt;- read_csv(\"data/eventlog.csv\")\n\nRows: 199999 Columns: 3\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr  (2): source_country, tz\ndttm (1): timestamp\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html#step-1-data-import",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html#step-1-data-import",
+    "title": "Hands-on Exercise 7",
+    "section": "Step 1: Data Import",
+    "text": "Step 1: Data Import\n\nair &lt;- read_excel(\"data/arrivals_by_air.xlsx\")"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html#step-2-deriving-month-and-year-fields",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html#step-2-deriving-month-and-year-fields",
+    "title": "Hands-on Exercise 7",
+    "section": "Step 2: Deriving month and year fields",
+    "text": "Step 2: Deriving month and year fields\n\nair$month &lt;- factor(month(air$`Month-Year`), \n                    levels=1:12, \n                    labels=month.abb, \n                    ordered=TRUE) \nair$year &lt;- year(ymd(air$`Month-Year`))"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html#step-3-extracting-the-target-country",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html#step-3-extracting-the-target-country",
+    "title": "Hands-on Exercise 7",
+    "section": "Step 3: Extracting the target country",
+    "text": "Step 3: Extracting the target country\n\nVietnam &lt;- air %&gt;% \n  select(`Vietnam`, \n         month, \n         year) %&gt;%\n  filter(year &gt;= 2010)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html#step-4-computing-year-average-arrivals-by-month",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html#step-4-computing-year-average-arrivals-by-month",
+    "title": "Hands-on Exercise 7",
+    "section": "Step 4: Computing year average arrivals by month",
+    "text": "Step 4: Computing year average arrivals by month\n\nhline.data &lt;- Vietnam %&gt;% \n  group_by(month) %&gt;%\n  summarise(avgvalue = mean(`Vietnam`))"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html#step-5-plotting-the-cycle-plot",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html#step-5-plotting-the-cycle-plot",
+    "title": "Hands-on Exercise 7",
+    "section": "Step 5: Plotting the cycle plot",
+    "text": "Step 5: Plotting the cycle plot\n\nggplot() + \n  geom_line(data=Vietnam,\n            aes(x=year, \n                y=`Vietnam`, \n                group=month), \n            colour=\"black\") +\n  geom_hline(aes(yintercept=avgvalue), \n             data=hline.data, \n             linetype=6, \n             colour=\"red\", \n             size=0.5) + \n  facet_grid(~month) +\n  labs(axis.text.x = element_blank(),\n       title = \"Visitor arrivals from Vietnam by air, Jan 2010-Dec 2019\") +\n  xlab(\"\") +\n  ylab(\"No. of Visitors\") +\n  theme_tufte(base_family = \"Helvetica\")\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family\nnot found in Windows font database\n\n\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\nWarning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font\nfamily not found in Windows font database\n\n\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database\nWarning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :\nfont family not found in Windows font database"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html#step-1-data-import-1",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html#step-1-data-import-1",
+    "title": "Hands-on Exercise 7",
+    "section": "Step 1: Data Import",
+    "text": "Step 1: Data Import\n\nrice &lt;- read_csv(\"data/rice.csv\")\n\nRows: 550 Columns: 4\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (1): Country\ndbl (3): Year, Yield, Production\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html#step-2-plotting-the-slopegraph",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html#step-2-plotting-the-slopegraph",
+    "title": "Hands-on Exercise 7",
+    "section": "Step 2: Plotting the slopegraph",
+    "text": "Step 2: Plotting the slopegraph\n\nrice %&gt;% \n  mutate(Year = factor(Year)) %&gt;%\n  filter(Year %in% c(1961, 1980)) %&gt;%\n  newggslopegraph(Year, Yield, Country,\n                Title = \"Rice Yield of Top 11 Asian Counties\",\n                SubTitle = \"1961-1980\",\n                Caption = \"Prepared by: Dr. Kam Tin Seong\")\n\n\nConverting 'Year' to an ordered factor"
   }
 ]
