@@ -3,10 +3,6 @@ title: "Take-home Exercise 2: Be Tradewise or Otherwise"
 author: "Kenneth Yong"
 date: "February 21, 2025"
 date-modified: "last-modified"
-format: 
-  html: 
-    code-fold: true
-    code-summary: Show the code
 ---
 
 # Overview
@@ -74,9 +70,7 @@ df3 <- read_excel("data/TradeRegion.xlsx", sheet = 'T2')
 df4 <- read_excel("data/TradeRegion.xlsx", sheet = 'T3')
 ```
 
-## Data Preparation
-
-### Prep for V1
+## V1 Data Preparation
 
 First, we examine the data to confirm the structure. We will need to convert the column names (Year-Month) into rows.
 
@@ -84,7 +78,7 @@ First, we examine the data to confirm the structure. We will need to convert the
 head(df1)
 ```
 
-#### Check for missing values
+### Check for missing values
 
 Even though colSums(is.na(df1)) shows no missing values, we can observe that there are indeed 'na' character strings in the data. However, they are only observed in the data before 1975. This would not affect the assignment as we are only concerned about the data starting from 2020-2024.
 
@@ -92,7 +86,7 @@ Even though colSums(is.na(df1)) shows no missing values, we can observe that the
 colSums(is.na(df1))
 ```
 
-#### Reshape the Data Using pivot_longer()
+### Reshape the Data Using pivot_longer()
 
 ```{r}
 colnames(df1) <- as.character(colnames(df1))
@@ -102,7 +96,7 @@ commodity <- df1 %>%
   mutate(Trade_Value = suppressWarnings(as.numeric(Trade_Value))) 
 ```
 
-#### Filter out the relevant data
+### Filter out the relevant data
 
 For the first visualisation, we are specifically concerned about the Total Merchandise Imports (At Current Prices), Total Merchandise Exports (At Current Prices) and the Total Merchandise Trade (Imports + Exports), (At Current Prices) from 2020 to 2024. Therefore, we filter those rows out.
 
@@ -120,15 +114,15 @@ commodity_total <- commodity_total %>%
   ungroup()
 ```
 
-#### Final Look at the Datasets
+### Final Look at the Datasets
 
 ```{r}
 kable(head(commodity_total))
 ```
 
-### Prep for V2
+## V2 Data Preparation
 
-#### Check for missing values
+### Check for missing values
 
 We can see there are no missing values in all 3 datasets.
 
@@ -138,7 +132,7 @@ colSums(is.na(df3))
 colSums(is.na(df4))
 ```
 
-#### Reshape and Filter Only for 2024 and Selected Countries
+### Reshape and Filter Only for 2024 and Selected Countries
 
 For the second visualisation, we are specifically concerned about the imports, exports and total trade volume with China, Malaysia, United States of America, Taiwan, Europe, Indonesia, Hong Kong, Republic of Korea, Japan, and Thailand in 2024. Therefore, we filter those rows out. We also combine domestic exports and re-exports into just exports with bind_rows().
 
@@ -166,13 +160,13 @@ exports <- df3 %>%
 
 ```
 
-#### Combine both dataframes
+### Combine both dataframes
 
 ```{r}
 combined_trade <- bind_rows(imports, exports)
 ```
 
-#### Calculate Total Trade Volume (Imports + Exports) and merge with combined_trade
+### Calculate Total Trade Volume (Imports + Exports) and merge with combined_trade
 
 Since combined_trade contains both Imports and Exports, we need to group them by Country & Date and sum the values.
 
@@ -187,15 +181,15 @@ total_trade <- combined_trade %>%
 final_trade <- bind_rows(combined_trade, total_trade)
 ```
 
-#### Summarize Trade Value for the Whole Year of 2024
+### Summarize Trade Value for the Whole Year of 2024
 
 ```{r}
-annual_trade <- final_trade %>%
+annual_trade <- combined_trade %>%
   group_by(`Data Series`, Trade_Type) %>%
   summarise(Trade_Value = sum(Trade_Value, na.rm = TRUE), .groups = "drop")
 ```
 
-#### Final look
+### Final look
 
 ```{r}
 kable(head(annual_trade))
@@ -203,7 +197,7 @@ kable(head(annual_trade))
 
 # V1 - Total Merchandise Trade at Current Prices, 2020 - 2024
 
-![Fig. 1](images/Screenshot 2025-03-09 002743.png)
+![Fig. 1](images/Screenshot%202025-03-09%20002743.png)
 
 ::: callout-note
 ## Comments on Fig. 1
@@ -256,7 +250,7 @@ ggplotly(p, tooltip = "text")
 
 # V2: Merchandise Trade Performance with Major Trading Partners (2024)
 
-![Fig. 2](images/Screenshot 2025-03-09 002700.png)
+![Fig. 2](images/Screenshot%202025-03-09%20002700.png)
 
 ::: callout-note
 ## Comments on Fig. 2
@@ -279,3 +273,20 @@ ggplotly(p, tooltip = "text")
 :::
 
 ## Makeover
+
+```{r}
+p1 <- ggplot(annual_trade, aes(x = `Data Series`, y = Trade_Value/1e3, fill = Trade_Type)) +
+  geom_col(position = "stack") + 
+  geom_text(aes(label = round(Trade_Value/1e3, 1)),  
+            position = position_stack(vjust = 0.5),  
+            color = "black",  
+            size = 3) +  
+  theme_minimal() +
+  labs(title = "Singapore's Total Merchandise Trade (2024)",
+       x = "Country",
+       y = "Total Trade Value (S$ Billion)",
+       fill = "Trade Type") +
+  coord_flip()
+
+ggplotly(p1, tooltip = "text") 
+```

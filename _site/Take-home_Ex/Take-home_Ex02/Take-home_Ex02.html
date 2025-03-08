@@ -277,10 +277,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#the-datasets" id="toc-the-datasets" class="nav-link" data-scroll-target="#the-datasets">The Datasets</a>
   <ul class="collapse">
   <li><a href="#importing-the-data" id="toc-importing-the-data" class="nav-link" data-scroll-target="#importing-the-data">Importing the Data</a></li>
-  <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation">Data Preparation</a>
+  <li><a href="#v1-data-preparation" id="toc-v1-data-preparation" class="nav-link" data-scroll-target="#v1-data-preparation">V1 Data Preparation</a>
   <ul class="collapse">
-  <li><a href="#prep-for-v1" id="toc-prep-for-v1" class="nav-link" data-scroll-target="#prep-for-v1">Prep for V1</a></li>
-  <li><a href="#prep-for-v2" id="toc-prep-for-v2" class="nav-link" data-scroll-target="#prep-for-v2">Prep for V2</a></li>
+  <li><a href="#check-for-missing-values" id="toc-check-for-missing-values" class="nav-link" data-scroll-target="#check-for-missing-values">Check for missing values</a></li>
+  <li><a href="#reshape-the-data-using-pivot_longer" id="toc-reshape-the-data-using-pivot_longer" class="nav-link" data-scroll-target="#reshape-the-data-using-pivot_longer">Reshape the Data Using pivot_longer()</a></li>
+  <li><a href="#filter-out-the-relevant-data" id="toc-filter-out-the-relevant-data" class="nav-link" data-scroll-target="#filter-out-the-relevant-data">Filter out the relevant data</a></li>
+  <li><a href="#final-look-at-the-datasets" id="toc-final-look-at-the-datasets" class="nav-link" data-scroll-target="#final-look-at-the-datasets">Final Look at the Datasets</a></li>
+  </ul></li>
+  <li><a href="#v2-data-preparation" id="toc-v2-data-preparation" class="nav-link" data-scroll-target="#v2-data-preparation">V2 Data Preparation</a>
+  <ul class="collapse">
+  <li><a href="#check-for-missing-values-1" id="toc-check-for-missing-values-1" class="nav-link" data-scroll-target="#check-for-missing-values-1">Check for missing values</a></li>
+  <li><a href="#reshape-and-filter-only-for-2024-and-selected-countries" id="toc-reshape-and-filter-only-for-2024-and-selected-countries" class="nav-link" data-scroll-target="#reshape-and-filter-only-for-2024-and-selected-countries">Reshape and Filter Only for 2024 and Selected Countries</a></li>
+  <li><a href="#combine-both-dataframes" id="toc-combine-both-dataframes" class="nav-link" data-scroll-target="#combine-both-dataframes">Combine both dataframes</a></li>
+  <li><a href="#calculate-total-trade-volume-imports-exports-and-merge-with-combined_trade" id="toc-calculate-total-trade-volume-imports-exports-and-merge-with-combined_trade" class="nav-link" data-scroll-target="#calculate-total-trade-volume-imports-exports-and-merge-with-combined_trade">Calculate Total Trade Volume (Imports + Exports) and merge with combined_trade</a></li>
+  <li><a href="#summarize-trade-value-for-the-whole-year-of-2024" id="toc-summarize-trade-value-for-the-whole-year-of-2024" class="nav-link" data-scroll-target="#summarize-trade-value-for-the-whole-year-of-2024">Summarize Trade Value for the Whole Year of 2024</a></li>
+  <li><a href="#final-look" id="toc-final-look" class="nav-link" data-scroll-target="#final-look">Final look</a></li>
   </ul></li>
   </ul></li>
   <li><a href="#v1---total-merchandise-trade-at-current-prices-2020---2024" id="toc-v1---total-merchandise-trade-at-current-prices-2020---2024" class="nav-link" data-scroll-target="#v1---total-merchandise-trade-at-current-prices-2020---2024">V1 - Total Merchandise Trade at Current Prices, 2020 - 2024</a>
@@ -397,10 +408,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 </div>
 </section>
-<section id="data-preparation" class="level2">
-<h2 class="anchored" data-anchor-id="data-preparation">Data Preparation</h2>
-<section id="prep-for-v1" class="level3">
-<h3 class="anchored" data-anchor-id="prep-for-v1">Prep for V1</h3>
+<section id="v1-data-preparation" class="level2">
+<h2 class="anchored" data-anchor-id="v1-data-preparation">V1 Data Preparation</h2>
 <p>First, we examine the data to confirm the structure. We will need to convert the column names (Year-Month) into rows.</p>
 <div class="cell">
 <details class="code-fold">
@@ -426,8 +435,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 #   `2022 Sep` &lt;chr&gt;, `2022 Aug` &lt;chr&gt;, `2022 Jul` &lt;chr&gt;, `2022 Jun` &lt;chr&gt;, …</code></pre>
 </div>
 </div>
-<section id="check-for-missing-values" class="level4">
-<h4 class="anchored" data-anchor-id="check-for-missing-values">Check for missing values</h4>
+<section id="check-for-missing-values" class="level3">
+<h3 class="anchored" data-anchor-id="check-for-missing-values">Check for missing values</h3>
 <p>Even though colSums(is.na(df1)) shows no missing values, we can observe that there are indeed ‘na’ character strings in the data. However, they are only observed in the data before 1975. This would not affect the assignment as we are only concerned about the data starting from 2020-2024.</p>
 <div class="cell">
 <details class="code-fold">
@@ -684,8 +693,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="reshape-the-data-using-pivot_longer" class="level4">
-<h4 class="anchored" data-anchor-id="reshape-the-data-using-pivot_longer">Reshape the Data Using pivot_longer()</h4>
+<section id="reshape-the-data-using-pivot_longer" class="level3">
+<h3 class="anchored" data-anchor-id="reshape-the-data-using-pivot_longer">Reshape the Data Using pivot_longer()</h3>
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
@@ -697,8 +706,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 </div>
 </section>
-<section id="filter-out-the-relevant-data" class="level4">
-<h4 class="anchored" data-anchor-id="filter-out-the-relevant-data">Filter out the relevant data</h4>
+<section id="filter-out-the-relevant-data" class="level3">
+<h3 class="anchored" data-anchor-id="filter-out-the-relevant-data">Filter out the relevant data</h3>
 <p>For the first visualisation, we are specifically concerned about the Total Merchandise Imports (At Current Prices), Total Merchandise Exports (At Current Prices) and the Total Merchandise Trade (Imports + Exports), (At Current Prices) from 2020 to 2024. Therefore, we filter those rows out.</p>
 <div class="cell">
 <details class="code-fold">
@@ -723,8 +732,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="final-look-at-the-datasets" class="level4">
-<h4 class="anchored" data-anchor-id="final-look-at-the-datasets">Final Look at the Datasets</h4>
+<section id="final-look-at-the-datasets" class="level3">
+<h3 class="anchored" data-anchor-id="final-look-at-the-datasets">Final Look at the Datasets</h3>
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
@@ -781,10 +790,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 </section>
-<section id="prep-for-v2" class="level3">
-<h3 class="anchored" data-anchor-id="prep-for-v2">Prep for V2</h3>
-<section id="check-for-missing-values-1" class="level4">
-<h4 class="anchored" data-anchor-id="check-for-missing-values-1">Check for missing values</h4>
+<section id="v2-data-preparation" class="level2">
+<h2 class="anchored" data-anchor-id="v2-data-preparation">V2 Data Preparation</h2>
+<section id="check-for-missing-values-1" class="level3">
+<h3 class="anchored" data-anchor-id="check-for-missing-values-1">Check for missing values</h3>
 <p>We can see there are no missing values in all 3 datasets.</p>
 <div class="cell">
 <details class="code-fold">
@@ -1077,8 +1086,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="reshape-and-filter-only-for-2024-and-selected-countries" class="level4">
-<h4 class="anchored" data-anchor-id="reshape-and-filter-only-for-2024-and-selected-countries">Reshape and Filter Only for 2024 and Selected Countries</h4>
+<section id="reshape-and-filter-only-for-2024-and-selected-countries" class="level3">
+<h3 class="anchored" data-anchor-id="reshape-and-filter-only-for-2024-and-selected-countries">Reshape and Filter Only for 2024 and Selected Countries</h3>
 <p>For the second visualisation, we are specifically concerned about the imports, exports and total trade volume with China, Malaysia, United States of America, Taiwan, Europe, Indonesia, Hong Kong, Republic of Korea, Japan, and Thailand in 2024. Therefore, we filter those rows out. We also combine domestic exports and re-exports into just exports with bind_rows().</p>
 <div class="cell">
 <details class="code-fold">
@@ -1108,8 +1117,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 </div>
 </section>
-<section id="combine-both-dataframes" class="level4">
-<h4 class="anchored" data-anchor-id="combine-both-dataframes">Combine both dataframes</h4>
+<section id="combine-both-dataframes" class="level3">
+<h3 class="anchored" data-anchor-id="combine-both-dataframes">Combine both dataframes</h3>
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
@@ -1117,8 +1126,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 </div>
 </section>
-<section id="calculate-total-trade-volume-imports-exports-and-merge-with-combined_trade" class="level4">
-<h4 class="anchored" data-anchor-id="calculate-total-trade-volume-imports-exports-and-merge-with-combined_trade">Calculate Total Trade Volume (Imports + Exports) and merge with combined_trade</h4>
+<section id="calculate-total-trade-volume-imports-exports-and-merge-with-combined_trade" class="level3">
+<h3 class="anchored" data-anchor-id="calculate-total-trade-volume-imports-exports-and-merge-with-combined_trade">Calculate Total Trade Volume (Imports + Exports) and merge with combined_trade</h3>
 <p>Since combined_trade contains both Imports and Exports, we need to group them by Country &amp; Date and sum the values.</p>
 <div class="cell">
 <details class="code-fold">
@@ -1136,19 +1145,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 </div>
 </section>
-<section id="summarize-trade-value-for-the-whole-year-of-2024" class="level4">
-<h4 class="anchored" data-anchor-id="summarize-trade-value-for-the-whole-year-of-2024">Summarize Trade Value for the Whole Year of 2024</h4>
+<section id="summarize-trade-value-for-the-whole-year-of-2024" class="level3">
+<h3 class="anchored" data-anchor-id="summarize-trade-value-for-the-whole-year-of-2024">Summarize Trade Value for the Whole Year of 2024</h3>
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>annual_trade <span class="ot">&lt;-</span> final_trade <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>annual_trade <span class="ot">&lt;-</span> combined_trade <span class="sc">%&gt;%</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Data Series</span><span class="st">`</span>, Trade_Type) <span class="sc">%&gt;%</span></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Trade_Value =</span> <span class="fu">sum</span>(Trade_Value, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
-<section id="final-look" class="level4">
-<h4 class="anchored" data-anchor-id="final-look">Final look</h4>
+<section id="final-look" class="level3">
+<h3 class="anchored" data-anchor-id="final-look">Final look</h3>
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
@@ -1175,30 +1184,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: right;">75739.6</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">China</td>
-<td style="text-align: left;">Total Trade</td>
-<td style="text-align: right;">170182.3</td>
-</tr>
-<tr class="even">
 <td style="text-align: left;">Europe</td>
 <td style="text-align: left;">Exports</td>
 <td style="text-align: right;">52417.1</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">Europe</td>
 <td style="text-align: left;">Imports</td>
 <td style="text-align: right;">89635.4</td>
 </tr>
+<tr class="odd">
+<td style="text-align: left;">Hong Kong</td>
+<td style="text-align: left;">Exports</td>
+<td style="text-align: right;">73878.6</td>
+</tr>
 <tr class="even">
-<td style="text-align: left;">Europe</td>
-<td style="text-align: left;">Total Trade</td>
-<td style="text-align: right;">142052.5</td>
+<td style="text-align: left;">Hong Kong</td>
+<td style="text-align: left;">Imports</td>
+<td style="text-align: right;">4743.6</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-</section>
 </section>
 </section>
 </section>
@@ -1258,8 +1266,8 @@ Comments on Fig. 1
 <span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplotly</span>(p, <span class="at">tooltip =</span> <span class="st">"text"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div class="plotly html-widget html-fill-item" id="htmlwidget-cb4b05491f47f62e626b" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-cb4b05491f47f62e626b">{"x":{"data":[{"x":[2020,2021,2022,2023,2024],"y":[515.64453900000001,614.0810937,709.96663510000008,638.40348920000008,674.50502660000006],"text":["Year: 2020 <br> Trade Type: Total Merchandise Exports, (At Current Prices) <br> Trade Value: S$ 515.6 B","Year: 2021 <br> Trade Type: Total Merchandise Exports, (At Current Prices) <br> Trade Value: S$ 614.1 B","Year: 2022 <br> Trade Type: Total Merchandise Exports, (At Current Prices) <br> Trade Value: S$ 710.0 B","Year: 2023 <br> Trade Type: Total Merchandise Exports, (At Current Prices) <br> Trade Value: S$ 638.4 B","Year: 2024 <br> Trade Type: Total Merchandise Exports, (At Current Prices) <br> Trade Value: S$ 674.5 B"],"type":"scatter","mode":"lines+markers","line":{"width":3.7795275590551185,"color":"rgba(248,118,109,1)","dash":"solid"},"hoveron":"points","name":"Total Merchandise Exports, (At Current Prices)","legendgroup":"Total Merchandise Exports, (At Current Prices)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":1,"size":7.559055118110237,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(248,118,109,1)"}},"frame":null},{"x":[2020,2021,2022,2023,2024],"y":[453.46744389999998,545.88193710000007,655.43588360000001,567.31906179999999,611.35944039999993],"text":["Year: 2020 <br> Trade Type: Total Merchandise Imports, (At Current Prices) <br> Trade Value: S$ 453.5 B","Year: 2021 <br> Trade Type: Total Merchandise Imports, (At Current Prices) <br> Trade Value: S$ 545.9 B","Year: 2022 <br> Trade Type: Total Merchandise Imports, (At Current Prices) <br> Trade Value: S$ 655.4 B","Year: 2023 <br> Trade Type: Total Merchandise Imports, (At Current Prices) <br> Trade Value: S$ 567.3 B","Year: 2024 <br> Trade Type: Total Merchandise Imports, (At Current Prices) <br> Trade Value: S$ 611.4 B"],"type":"scatter","mode":"lines+markers","line":{"width":3.7795275590551185,"color":"rgba(0,186,56,1)","dash":"solid"},"hoveron":"points","name":"Total Merchandise Imports, (At Current Prices)","legendgroup":"Total Merchandise Imports, (At Current Prices)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(0,186,56,1)","opacity":1,"size":7.559055118110237,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,186,56,1)"}},"frame":null},{"x":[2020,2021,2022,2023,2024],"y":[969.11198289999993,1159.9630305999999,1365.4025185,1205.7225510000001,1285.8644674000002],"text":["Year: 2020 <br> Trade Type: Total Merchandise Trade, (At Current Prices) <br> Trade Value: S$ 969.1 B","Year: 2021 <br> Trade Type: Total Merchandise Trade, (At Current Prices) <br> Trade Value: S$ 1,160.0 B","Year: 2022 <br> Trade Type: Total Merchandise Trade, (At Current Prices) <br> Trade Value: S$ 1,365.4 B","Year: 2023 <br> Trade Type: Total Merchandise Trade, (At Current Prices) <br> Trade Value: S$ 1,205.7 B","Year: 2024 <br> Trade Type: Total Merchandise Trade, (At Current Prices) <br> Trade Value: S$ 1,285.9 B"],"type":"scatter","mode":"lines+markers","line":{"width":3.7795275590551185,"color":"rgba(97,156,255,1)","dash":"solid"},"hoveron":"points","name":"Total Merchandise Trade, (At Current Prices)","legendgroup":"Total Merchandise Trade, (At Current Prices)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(97,156,255,1)","opacity":1,"size":7.559055118110237,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(97,156,255,1)"}},"frame":null}],"layout":{"margin":{"t":43.762557077625573,"r":7.3059360730593621,"b":40.182648401826491,"l":54.794520547945211},"font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Yearly Trend of Merchandise Trade (2020-2024)","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[2019.8,2024.2],"tickmode":"array","ticktext":["2020","2021","2022","2023","2024"],"tickvals":[2020,2021,2022,2023,2024],"categoryorder":"array","categoryarray":["2020","2021","2022","2023","2024"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"Year","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[407.87069016999999,1410.9992722300001],"tickmode":"array","ticktext":["600","800","1 000","1 200","1 400"],"tickvals":[600,800,1000,1200,1400],"categoryorder":"array","categoryarray":["600","800","1 000","1 200","1 400"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Trade Value (S$ Billion)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498},"title":{"text":"Trade Type","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"49cc47cd1816":{"x":{},"y":{},"colour":{},"text":{},"type":"scatter"},"49cc36a11db9":{"x":{},"y":{},"colour":{},"text":{}}},"cur_data":"49cc47cd1816","visdat":{"49cc47cd1816":["function (y) ","x"],"49cc36a11db9":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-a7059b4cdb5603f8f92c" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-a7059b4cdb5603f8f92c">{"x":{"data":[{"x":[2020,2021,2022,2023,2024],"y":[515.64453900000001,614.0810937,709.96663510000008,638.40348920000008,674.50502660000006],"text":["Year: 2020 <br> Trade Type: Total Merchandise Exports, (At Current Prices) <br> Trade Value: S$ 515.6 B","Year: 2021 <br> Trade Type: Total Merchandise Exports, (At Current Prices) <br> Trade Value: S$ 614.1 B","Year: 2022 <br> Trade Type: Total Merchandise Exports, (At Current Prices) <br> Trade Value: S$ 710.0 B","Year: 2023 <br> Trade Type: Total Merchandise Exports, (At Current Prices) <br> Trade Value: S$ 638.4 B","Year: 2024 <br> Trade Type: Total Merchandise Exports, (At Current Prices) <br> Trade Value: S$ 674.5 B"],"type":"scatter","mode":"lines+markers","line":{"width":3.7795275590551185,"color":"rgba(248,118,109,1)","dash":"solid"},"hoveron":"points","name":"Total Merchandise Exports, (At Current Prices)","legendgroup":"Total Merchandise Exports, (At Current Prices)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":1,"size":7.559055118110237,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(248,118,109,1)"}},"frame":null},{"x":[2020,2021,2022,2023,2024],"y":[453.46744389999998,545.88193710000007,655.43588360000001,567.31906179999999,611.35944039999993],"text":["Year: 2020 <br> Trade Type: Total Merchandise Imports, (At Current Prices) <br> Trade Value: S$ 453.5 B","Year: 2021 <br> Trade Type: Total Merchandise Imports, (At Current Prices) <br> Trade Value: S$ 545.9 B","Year: 2022 <br> Trade Type: Total Merchandise Imports, (At Current Prices) <br> Trade Value: S$ 655.4 B","Year: 2023 <br> Trade Type: Total Merchandise Imports, (At Current Prices) <br> Trade Value: S$ 567.3 B","Year: 2024 <br> Trade Type: Total Merchandise Imports, (At Current Prices) <br> Trade Value: S$ 611.4 B"],"type":"scatter","mode":"lines+markers","line":{"width":3.7795275590551185,"color":"rgba(0,186,56,1)","dash":"solid"},"hoveron":"points","name":"Total Merchandise Imports, (At Current Prices)","legendgroup":"Total Merchandise Imports, (At Current Prices)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(0,186,56,1)","opacity":1,"size":7.559055118110237,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,186,56,1)"}},"frame":null},{"x":[2020,2021,2022,2023,2024],"y":[969.11198289999993,1159.9630305999999,1365.4025185,1205.7225510000001,1285.8644674000002],"text":["Year: 2020 <br> Trade Type: Total Merchandise Trade, (At Current Prices) <br> Trade Value: S$ 969.1 B","Year: 2021 <br> Trade Type: Total Merchandise Trade, (At Current Prices) <br> Trade Value: S$ 1,160.0 B","Year: 2022 <br> Trade Type: Total Merchandise Trade, (At Current Prices) <br> Trade Value: S$ 1,365.4 B","Year: 2023 <br> Trade Type: Total Merchandise Trade, (At Current Prices) <br> Trade Value: S$ 1,205.7 B","Year: 2024 <br> Trade Type: Total Merchandise Trade, (At Current Prices) <br> Trade Value: S$ 1,285.9 B"],"type":"scatter","mode":"lines+markers","line":{"width":3.7795275590551185,"color":"rgba(97,156,255,1)","dash":"solid"},"hoveron":"points","name":"Total Merchandise Trade, (At Current Prices)","legendgroup":"Total Merchandise Trade, (At Current Prices)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(97,156,255,1)","opacity":1,"size":7.559055118110237,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(97,156,255,1)"}},"frame":null}],"layout":{"margin":{"t":43.762557077625573,"r":7.3059360730593621,"b":40.182648401826491,"l":54.794520547945211},"font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Yearly Trend of Merchandise Trade (2020-2024)","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[2019.8,2024.2],"tickmode":"array","ticktext":["2020","2021","2022","2023","2024"],"tickvals":[2020,2021,2022,2023,2024],"categoryorder":"array","categoryarray":["2020","2021","2022","2023","2024"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"Year","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[407.87069016999999,1410.9992722300001],"tickmode":"array","ticktext":["600","800","1 000","1 200","1 400"],"tickvals":[600,800,1000,1200,1400],"categoryorder":"array","categoryarray":["600","800","1 000","1 200","1 400"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Trade Value (S$ Billion)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498},"title":{"text":"Trade Type","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"38d4609571fe":{"x":{},"y":{},"colour":{},"text":{},"type":"scatter"},"38d4ab2507c":{"x":{},"y":{},"colour":{},"text":{}}},"cur_data":"38d4609571fe","visdat":{"38d4609571fe":["function (y) ","x"],"38d4ab2507c":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -1319,6 +1327,29 @@ Comments on Fig. 2
 </div>
 <section id="makeover-1" class="level2">
 <h2 class="anchored" data-anchor-id="makeover-1">Makeover</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(annual_trade, <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">Data Series</span><span class="st">`</span>, <span class="at">y =</span> Trade_Value<span class="sc">/</span><span class="fl">1e3</span>, <span class="at">fill =</span> Trade_Type)) <span class="sc">+</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"stack"</span>) <span class="sc">+</span> </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">round</span>(Trade_Value<span class="sc">/</span><span class="fl">1e3</span>, <span class="dv">1</span>)),  </span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">position =</span> <span class="fu">position_stack</span>(<span class="at">vjust =</span> <span class="fl">0.5</span>),  </span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">"black"</span>,  </span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span>  </span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Singapore's Total Merchandise Trade (2024)"</span>,</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Country"</span>,</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Total Trade Value (S$ Billion)"</span>,</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">"Trade Type"</span>) <span class="sc">+</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>()</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplotly</span>(p1, <span class="at">tooltip =</span> <span class="st">"text"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-6469d3a8b218beabeec2" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-6469d3a8b218beabeec2">{"x":{"data":[{"orientation":"h","width":[0.89999999999999991,0.90000000000000013,0.90000000000000036,0.90000000000000036,0.90000000000000036,0.90000000000000036,0.90000000000000036,0.89999999999999947,0.89999999999999858,0.89999999999999858],"base":[75.73960000000001,89.63539999999999,4.7436000000000007,20.938400000000001,29.695499999999999,38.395300000000006,68.707899999999995,84.318399999999997,15.177100000000001,74.368100000000013],"x":[94.442699999999988,52.417099999999991,73.878600000000006,53.216499999999996,23.706799999999998,28.422799999999995,69.935600000000022,32.469499999999996,29.297899999999998,57.621200000000002],"y":[1,2,3,4,5,6,7,8,9,10],"text":"","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","line":{"width":1.8897637795275593,"color":"transparent"}},"name":"Exports","legendgroup":"Exports","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":[0.89999999999999991,0.90000000000000013,0.90000000000000036,0.90000000000000036,0.90000000000000036,0.90000000000000036,0.90000000000000036,0.89999999999999947,0.89999999999999858,0.89999999999999858],"base":[0,0,0,0,0,0,0,0,0,0],"x":[75.73960000000001,89.63539999999999,4.7436000000000007,20.938400000000001,29.695499999999999,38.395300000000006,68.707899999999995,84.318399999999997,15.177100000000001,74.368100000000013],"y":[1,2,3,4,5,6,7,8,9,10],"text":"","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","line":{"width":1.8897637795275593,"color":"transparent"}},"name":"Imports","legendgroup":"Imports","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[122.96095,115.84394999999998,41.682900000000004,47.54665,41.548899999999996,52.606700000000004,103.67570000000001,100.55314999999999,29.826050000000002,103.17870000000002],"y":[1,2,3,4,5,6,7,8,9,10],"text":[94.400000000000006,52.399999999999999,73.900000000000006,53.200000000000003,23.699999999999999,28.399999999999999,69.900000000000006,32.5,29.300000000000001,57.600000000000001],"hovertext":["","","","","","","","","",""],"textfont":{"size":11.338582677165356,"color":"rgba(0,0,0,1)"},"type":"scatter","mode":"text","hoveron":"points","name":"Exports","legendgroup":"Exports","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[37.869800000000005,44.817699999999995,2.3718000000000004,10.469200000000001,14.84775,19.197650000000003,34.353949999999998,42.159199999999998,7.5885500000000006,37.184050000000006],"y":[1,2,3,4,5,6,7,8,9,10],"text":[75.700000000000003,89.599999999999994,4.7000000000000002,20.899999999999999,29.699999999999999,38.399999999999999,68.700000000000003,84.299999999999997,15.199999999999999,74.400000000000006],"hovertext":["","","","","","","","","",""],"textfont":{"size":11.338582677165356,"color":"rgba(0,0,0,1)"},"type":"scatter","mode":"text","hoveron":"points","name":"Imports","legendgroup":"Imports","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":43.762557077625573,"r":7.3059360730593621,"b":40.182648401826491,"l":101.55251141552515},"font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Singapore's Total Merchandise Trade (2024)","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-8.5091149999999995,178.69141500000001],"tickmode":"array","ticktext":["0","50","100","150"],"tickvals":[0,50.000000000000007,100,150],"categoryorder":"array","categoryarray":["0","50","100","150"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"Total Trade Value (S$ Billion)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.40000000000000002,10.6],"tickmode":"array","ticktext":["China","Europe","Hong Kong","Indonesia","Japan","Korea, Rep Of","Malaysia","Taiwan","Thailand","United States"],"tickvals":[1,2,3,4,5,6.0000000000000009,7,8,9,10],"categoryorder":"array","categoryarray":["China","Europe","Hong Kong","Indonesia","Japan","Korea, Rep Of","Malaysia","Taiwan","Thailand","United States"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Country","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498},"title":{"text":"Trade Type","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"38d420757c0":{"x":{},"y":{},"fill":{},"type":"bar"},"38d42e8c4b6f":{"x":{},"y":{},"fill":{},"label":{}}},"cur_data":"38d420757c0","visdat":{"38d420757c0":["function (y) ","x"],"38d42e8c4b6f":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
 
 
 </section>
