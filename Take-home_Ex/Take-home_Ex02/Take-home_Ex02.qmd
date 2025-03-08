@@ -42,7 +42,7 @@ The following R packages will be used:
 -   **feasts**: Works with tsibble to analyze time-series components (trend, seasonality, residuals).
 
 ```{r}
-pacman::p_load(readxl, data.table, tidyverse, plotly, ggthemes, patchwork, scales, tsibble, lubridate, feasts)
+pacman::p_load(ggrepel, readxl, data.table, tidyverse, plotly, ggthemes, patchwork, scales, tsibble, lubridate, feasts)
 ```
 
 # The Datasets
@@ -133,7 +133,7 @@ glimpse(commodity_total)
 
 # Visualisation 1 - Total Merchandise Trade at Current Prices, 2020 - 2024
 
-![Fig. 1](images/Screenshot 2025-03-08 222701.png)
+![Fig. 1](images/Screenshot 2025-03-09 002743.png)
 
 ::: callout-note
 ## Comments on Fig. 1
@@ -144,33 +144,66 @@ glimpse(commodity_total)
 
 -   Clearly distinguishes between exports and imports with separate values.
 
--   Uses a chronological format to highlight trends.
+-   Exports and imports are grouped together, making it easy to compare them by year.
 
 #### **Cons:**
 
 -   The visualization is heavily text-based, making it hard to grasp trends at a glance.
 
--   No clear graphical elements such as bars or lines to show trends.
+-   No clear graphical elements such as a trendline to show trends.
 
 -   The numeric values can be overwhelming without visual cues.
+
+-   No meaningful colour coding as every bar, be it import or export, is represented by a different colour.
 :::
 
 ## Makeover
 
 ```{r}
-
-
-ggplot(commodity_total, aes(x = Year, y = Total_Trade_Value / 1e6, color = `Data Series`, group = `Data Series`)) +  
-  geom_line(size = 1) +
+p <- ggplot(commodity_total, aes(x = Year, y = Total_Trade_Value / 1e6, color = `Data Series`, group = `Data Series`, text = paste("Year:", Year, "<br>", "Trade Type:", `Data Series`, "<br>", "Trade Value: S$", scales::comma(Total_Trade_Value / 1e6), "B"))) + 
+  geom_line(linewidth = 1) +
   geom_point(size = 2) +
-
-  geom_text(aes(label = scales::comma(Total_Trade_Value / 1e6)), vjust = -0.5, hjust = 0.5, size = 3) +  
-
   theme_minimal() +
   labs(title = "Yearly Trend of Merchandise Trade (2020-2024)",
        x = "Year",
-       y = "Trade Value (S$ Billion)",  
-       color = "Legend") +
+       y = "Trade Value (S$ Billion)",
+       color = "Trade Type") +
   scale_x_continuous(breaks = seq(2020, 2024, 1)) +
-  scale_y_continuous(labels = label_number(scale = 1))
+  scale_y_continuous(labels = label_number(scale = 1))  
+
+ggplotly(p, tooltip = "text") 
 ```
+
+::: callout-note
+## Improvements over Fig. 1
+
+-   Time series - From 2020 on the left to 2024 on the right
+
+-   Line graphs allow us to clearly see the trend over the years.
+
+-   The interactivity provided by ggplotly allows us to isolate a particular graph for easier comparison .
+:::
+
+# Visualisation 2: Merchandise Trade Performance with Major Trading Partners (2024)
+
+![Fig. 2](images/Screenshot 2025-03-09 002700.png)
+
+::: callout-note
+## Comments on Fig. 2
+
+#### **Pros:**
+
+-   The bubble chart format can convey a great deal of information within a small space. We can see Singapore's trade volume with many countries and whether Singapore has a positive net export or import with these countries.
+
+-   Differentiates between import and export dominance via color coding.
+
+-   We can immediately see who Singapore's biggest trading partners are based on the size of the bubble.
+
+#### **Cons:**
+
+-   A lot of numbers are presented, which might make it hard to compare at a glance.
+
+-   No way to tell what the import and export trade values are. Can only see total trade value.
+
+-   Can be hard to tell if a country is import or export dominant with Singapore if the centre of the bubble lies close to the dividing line (eg. Malaysia).
+:::

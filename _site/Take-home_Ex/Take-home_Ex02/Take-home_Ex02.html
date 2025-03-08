@@ -102,6 +102,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<link href="../../site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+
+<script src="../../site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+
+<script src="../../site_libs/plotly-binding-4.10.4/plotly.js"></script>
+
+<script src="../../site_libs/typedarray-0.1/typedarray.min.js"></script>
+
+<script src="../../site_libs/jquery-3.5.1/jquery.min.js"></script>
+
+<link href="../../site_libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet">
+
+<script src="../../site_libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+
+<link href="../../site_libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+
+<script src="../../site_libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+
 
 
 <link rel="stylesheet" href="../../styles.css">
@@ -271,6 +289,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#makeover" id="toc-makeover" class="nav-link" data-scroll-target="#makeover">Makeover</a></li>
   </ul></li>
+  <li><a href="#visualisation-2-merchandise-trade-performance-with-major-trading-partners-2024" id="toc-visualisation-2-merchandise-trade-performance-with-major-trading-partners-2024" class="nav-link" data-scroll-target="#visualisation-2-merchandise-trade-performance-with-major-trading-partners-2024">Visualisation 2: Merchandise Trade Performance with Major Trading Partners (2024)</a></li>
   </ul>
 </nav>
     </div>
@@ -303,7 +322,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">March 8, 2025</p>
+      <p class="date-modified">March 9, 2025</p>
     </div>
   </div>
     
@@ -343,7 +362,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(readxl, data.table, tidyverse, plotly, ggthemes, patchwork, scales, tsibble, lubridate, feasts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(ggrepel, readxl, data.table, tidyverse, plotly, ggthemes, patchwork, scales, tsibble, lubridate, feasts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -1033,7 +1052,7 @@ $ Total_Trade_Value &lt;dbl&gt; 515644539, 453467444, 969111983, 614081094, 5458
 <h1>Visualisation 1 - Total Merchandise Trade at Current Prices, 2020 - 2024</h1>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/Screenshot 2025-03-08 222701.png" class="img-fluid figure-img"></p>
+<p><img src="images/Screenshot 2025-03-09 002743.png" class="img-fluid figure-img"></p>
 <figcaption>Fig. 1</figcaption>
 </figure>
 </div>
@@ -1052,15 +1071,16 @@ Comments on Fig. 1
 <ul>
 <li><p>Provides an overview of Singapore’s trade growth over time.</p></li>
 <li><p>Clearly distinguishes between exports and imports with separate values.</p></li>
-<li><p>Uses a chronological format to highlight trends.</p></li>
+<li><p>Exports and imports are grouped together, making it easy to compare them by year.</p></li>
 </ul>
 </section>
 <section id="cons" class="level4">
 <h4 class="anchored" data-anchor-id="cons"><strong>Cons:</strong></h4>
 <ul>
 <li><p>The visualization is heavily text-based, making it hard to grasp trends at a glance.</p></li>
-<li><p>No clear graphical elements such as bars or lines to show trends.</p></li>
+<li><p>No clear graphical elements such as a trendline to show trends.</p></li>
 <li><p>The numeric values can be overwhelming without visual cues.</p></li>
+<li><p>No meaningful colour coding as every bar, be it import or export, is represented by a different colour.</p></li>
 </ul>
 </section>
 </div>
@@ -1070,35 +1090,81 @@ Comments on Fig. 1
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(commodity_total, <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> Total_Trade_Value <span class="sc">/</span> <span class="fl">1e6</span>, <span class="at">color =</span> <span class="st">`</span><span class="at">Data Series</span><span class="st">`</span>, <span class="at">group =</span> <span class="st">`</span><span class="at">Data Series</span><span class="st">`</span>)) <span class="sc">+</span>  </span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(commodity_total, <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> Total_Trade_Value <span class="sc">/</span> <span class="fl">1e6</span>, <span class="at">color =</span> <span class="st">`</span><span class="at">Data Series</span><span class="st">`</span>, <span class="at">group =</span> <span class="st">`</span><span class="at">Data Series</span><span class="st">`</span>, <span class="at">text =</span> <span class="fu">paste</span>(<span class="st">"Year:"</span>, Year, <span class="st">"&lt;br&gt;"</span>, <span class="st">"Trade Type:"</span>, <span class="st">`</span><span class="at">Data Series</span><span class="st">`</span>, <span class="st">"&lt;br&gt;"</span>, <span class="st">"Trade Value: S$"</span>, scales<span class="sc">::</span><span class="fu">comma</span>(Total_Trade_Value <span class="sc">/</span> <span class="fl">1e6</span>), <span class="st">"B"</span>))) <span class="sc">+</span> </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> scales<span class="sc">::</span><span class="fu">comma</span>(Total_Trade_Value <span class="sc">/</span> <span class="fl">1e6</span>)), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span>  </span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Yearly Trend of Merchandise Trade (2020-2024)"</span>,</span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Year"</span>,</span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Trade Value (S$ Billion)"</span>,  </span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">"Legend"</span>) <span class="sc">+</span></span>
-<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">2020</span>, <span class="dv">2024</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> <span class="fu">label_number</span>(<span class="at">scale =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Yearly Trend of Merchandise Trade (2020-2024)"</span>,</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Year"</span>,</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Trade Value (S$ Billion)"</span>,</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">"Trade Type"</span>) <span class="sc">+</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">2020</span>, <span class="dv">2024</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> <span class="fu">label_number</span>(<span class="at">scale =</span> <span class="dv">1</span>))  </span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplotly</span>(p, <span class="at">tooltip =</span> <span class="st">"text"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-ℹ Please use `linewidth` instead.</code></pre>
-</div>
 <div class="cell-output-display">
-<div>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-f4dfa308db7d67c596ac" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-f4dfa308db7d67c596ac">{"x":{"data":[{"x":[2020,2021,2022,2023,2024],"y":[515.64453900000001,614.0810937,709.96663510000008,638.40348920000008,674.50502660000006],"text":["Year: 2020 <br> Trade Type: Total Merchandise Exports, (At Current Prices) <br> Trade Value: S$ 515.6 B","Year: 2021 <br> Trade Type: Total Merchandise Exports, (At Current Prices) <br> Trade Value: S$ 614.1 B","Year: 2022 <br> Trade Type: Total Merchandise Exports, (At Current Prices) <br> Trade Value: S$ 710.0 B","Year: 2023 <br> Trade Type: Total Merchandise Exports, (At Current Prices) <br> Trade Value: S$ 638.4 B","Year: 2024 <br> Trade Type: Total Merchandise Exports, (At Current Prices) <br> Trade Value: S$ 674.5 B"],"type":"scatter","mode":"lines+markers","line":{"width":3.7795275590551185,"color":"rgba(248,118,109,1)","dash":"solid"},"hoveron":"points","name":"Total Merchandise Exports, (At Current Prices)","legendgroup":"Total Merchandise Exports, (At Current Prices)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":1,"size":7.559055118110237,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(248,118,109,1)"}},"frame":null},{"x":[2020,2021,2022,2023,2024],"y":[453.46744389999998,545.88193710000007,655.43588360000001,567.31906179999999,611.35944039999993],"text":["Year: 2020 <br> Trade Type: Total Merchandise Imports, (At Current Prices) <br> Trade Value: S$ 453.5 B","Year: 2021 <br> Trade Type: Total Merchandise Imports, (At Current Prices) <br> Trade Value: S$ 545.9 B","Year: 2022 <br> Trade Type: Total Merchandise Imports, (At Current Prices) <br> Trade Value: S$ 655.4 B","Year: 2023 <br> Trade Type: Total Merchandise Imports, (At Current Prices) <br> Trade Value: S$ 567.3 B","Year: 2024 <br> Trade Type: Total Merchandise Imports, (At Current Prices) <br> Trade Value: S$ 611.4 B"],"type":"scatter","mode":"lines+markers","line":{"width":3.7795275590551185,"color":"rgba(0,186,56,1)","dash":"solid"},"hoveron":"points","name":"Total Merchandise Imports, (At Current Prices)","legendgroup":"Total Merchandise Imports, (At Current Prices)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(0,186,56,1)","opacity":1,"size":7.559055118110237,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,186,56,1)"}},"frame":null},{"x":[2020,2021,2022,2023,2024],"y":[969.11198289999993,1159.9630305999999,1365.4025185,1205.7225510000001,1285.8644674000002],"text":["Year: 2020 <br> Trade Type: Total Merchandise Trade, (At Current Prices) <br> Trade Value: S$ 969.1 B","Year: 2021 <br> Trade Type: Total Merchandise Trade, (At Current Prices) <br> Trade Value: S$ 1,160.0 B","Year: 2022 <br> Trade Type: Total Merchandise Trade, (At Current Prices) <br> Trade Value: S$ 1,365.4 B","Year: 2023 <br> Trade Type: Total Merchandise Trade, (At Current Prices) <br> Trade Value: S$ 1,205.7 B","Year: 2024 <br> Trade Type: Total Merchandise Trade, (At Current Prices) <br> Trade Value: S$ 1,285.9 B"],"type":"scatter","mode":"lines+markers","line":{"width":3.7795275590551185,"color":"rgba(97,156,255,1)","dash":"solid"},"hoveron":"points","name":"Total Merchandise Trade, (At Current Prices)","legendgroup":"Total Merchandise Trade, (At Current Prices)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(97,156,255,1)","opacity":1,"size":7.559055118110237,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(97,156,255,1)"}},"frame":null}],"layout":{"margin":{"t":43.762557077625573,"r":7.3059360730593621,"b":40.182648401826491,"l":54.794520547945211},"font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Yearly Trend of Merchandise Trade (2020-2024)","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[2019.8,2024.2],"tickmode":"array","ticktext":["2020","2021","2022","2023","2024"],"tickvals":[2020,2021,2022,2023,2024],"categoryorder":"array","categoryarray":["2020","2021","2022","2023","2024"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"Year","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[407.87069016999999,1410.9992722300001],"tickmode":"array","ticktext":["600","800","1 000","1 200","1 400"],"tickvals":[600,800,1000,1200,1400],"categoryorder":"array","categoryarray":["600","800","1 000","1 200","1 400"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Trade Value (S$ Billion)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498},"title":{"text":"Trade Type","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"4a14135c4d3f":{"x":{},"y":{},"colour":{},"text":{},"type":"scatter"},"4a146bbc2c45":{"x":{},"y":{},"colour":{},"text":{}}},"cur_data":"4a14135c4d3f","visdat":{"4a14135c4d3f":["function (y) ","x"],"4a146bbc2c45":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Improvements over Fig. 1
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><p>Time series - From 2020 on the left to 2024 on the right</p></li>
+<li><p>Line graphs allow us to clearly see the trend over the years.</p></li>
+<li><p>The interactivity provided by ggplotly allows us to isolate a particular graph for easier comparison .</p></li>
+</ul>
+</div>
+</div>
+</section>
+</section>
+<section id="visualisation-2-merchandise-trade-performance-with-major-trading-partners-2024" class="level1">
+<h1>Visualisation 2: Merchandise Trade Performance with Major Trading Partners (2024)</h1>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="Take-home_Ex02_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="images/Screenshot 2025-03-09 002700.png" class="img-fluid figure-img"></p>
+<figcaption>Fig. 2</figcaption>
 </figure>
 </div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Comments on Fig. 2
 </div>
 </div>
-
-
+<div class="callout-body-container callout-body">
+<section id="pros-1" class="level4">
+<h4 class="anchored" data-anchor-id="pros-1"><strong>Pros:</strong></h4>
+<ul>
+<li><p>The bubble chart format can convey a great deal of information within a small space. We can see Singapore’s trade volume with many countries and whether Singapore has a positive net export or import with these countries.</p></li>
+<li><p>Differentiates between import and export dominance via color coding.</p></li>
+<li><p>We can immediately see who Singapore’s biggest trading partners are based on the size of the bubble.</p></li>
+</ul>
 </section>
+<section id="cons-1" class="level4">
+<h4 class="anchored" data-anchor-id="cons-1"><strong>Cons:</strong></h4>
+<ul>
+<li><p>A lot of numbers are presented, which might make it hard to compare at a glance.</p></li>
+<li><p>No way to tell what the import and export trade values are. Can only see total trade value.</p></li>
+<li><p>Can be hard to tell if a country is import or export dominant with Singapore if the centre of the bubble lies close to the dividing line (eg. Malaysia).</p></li>
+</ul>
+</section>
+</div>
+</div>
+
+
 </section>
 
 </main> <!-- /main -->
