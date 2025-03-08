@@ -61,6 +61,15 @@ The data used are from the Department of Statistics Singapore [website](https://
 
 ```{r}
 df1 <- read_excel("data/TradeCommodity.xlsx", sheet = 'T1')
+```
+
+The columns for TradeCommodity.xlsx was shown to have a mix of numeric and character types. Therefore, col_types = "text" is used to standardised the column type to text.
+
+```{r}
+df1 <- read_excel("data/TradeCommodity.xlsx", sheet = 'T1', col_types = "text")
+```
+
+```{r}
 df2 <- read_excel("data/TradeRegion.xlsx", sheet = 'T1')
 df3 <- read_excel("data/TradeRegion.xlsx", sheet = 'T2')
 df4 <- read_excel("data/TradeRegion.xlsx", sheet = 'T3')
@@ -68,13 +77,10 @@ df4 <- read_excel("data/TradeRegion.xlsx", sheet = 'T3')
 
 ## Data Preparation
 
-By inspecting the datasets with `glimpse()`, we can see that the datasets need to be transposed such that the dates are rows and the commodity type/region are the columns (variables).
+First, we examine the data to confirm the structure. We will need to convert the column names (Year-Month) into rows.
 
 ```{r}
-glimpse(df1)
-glimpse(df2)
-glimpse(df3)
-glimpse(df4)
+head(df1)
 ```
 
 ### Check for missing values
@@ -88,56 +94,83 @@ colSums(is.na(df3))
 colSums(is.na(df4))
 ```
 
-### Transposing the dataset
-
-Transposing the datasets then use the first row as column names after transposing.
+### Reshape the Data Using pivot_longer()
 
 ```{r}
-# Transpose the dataset
-commodity <- as.data.frame(t(df1))
-import <- as.data.frame(t(df2))
-dom_ex <- as.data.frame(t(df3))
-re_ex <- as.data.frame(t(df4))
+colnames(df1) <- as.character(colnames(df1))
 
-# Set the first row as column names
-colnames(commodity) <- commodity[1, ]
-colnames(import) <- import[1, ]
-colnames(dom_ex) <- dom_ex[1, ]
-colnames(re_ex) <- re_ex[1, ]
-
-# Remove the first row since it is now the header
-commodity <- commodity[-1, ]
-import <- import[-1, ]
-dom_ex <- dom_ex[-1, ]
-re_ex <- re_ex[-1, ]
+commodity <- df1 %>%
+  pivot_longer(cols = -`Data Series`, names_to = "Year_Month", values_to = "Trade_Value") %>%
+  mutate(Trade_Value = suppressWarnings(as.numeric(Trade_Value))) 
 ```
 
-The dataset "Merchandise Trade By Commodity Section, (At Current Prices), Monthly" contains duplicated column names after transposing and will need to be assigned unique names.
+### Filter out the relevant data
+
+For the first visualisation, we are specifically concerned about the Total Merchandise Imports (At Current Prices), Total Merchandise Exports (At Current Prices) and the Total Merchandise Trade (Imports + Exports), (At Current Prices) from 2020 to 2024. Therefore, we filter those rows out.
 
 ```{r}
-colnames(commodity) <- make.names(colnames(commodity), unique = TRUE)
+commodity_total <- commodity %>%
+  filter(`Data Series` %in% c("Total Merchandise Imports, (At Current Prices)", "Total Merchandise Exports, (At Current Prices)", "Total Merchandise Trade, (At Current Prices)"))
 ```
 
-Convert all variable types to numeric since R treats them as characters after transposing. The warnings appear due to there being 'na' character strings in "commodity".
-
 ```{r}
-commodity <- commodity %>%
-  mutate(across(everything(), as.numeric))
-import <- import %>%
-  mutate(across(everything(), as.numeric))
-dom_ex <- dom_ex %>%
-  mutate(across(everything(), as.numeric))
-re_ex <- re_ex %>%
-  mutate(across(everything(), as.numeric))
+commodity_total <- commodity_total %>%
+  mutate(Year = year(parse_date_time(Year_Month, orders = "ym"))) %>% 
+  filter(Year >= 2020 & Year <= 2024) %>%
+  group_by(Year, `Data Series`) %>%
+  summarise(Total_Trade_Value = sum(Trade_Value, na.rm = TRUE)) %>% 
+  ungroup()
 ```
 
-### Final Touches
+### Final Look at the Datasets
 
-Final look at the datasets.
+#### Visualisation 1
 
 ```{r}
-glimpse(commodity)
-glimpse(import)
-glimpse(dom_ex)
-glimpse(re_ex)
+head(commodity_total)
+glimpse(commodity_total)
+```
+
+# Visualisation 1 - Total Merchandise Trade at Current Prices, 2020 - 2024
+
+![Fig. 1](images/Screenshot 2025-03-08 222701.png)
+
+::: callout-note
+## Comments on Fig. 1
+
+#### **Pros:**
+
+-   Provides an overview of Singapore's trade growth over time.
+
+-   Clearly distinguishes between exports and imports with separate values.
+
+-   Uses a chronological format to highlight trends.
+
+#### **Cons:**
+
+-   The visualization is heavily text-based, making it hard to grasp trends at a glance.
+
+-   No clear graphical elements such as bars or lines to show trends.
+
+-   The numeric values can be overwhelming without visual cues.
+:::
+
+## Makeover
+
+```{r}
+
+
+ggplot(commodity_total, aes(x = Year, y = Total_Trade_Value / 1e6, color = `Data Series`, group = `Data Series`)) +  
+  geom_line(size = 1) +
+  geom_point(size = 2) +
+
+  geom_text(aes(label = scales::comma(Total_Trade_Value / 1e6)), vjust = -0.5, hjust = 0.5, size = 3) +  
+
+  theme_minimal() +
+  labs(title = "Yearly Trend of Merchandise Trade (2020-2024)",
+       x = "Year",
+       y = "Trade Value (S$ Billion)",  
+       color = "Legend") +
+  scale_x_continuous(breaks = seq(2020, 2024, 1)) +
+  scale_y_continuous(labels = label_number(scale = 1))
 ```
