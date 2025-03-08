@@ -191,6 +191,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html">
  <span class="dropdown-text">Take-home Exercise 1</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html">
+ <span class="dropdown-text">Take-home Exercise 2</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -262,6 +266,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#single-time-series-decomposition" id="toc-single-time-series-decomposition" class="nav-link" data-scroll-target="#single-time-series-decomposition">Single time series decomposition</a></li>
   <li><a href="#multiple-time-series-decomposition" id="toc-multiple-time-series-decomposition" class="nav-link" data-scroll-target="#multiple-time-series-decomposition">Multiple time-series decomposition</a></li>
+  <li><a href="#composite-plot-of-time-series-decomposition" id="toc-composite-plot-of-time-series-decomposition" class="nav-link" data-scroll-target="#composite-plot-of-time-series-decomposition">Composite plot of time series decomposition</a></li>
+  </ul></li>
+  <li><a href="#visual-stl-diagnostics" id="toc-visual-stl-diagnostics" class="nav-link" data-scroll-target="#visual-stl-diagnostics">Visual STL Diagnostics</a>
+  <ul class="collapse">
+  <li><a href="#visual-stl-diagnostics-with-feasts" id="toc-visual-stl-diagnostics-with-feasts" class="nav-link" data-scroll-target="#visual-stl-diagnostics-with-feasts">Visual STL diagnostics with feasts</a></li>
+  <li><a href="#classical-decomposition-with-feasts" id="toc-classical-decomposition-with-feasts" class="nav-link" data-scroll-target="#classical-decomposition-with-feasts">Classical Decomposition with feasts</a></li>
+  </ul></li>
+  <li><a href="#visual-forecasting" id="toc-visual-forecasting" class="nav-link" data-scroll-target="#visual-forecasting">Visual Forecasting</a>
+  <ul class="collapse">
+  <li><a href="#time-series-data-sampling" id="toc-time-series-data-sampling" class="nav-link" data-scroll-target="#time-series-data-sampling">Time Series Data Sampling</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -605,6 +619,81 @@ dbl (33): Republic of South Africa, Canada, USA, Bangladesh, Brunei, China, ...
 </figure>
 </div>
 </div>
+</div>
+</section>
+<section id="composite-plot-of-time-series-decomposition" class="level2">
+<h2 class="anchored" data-anchor-id="composite-plot-of-time-series-decomposition">Composite plot of time series decomposition</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>tsibble_longer <span class="sc">%&gt;%</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Country</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Vietnam"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gg_tsdisplay</span>(Arrivals)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="In-class_Ex07_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="visual-stl-diagnostics" class="level1">
+<h1>Visual STL Diagnostics</h1>
+<section id="visual-stl-diagnostics-with-feasts" class="level2">
+<h2 class="anchored" data-anchor-id="visual-stl-diagnostics-with-feasts">Visual STL diagnostics with feasts</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>tsibble_longer <span class="sc">%&gt;%</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Country</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Vietnam"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">model</span>(<span class="at">stl =</span> <span class="fu">STL</span>(Arrivals)) <span class="sc">%&gt;%</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">components</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autoplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="In-class_Ex07_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="classical-decomposition-with-feasts" class="level2">
+<h2 class="anchored" data-anchor-id="classical-decomposition-with-feasts">Classical Decomposition with feasts</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>tsibble_longer <span class="sc">%&gt;%</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Country</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Vietnam"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">model</span>(</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">classical_decomposition</span>(</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>      Arrivals, <span class="at">type =</span> <span class="st">"additive"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">components</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autoplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 6 rows containing missing values or values outside the scale range
+(`geom_line()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="In-class_Ex07_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="visual-forecasting" class="level1">
+<h1>Visual Forecasting</h1>
+<section id="time-series-data-sampling" class="level2">
+<h2 class="anchored" data-anchor-id="time-series-data-sampling">Time Series Data Sampling</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>vietnam_ts <span class="ot">&lt;-</span> tsibble_longer <span class="sc">%&gt;%</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Country <span class="sc">==</span> <span class="st">"Vietnam"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Type =</span> <span class="fu">if_else</span>(</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Month-Year</span><span class="st">`</span> <span class="sc">&gt;=</span> <span class="st">"2019-01-01"</span>, </span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Hold-out"</span>, <span class="st">"Training"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>vietnam_train <span class="ot">&lt;-</span> vietnam_ts <span class="sc">%&gt;%</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Month-Year</span><span class="st">`</span> <span class="sc">&lt;</span> <span class="st">"2019-01-01"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 

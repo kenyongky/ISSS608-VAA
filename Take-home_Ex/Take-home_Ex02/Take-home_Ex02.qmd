@@ -1,0 +1,143 @@
+---
+title: "Take-home Exercise 2: Be Tradewise or Otherwise"
+author: "Kenneth Yong"
+date: "February 21, 2025"
+date-modified: "last-modified"
+format: 
+  html: 
+    code-fold: true
+    code-summary: Show the code
+---
+
+# Overview
+
+## Background
+
+The political turbulence in the United States of America has made global trade one of the most closely watched topics in recent years. Their actions and policies greatly affect the world's economy and individual countries want to know what impact they will have on their own economies. This assignment examines Singapore's trade data to gain insights on their economic relationships with other nations.
+
+## Objectives
+
+The goal of this assignment is to critically analyze visualizations from Singapore's trade report and improve them using `ggplot2` and other relevant R packages. The makeover should enhance clarity, readability, and interpretability while ensuring that key trade insights are effectively communicated.
+
+# Getting Started
+
+## Installing and loading packages
+
+The following R packages will be used:
+
+-   **tidyverse:** A collection of R packages designed for data manipulation, exploration, and visualization, providing a consistent and easy-to-use syntax.
+
+-   **plotly**: R package for creating interactive and dynamic data visualizations.
+
+-   **ggthemes:** Offers additional themes and color schemes for ggplot2, enabling more visually appealing and customized plots.
+
+-   **patchwork:** Facilitates combining multiple ggplot2 plots into a single layout, making it easy to create complex multi-panel visualizations.
+
+-   **scales:** Allows customization of axis labels, breaks, and scales in ggplot2, improving plot readability and presentation.
+
+-   **tsibble:** Provides a framework for working with time-series data in a tidy format.
+
+-   **lubridate:** Helps parse, manipulate, and analyze date/time information.
+
+-   **feasts**: Works with tsibble to analyze time-series components (trend, seasonality, residuals).
+
+```{r}
+pacman::p_load(readxl, data.table, tidyverse, plotly, ggthemes, patchwork, scales, tsibble, lubridate, feasts)
+```
+
+# The Datasets
+
+The data used are from the Department of Statistics Singapore [website](https://www.singstat.gov.sg/find-data/search-by-theme/trade-and-investment/merchandise-trade/latest-data). Specifically, we will be importing the following excel spreadsheets:
+
+-   Merchandise Trade By Commodity Section, (At Current Prices), Monthly \[TradeCommodity.xlsx T1\]
+
+-   Merchandise Trade By Region and Selected Market (Imports), Monthly \[TradeRegion.xlsx T1\]
+
+-   Merchandise Trade By Region and Selected Market (Domestic Exports), Monthly \[TradeRegion.xlsx T2\]
+
+-   Merchandise Trade By Region and Selected Market (Re-Exports), Monthly \[TradeRegion.xlsx T3\]
+
+## Importing the Data
+
+```{r}
+df1 <- read_excel("data/TradeCommodity.xlsx", sheet = 'T1')
+df2 <- read_excel("data/TradeRegion.xlsx", sheet = 'T1')
+df3 <- read_excel("data/TradeRegion.xlsx", sheet = 'T2')
+df4 <- read_excel("data/TradeRegion.xlsx", sheet = 'T3')
+```
+
+## Data Preparation
+
+By inspecting the datasets with `glimpse()`, we can see that the datasets need to be transposed such that the dates are rows and the commodity type/region are the columns (variables).
+
+```{r}
+glimpse(df1)
+glimpse(df2)
+glimpse(df3)
+glimpse(df4)
+```
+
+### Check for missing values
+
+Even though colSums(is.na(df1)) shows no missing values, we can observe that there are indeed 'na' character strings in the data. However, they are only observed in the data before 1975. This would not affect the assignment as we are only concerned about the data starting from 2020-2024.
+
+```{r}
+colSums(is.na(df1))
+colSums(is.na(df2))
+colSums(is.na(df3))
+colSums(is.na(df4))
+```
+
+### Transposing the dataset
+
+Transposing the datasets then use the first row as column names after transposing.
+
+```{r}
+# Transpose the dataset
+commodity <- as.data.frame(t(df1))
+import <- as.data.frame(t(df2))
+dom_ex <- as.data.frame(t(df3))
+re_ex <- as.data.frame(t(df4))
+
+# Set the first row as column names
+colnames(commodity) <- commodity[1, ]
+colnames(import) <- import[1, ]
+colnames(dom_ex) <- dom_ex[1, ]
+colnames(re_ex) <- re_ex[1, ]
+
+# Remove the first row since it is now the header
+commodity <- commodity[-1, ]
+import <- import[-1, ]
+dom_ex <- dom_ex[-1, ]
+re_ex <- re_ex[-1, ]
+```
+
+The dataset "Merchandise Trade By Commodity Section, (At Current Prices), Monthly" contains duplicated column names after transposing and will need to be assigned unique names.
+
+```{r}
+colnames(commodity) <- make.names(colnames(commodity), unique = TRUE)
+```
+
+Convert all variable types to numeric since R treats them as characters after transposing. The warnings appear due to there being 'na' character strings in "commodity".
+
+```{r}
+commodity <- commodity %>%
+  mutate(across(everything(), as.numeric))
+import <- import %>%
+  mutate(across(everything(), as.numeric))
+dom_ex <- dom_ex %>%
+  mutate(across(everything(), as.numeric))
+re_ex <- re_ex %>%
+  mutate(across(everything(), as.numeric))
+```
+
+### Final Touches
+
+Final look at the datasets.
+
+```{r}
+glimpse(commodity)
+glimpse(import)
+glimpse(dom_ex)
+glimpse(re_ex)
+```
