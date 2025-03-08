@@ -31,7 +31,7 @@ The following R packages will be used:
 
 -   **ggthemes:** Offers additional themes and color schemes for ggplot2, enabling more visually appealing and customized plots.
 
--   **patchwork:** Facilitates combining multiple ggplot2 plots into a single layout, making it easy to create complex multi-panel visualizations.
+-   **knitr:** An R package designed for dynamic report generation. It integrates R code with documents to produce well-formatted reports, tables, and visualizations.
 
 -   **scales:** Allows customization of axis labels, breaks, and scales in ggplot2, improving plot readability and presentation.
 
@@ -41,8 +41,10 @@ The following R packages will be used:
 
 -   **feasts**: Works with tsibble to analyze time-series components (trend, seasonality, residuals).
 
+-   **readxl:** An R package for reading Excel files (.xls and .xlsx) into R.
+
 ```{r}
-pacman::p_load(ggrepel, readxl, data.table, tidyverse, plotly, ggthemes, patchwork, scales, tsibble, lubridate, feasts)
+pacman::p_load(readxl, tidyverse, plotly, ggthemes, knitr, scales, tsibble, lubridate, feasts)
 ```
 
 # The Datasets
@@ -67,9 +69,6 @@ The columns for TradeCommodity.xlsx was shown to have a mix of numeric and chara
 
 ```{r}
 df1 <- read_excel("data/TradeCommodity.xlsx", sheet = 'T1', col_types = "text")
-```
-
-```{r}
 df2 <- read_excel("data/TradeRegion.xlsx", sheet = 'T1')
 df3 <- read_excel("data/TradeRegion.xlsx", sheet = 'T2')
 df4 <- read_excel("data/TradeRegion.xlsx", sheet = 'T3')
@@ -77,24 +76,23 @@ df4 <- read_excel("data/TradeRegion.xlsx", sheet = 'T3')
 
 ## Data Preparation
 
+### Prep for V1
+
 First, we examine the data to confirm the structure. We will need to convert the column names (Year-Month) into rows.
 
 ```{r}
 head(df1)
 ```
 
-### Check for missing values
+#### Check for missing values
 
 Even though colSums(is.na(df1)) shows no missing values, we can observe that there are indeed 'na' character strings in the data. However, they are only observed in the data before 1975. This would not affect the assignment as we are only concerned about the data starting from 2020-2024.
 
 ```{r}
 colSums(is.na(df1))
-colSums(is.na(df2))
-colSums(is.na(df3))
-colSums(is.na(df4))
 ```
 
-### Reshape the Data Using pivot_longer()
+#### Reshape the Data Using pivot_longer()
 
 ```{r}
 colnames(df1) <- as.character(colnames(df1))
@@ -104,7 +102,7 @@ commodity <- df1 %>%
   mutate(Trade_Value = suppressWarnings(as.numeric(Trade_Value))) 
 ```
 
-### Filter out the relevant data
+#### Filter out the relevant data
 
 For the first visualisation, we are specifically concerned about the Total Merchandise Imports (At Current Prices), Total Merchandise Exports (At Current Prices) and the Total Merchandise Trade (Imports + Exports), (At Current Prices) from 2020 to 2024. Therefore, we filter those rows out.
 
@@ -122,16 +120,88 @@ commodity_total <- commodity_total %>%
   ungroup()
 ```
 
-### Final Look at the Datasets
-
-#### Visualisation 1
+#### Final Look at the Datasets
 
 ```{r}
-head(commodity_total)
-glimpse(commodity_total)
+kable(head(commodity_total))
 ```
 
-# Visualisation 1 - Total Merchandise Trade at Current Prices, 2020 - 2024
+### Prep for V2
+
+#### Check for missing values
+
+We can see there are no missing values in all 3 datasets.
+
+```{r}
+colSums(is.na(df2))
+colSums(is.na(df3))
+colSums(is.na(df4))
+```
+
+#### Reshape and Filter Only for 2024 and Selected Countries
+
+For the second visualisation, we are specifically concerned about the imports, exports and total trade volume with China, Malaysia, United States of America, Taiwan, Europe, Indonesia, Hong Kong, Republic of Korea, Japan, and Thailand in 2024. Therefore, we filter those rows out. We also combine domestic exports and re-exports into just exports with bind_rows().
+
+```{r}
+target_countries <- c("China", "Malaysia", "United States", 
+                      "Taiwan", "Europe", "Indonesia", "Hong Kong", 
+                      "Korea, Rep Of", "Japan", "Thailand")
+```
+
+```{r}
+imports <- df2 %>%
+  filter(`Data Series` %in% target_countries) %>%   
+  pivot_longer(cols = -`Data Series`,               
+               names_to = "Date", 
+               values_to = "Trade_Value") %>%
+  filter(startsWith(Date, "2024")) %>%
+  mutate(Trade_Type = "Imports") 
+
+exports <- df3 %>%
+  bind_rows(df4) %>%  
+  filter(`Data Series` %in% target_countries) %>%
+  pivot_longer(cols = -`Data Series`, names_to = "Date", values_to = "Trade_Value") %>%
+  filter(startsWith(Date, "2024")) %>%
+  mutate(Trade_Type = "Exports") 
+
+```
+
+#### Combine both dataframes
+
+```{r}
+combined_trade <- bind_rows(imports, exports)
+```
+
+#### Calculate Total Trade Volume (Imports + Exports) and merge with combined_trade
+
+Since combined_trade contains both Imports and Exports, we need to group them by Country & Date and sum the values.
+
+```{r}
+total_trade <- combined_trade %>%
+  group_by(`Data Series`, Date) %>%
+  summarise(Trade_Value = sum(Trade_Value, na.rm = TRUE), .groups = "drop") %>%
+  mutate(Trade_Type = "Total Trade") 
+```
+
+```{r}
+final_trade <- bind_rows(combined_trade, total_trade)
+```
+
+#### Summarize Trade Value for the Whole Year of 2024
+
+```{r}
+annual_trade <- final_trade %>%
+  group_by(`Data Series`, Trade_Type) %>%
+  summarise(Trade_Value = sum(Trade_Value, na.rm = TRUE), .groups = "drop")
+```
+
+#### Final look
+
+```{r}
+kable(head(annual_trade))
+```
+
+# V1 - Total Merchandise Trade at Current Prices, 2020 - 2024
 
 ![Fig. 1](images/Screenshot 2025-03-09 002743.png)
 
@@ -184,7 +254,7 @@ ggplotly(p, tooltip = "text")
 -   The interactivity provided by ggplotly allows us to isolate a particular graph for easier comparison .
 :::
 
-# Visualisation 2: Merchandise Trade Performance with Major Trading Partners (2024)
+# V2: Merchandise Trade Performance with Major Trading Partners (2024)
 
 ![Fig. 2](images/Screenshot 2025-03-09 002700.png)
 
@@ -207,3 +277,5 @@ ggplotly(p, tooltip = "text")
 
 -   Can be hard to tell if a country is import or export dominant with Singapore if the centre of the bubble lies close to the dividing line (eg. Malaysia).
 :::
+
+## Makeover
