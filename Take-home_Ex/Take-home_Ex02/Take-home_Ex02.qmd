@@ -68,6 +68,7 @@ df1 <- read_excel("data/TradeCommodity.xlsx", sheet = 'T1', col_types = "text")
 df2 <- read_excel("data/TradeRegion.xlsx", sheet = 'T1')
 df3 <- read_excel("data/TradeRegion.xlsx", sheet = 'T2')
 df4 <- read_excel("data/TradeRegion.xlsx", sheet = 'T3')
+df5 <- read_excel("data/TradeCommodity_Mod.xlsx", sheet = 'T1', col_types = "text")
 ```
 
 ## V1 Data Preparation
@@ -118,6 +119,7 @@ commodity_total <- commodity_total %>%
 
 ```{r}
 kable(head(commodity_total))
+commodity_total
 ```
 
 ## V2 Data Preparation
@@ -193,6 +195,46 @@ annual_trade <- combined_trade %>%
 
 ```{r}
 kable(head(annual_trade))
+annual_trade
+```
+
+## V3 Data Preparation
+
+We will be using a modified version of TradeCommodity.xlsx. This dataset contains proper labelling for imports and exports. For example, Machinery & Transport Equipment is renamed to Machinery & Transport Equipment (Import) and Machinery & Transport Equipment (Export) where necessary.
+
+### Reshape the Data Using pivot_longer()
+
+```{r}
+colnames(df5) <- as.character(colnames(df5))
+
+commodity_mod <- df5 %>%
+  pivot_longer(cols = -`Data Series`, names_to = "Year_Month", values_to = "Trade_Value") %>%
+  mutate(Trade_Value = suppressWarnings(as.numeric(Trade_Value))) 
+```
+
+### Filter out the relevant data
+
+We will be filtering out the following commodity categories, both imports and exports, in 2024: Machinery & Transport Equipment, Chemicals & Chemical Products, Miscellaneous Manufactured Articles, Manufactured Goods, Food & Live Animals, Animal & Vegetable Oils Beverages & Tobacco, Crude Materials and other Miscellaneous Items.
+
+```{r}
+commodity_category <- commodity_mod %>%
+  filter(`Data Series` %in% c("Food & Live Animals (Import)", "Beverages & Tobacco (Import)", "Crude Materials (Excl Fuels) (Import)", "Animal & Vegetable Oils Fats & Waxes (Import)", "Chemicals & Chemical Products (Import)", "Manufactured Goods (Import)", "Machinery & Transport Equipment (Import)", "Miscellaneous Manufactured Articles (Import)", "Miscellaneous (Excluding Oil Bunkers) (Import)", "Food & Live Animals (Export)", "Beverages & Tobacco(Export)", "Crude Materials (Excl Fuels) (Export)", "Animal & Vegetable Oils Fats & Waxes (Export)", "Chemicals & Chemical Products (Export)", "Manufactured Goods (Export)", "Machinery & Transport Equipment (Export)", "Miscellaneous Manufactured Articles (Export)", "Miscellaneous (Excluding Oil Bunkers) (Export)"))
+```
+
+```{r}
+commodity_category <- commodity_category %>%
+  mutate(Year = year(parse_date_time(Year_Month, orders = "ym"))) %>% 
+  filter(Year == 2024) %>%
+  group_by(Year, `Data Series`) %>%
+  summarise(Total_Trade_Value = sum(Trade_Value, na.rm = TRUE)) %>% 
+  ungroup()
+```
+
+### Final Look at the Datasets
+
+```{r}
+kable(head(commodity_category))
+commodity_category
 ```
 
 # V1 - Total Merchandise Trade at Current Prices, 2020 - 2024
@@ -224,6 +266,7 @@ kable(head(annual_trade))
 ## Makeover
 
 ```{r}
+#| code-fold: true
 p <- ggplot(commodity_total, aes(x = Year, y = Total_Trade_Value / 1e6, color = `Data Series`, group = `Data Series`, text = paste("Year:", Year, "<br>", "Trade Type:", `Data Series`, "<br>", "Trade Value: S$", scales::comma(Total_Trade_Value / 1e6), "B"))) + 
   geom_line(linewidth = 1) +
   geom_point(size = 2) +
@@ -275,6 +318,7 @@ ggplotly(p, tooltip = "text")
 ## Makeover
 
 ```{r}
+#| code-fold: true
 p1 <- ggplot(annual_trade, aes(x = `Data Series`, y = Trade_Value/1e3, fill = Trade_Type)) +
   geom_col(position = "stack") + 
   geom_text(aes(label = round(Trade_Value/1e3, 1)),  
@@ -289,4 +333,60 @@ p1 <- ggplot(annual_trade, aes(x = `Data Series`, y = Trade_Value/1e3, fill = Tr
   coord_flip()
 
 ggplotly(p1, tooltip = "text") 
+```
+
+::: callout-note
+## Improvements on Fig. 2
+
+-   Able to see detailed figures for imports and exports.
+
+-   Can see which country has a trade surplus/deficit with Singapore at a glance.
+
+-   Interactive - Able to isolate imports and exports for better comparison between countries.
+:::
+
+# V3 - Non-Oil Merchandise Trade by Major Commodity Sections, 2024
+
+![Fig. 3](images/Screenshot 2025-03-09 121622.png)
+
+::: callout-note
+## Comments on Fig. 3
+
+#### **Pros:**
+
+-   Able to easily compare imports and exports within a commodity section
+
+-   Colour coding for imports and exports
+
+-   Category names are accompanied by graphics, making it visually appealing
+
+#### **Cons:**
+
+-   When a bar exceeds 60 Billion, it is represented by a segmented bar as can be seen on Machinery and Transport Equipment.
+
+-   There is no indication on what amount each segment represents.
+
+-   It is hard to count how many segments there are in the segmented bars.
+:::
+
+## Makeover
+
+```{r}
+p2 <- ggplot(commodity_category, aes(x = `Data Series`, y = Total_Trade_Value/1e6, fill = `Data Series`, 
+                                     text = paste0("Trade Value: S$", round(Total_Trade_Value/1e6, 2), " Billion"))) + 
+  geom_col(position = "stack") + 
+  geom_text(aes(label = round(Total_Trade_Value/1e6, 1)),  
+            hjust = -0.5,  
+            size = 2.5, color = "black") +
+  theme_minimal() +
+  labs(title = "Non-Oil Merchandise Trade, 2024",
+       x = "",
+       y = "Total Trade Value (S$ Billion)",
+       fill = "Trade Type") +
+  scale_y_continuous(labels = comma) +  
+  coord_flip()
+
+
+ggplotly(p2, tooltip = "text")
+
 ```
