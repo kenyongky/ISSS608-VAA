@@ -153,12 +153,23 @@ imports <- df2 %>%
   filter(startsWith(Date, "2024")) %>%
   mutate(Trade_Type = "Imports") 
 
-exports <- df3 %>%
-  bind_rows(df4) %>%  
-  filter(`Data Series` %in% target_countries) %>%
-  pivot_longer(cols = -`Data Series`, names_to = "Date", values_to = "Trade_Value") %>%
+domestic_ex <- df3 %>%
+  filter(`Data Series` %in% target_countries) %>%   
+  pivot_longer(cols = -`Data Series`,               
+               names_to = "Date", 
+               values_to = "Trade_Value") %>%
   filter(startsWith(Date, "2024")) %>%
   mutate(Trade_Type = "Exports") 
+
+re_ex <- df4 %>%
+  filter(`Data Series` %in% target_countries) %>%   
+  pivot_longer(cols = -`Data Series`,               
+               names_to = "Date", 
+               values_to = "Trade_Value") %>%
+  filter(startsWith(Date, "2024")) %>%
+  mutate(Trade_Type = "Exports") 
+
+exports <- bind_rows(domestic_ex, re_ex)
 
 ```
 
@@ -185,7 +196,7 @@ annual_trade
 
 ## V3 Data Preparation
 
-We will be using a modified version of TradeCommodity.xlsx. This dataset contains proper labelling for imports and exports. For example, Machinery & Transport Equipment is renamed to Machinery & Transport Equipment (Import) and Machinery & Transport Equipment (Export) where necessary.
+We will be using a modified version of TradeCommodity.xlsx. This dataset contains proper labelling for imports and exports. For example, Machinery & Transport Equipment is renamed to Machinery & Transport Equipment \[Imports\] and Machinery & Transport Equipment \[Exports\] where necessary.
 
 ### Reshape the Data Using pivot_longer()
 
@@ -203,7 +214,7 @@ We will be filtering out the following commodity categories, both imports and ex
 
 ```{r}
 commodity_category <- commodity_mod %>%
-  filter(`Data Series` %in% c("Food & Live Animals (Import)", "Beverages & Tobacco (Import)", "Crude Materials (Excl Fuels) (Import)", "Animal & Vegetable Oils Fats & Waxes (Import)", "Chemicals & Chemical Products (Import)", "Manufactured Goods (Import)", "Machinery & Transport Equipment (Import)", "Miscellaneous Manufactured Articles (Import)", "Miscellaneous (Excluding Oil Bunkers) (Import)", "Food & Live Animals (Export)", "Beverages & Tobacco(Export)", "Crude Materials (Excl Fuels) (Export)", "Animal & Vegetable Oils Fats & Waxes (Export)", "Chemicals & Chemical Products (Export)", "Manufactured Goods (Export)", "Machinery & Transport Equipment (Export)", "Miscellaneous Manufactured Articles (Export)", "Miscellaneous (Excluding Oil Bunkers) (Export)"))
+  filter(`Data Series` %in% c("Food & Live Animals [Imports]", "Beverages & Tobacco [Imports]", "Crude Materials (Excl Fuels) [Imports]", "Animal & Vegetable Oils Fats & Waxes [Imports]", "Chemicals & Chemical Products [Imports]", "Manufactured Goods [Imports]", "Machinery & Transport Equipment [Imports]", "Miscellaneous Manufactured Articles [Imports]", "Miscellaneous (Excluding Oil Bunkers) [Imports]", "Food & Live Animals [Exports]", "Beverages & Tobacco [Exports]", "Crude Materials (Excl Fuels) [Exports]", "Animal & Vegetable Oils Fats & Waxes [Exports]", "Chemicals & Chemical Products [Exports]", "Manufactured Goods [Exports]", "Machinery & Transport Equipment [Exports]", "Miscellaneous Manufactured Articles [Exports]", "Miscellaneous (Excluding Oil Bunkers) [Exports]"))
 ```
 
 ```{r}
@@ -215,6 +226,14 @@ commodity_category <- commodity_category %>%
   ungroup()
 ```
 
+### Separate into 'Commodity' and 'Trade_Type'
+
+```{r}
+commodity_category <- commodity_category %>%
+  separate(`Data Series`, into = c("Commodity", "Trade_Type"), sep = " \\[", remove = TRUE) %>%
+  mutate(Trade_Type = gsub("\\]", "", Trade_Type))
+```
+
 ### Final Look at the Datasets
 
 ```{r}
@@ -222,7 +241,115 @@ kable(head(commodity_category))
 commodity_category
 ```
 
-# V1 - Total Merchandise Trade at Current Prices, 2020 - 2024
+## V4 Data Preparation
+
+### Time Series Visualisation
+
+For time series visualisation, the same dataset from V2 will be used, except we will be filtering from 2015 to 2024 and keeping the datasets separate (imports, domestic exports, re-exports).
+
+```{r}
+
+imports_v4 <- df2 %>%
+  filter(`Data Series` %in% target_countries) %>%   
+  pivot_longer(cols = -`Data Series`,               
+               names_to = "Date", 
+               values_to = "Trade_Value") %>%
+  mutate(Date = ym(Date)) %>%  
+  filter(year(Date) >= 2015 & year(Date) <= 2024)
+
+domestic_ex_v4 <- df3 %>%
+  filter(`Data Series` %in% target_countries) %>%   
+  pivot_longer(cols = -`Data Series`,               
+               names_to = "Date", 
+               values_to = "Trade_Value") %>%
+  mutate(Date = ym(Date)) %>%  
+  filter(year(Date) >= 2015 & year(Date) <= 2024)
+
+re_ex_v4 <- df3 %>%
+  filter(`Data Series` %in% target_countries) %>%   
+  pivot_longer(cols = -`Data Series`,               
+               names_to = "Date", 
+               values_to = "Trade_Value") %>%
+  mutate(Date = ym(Date)) %>%  
+  filter(year(Date) >= 2015 & year(Date) <= 2024)
+  
+
+```
+
+### Time Series Analysis
+
+For Time Series Analysis, we will need to transpose the dataset and convert the tibble dataset to tsibble.
+
+#### Transpose and Filter
+
+```{r}
+import1 <- as.data.frame(t(df2))
+dom_ex1 <- as.data.frame(t(df3))
+re_ex1 <- as.data.frame(t(df4))
+
+colnames(import1) <- import1[1, ]
+colnames(dom_ex1) <- dom_ex1[1, ]
+colnames(re_ex1) <- re_ex1[1, ]
+
+import_tp <- import1[-1, ]
+dom_ex_tp <- dom_ex1[-1, ]
+re_ex_tp <- re_ex1[-1, ]
+
+import_tp <- import_tp %>%
+  rownames_to_column(var = "Date") %>%
+  mutate(Date = as.character(Date),   
+         Date = ym(Date)) %>%         
+  filter(year(Date) >= 2015 & year(Date) <= 2024)  
+
+dom_ex_tp <- dom_ex_tp %>%
+  rownames_to_column(var = "Date") %>%
+  mutate(Date = as.character(Date), 
+         Date = ym(Date)) %>%
+  filter(year(Date) >= 2015 & year(Date) <= 2024)
+
+re_ex_tp <- re_ex_tp %>%
+  rownames_to_column(var = "Date") %>%
+  mutate(Date = as.character(Date), 
+         Date = ym(Date)) %>%
+  filter(year(Date) >= 2015 & year(Date) <= 2024)
+```
+
+#### Convert to tsibble
+
+```{r}
+import_tsibble <- import_tp %>%
+  mutate(Month = yearmonth(Date)) %>%
+  as_tsibble(index = `Month`)
+
+dom_ex_tsibble <- dom_ex_tp %>%
+  mutate(Month = yearmonth(Date)) %>%
+  as_tsibble(index = `Month`)
+
+re_ex_tsibble <- re_ex_tp %>%
+  mutate(Month = yearmonth(Date)) %>%
+  as_tsibble(index = `Month`)
+```
+
+#### Convert to long format
+
+```{r}
+import_longer <- import_tsibble %>%
+  pivot_longer(cols = all_of(target_countries),  
+               names_to = "Country",
+               values_to = "Trade_Value")
+
+dom_ex_longer <- dom_ex_tsibble %>%
+  pivot_longer(cols = all_of(target_countries),  
+               names_to = "Country",
+               values_to = "Trade_Value")
+
+re_ex_longer <- re_ex_tsibble %>%
+  pivot_longer(cols = all_of(target_countries),  
+               names_to = "Country",
+               values_to = "Trade_Value")
+```
+
+# V1: Total Merchandise Trade at Current Prices, 2020 - 2024
 
 ![Fig. 1](images/Screenshot%202025-03-09%20002743.png)
 
@@ -252,28 +379,31 @@ commodity_category
 
 ```{r}
 #| code-fold: true
-p <- ggplot(commodity_total, aes(x = Year, y = Total_Trade_Value / 1e6, color = `Data Series`, group = `Data Series`, text = paste("Year:", Year, "<br>", "Trade Type:", `Data Series`, "<br>", "Trade Value: S$", scales::comma(Total_Trade_Value / 1e6), "B"))) + 
-  geom_line(linewidth = 1) +
-  geom_point(size = 2) +
-  theme_minimal() +
+ggplot(commodity_total, aes(x = Year, y = Total_Trade_Value / 1e6, color = `Data Series`, group = `Data Series`)) + 
+  geom_line(linewidth = 1) +  
+  geom_point(size = 2) + 
+  geom_text(aes(label = round(Total_Trade_Value / 1e6, 1)), 
+            hjust = -0.2,  
+            vjust = -0.5,  
+            size = 2.5, color = "black") + 
+  theme(legend.position = "bottom") +
+  guides(color = guide_legend(ncol = 1)) +
   labs(title = "Yearly Trend of Merchandise Trade (2020-2024)",
        x = "Year",
        y = "Trade Value (S$ Billion)",
        color = "Trade Type") +
-  scale_x_continuous(breaks = seq(2020, 2024, 1)) +
-  scale_y_continuous(labels = label_number(scale = 1))  
-
-ggplotly(p, tooltip = "text") 
+  scale_x_continuous(breaks = seq(2020, 2024, 1), limits = c(2019.5, 2024.5)) +
+  scale_y_continuous(labels = label_number(scale = 1), limits = c(min(commodity_total$Total_Trade_Value / 1e6),   max(commodity_total$Total_Trade_Value / 1e6) * 1.1))
 ```
 
 ::: callout-note
 ## Improvements over Fig. 1
 
--   Time series - From 2020 on the left to 2024 on the right
+-   It is more intuitive to read a time series from left to right.
 
 -   Line graphs allow us to clearly see the trend over the years.
 
--   The interactivity provided by ggplotly allows us to isolate a particular graph for easier comparison .
+-   Less wordy. Only the important figures are shown.
 :::
 
 # V2: Merchandise Trade Performance with Major Trading Partners (2024)
@@ -312,7 +442,7 @@ p1 <- ggplot(annual_trade, aes(x = `Data Series`, y = Trade_Value/1e3, fill = Tr
             size = 3) +  
   theme_minimal() +
   labs(title = "Singapore's Total Merchandise Trade (2024)",
-       x = "Country",
+       x = "",
        y = "Total Trade Value (S$ Billion)",
        fill = "Trade Type") +
   coord_flip()
@@ -330,9 +460,9 @@ ggplotly(p1, tooltip = "text")
 -   Interactive - Able to isolate imports and exports for better comparison between countries.
 :::
 
-# V3 - Non-Oil Merchandise Trade by Major Commodity Sections, 2024
+# V3: Non-Oil Merchandise Trade by Major Commodity Sections, 2024
 
-![Fig. 3](images/Screenshot 2025-03-09 121622.png)
+![Fig. 3](images/Screenshot%202025-03-09%20121622.png)
 
 ::: callout-note
 ## Comments on Fig. 3
@@ -352,26 +482,250 @@ ggplotly(p1, tooltip = "text")
 -   There is no indication on what amount each segment represents.
 
 -   It is hard to count how many segments there are in the segmented bars.
+
+-   The graphics can be distracting when trying to process the important numbers.
 :::
 
 ## Makeover
 
 ```{r}
-p2 <- ggplot(commodity_category, aes(x = `Data Series`, y = Total_Trade_Value/1e6, fill = `Data Series`, 
-                                     text = paste0("Trade Value: S$", round(Total_Trade_Value/1e6, 2), " Billion"))) + 
-  geom_col(position = "stack") + 
-  geom_text(aes(label = round(Total_Trade_Value/1e6, 1)),  
-            hjust = -0.5,  
-            size = 2.5, color = "black") +
-  theme_minimal() +
-  labs(title = "Non-Oil Merchandise Trade, 2024",
+#| code-fold: true
+commodity_category <- commodity_category %>%
+  group_by(Trade_Type) %>%
+  mutate(Percentage = (Total_Trade_Value / sum(Total_Trade_Value)) * 100)
+
+# Create bar chart with percentage labels
+ggplot(commodity_category, aes(x = Commodity, y = Total_Trade_Value/1e6, fill = Trade_Type)) +
+  geom_col(position = "dodge") +  
+  geom_text(aes(label = paste0(round(Total_Trade_Value/1e6, 1), " (", round(Percentage, 1), "%)")),  
+            position = position_dodge(width = 0.9),  
+            hjust = -0.3,  
+            size = 2.5, color = "black") +  
+  theme(legend.position = "bottom") +
+  labs(title = "Non-Oil Merchandise Trade by Major Commodity Sections (2024)",
        x = "",
        y = "Total Trade Value (S$ Billion)",
        fill = "Trade Type") +
-  scale_y_continuous(labels = comma) +  
+  scale_y_continuous(labels = comma, limits = c(0, max(commodity_category$Total_Trade_Value/1e6) * 1.2)) +  
   coord_flip()
-
-
-ggplotly(p2, tooltip = "text")
-
 ```
+
+::: callout-note
+## Improvements on Fig. 3
+
+-   Easier to compare between bars as they are not segmented.
+-   Less fluff. Only the important numbers are shown.
+:::
+
+# V4 : Time-series Analysis of Singapore's Top 10 Trading Partners from 2015 - 2024
+
+## Visualising the Time Series
+
+```{r}
+#| code-fold: true
+ggplot(data = imports_v4, 
+       aes(x = Date, 
+           y = Trade_Value/1e3,
+           color = `Data Series`))+
+  geom_line(linewidth = 0.5) +
+  theme(legend.position = "bottom", 
+        legend.box.spacing = unit(0.5, "cm")) +
+  labs(title = "Major Import Partners",
+       x = "",
+       y = "Trade Value (S$ Billion)",
+       color = "Country")
+```
+
+```{r}
+#| code-fold: true
+ggplot(data = domestic_ex_v4, 
+       aes(x = Date, 
+           y = Trade_Value/1e3,
+           color = `Data Series`))+
+  geom_line(linewidth = 0.5) +
+  theme(legend.position = "bottom", 
+        legend.box.spacing = unit(0.5, "cm")) +
+  labs(title = "Major Domestic Export Partners",
+       x = "",
+       y = "Trade Value (S$ Billion)",
+       color = "Country")
+```
+
+```{r}
+#| code-fold: true
+ggplot(data = re_ex_v4, 
+       aes(x = Date, 
+           y = Trade_Value/1e3,
+           color = `Data Series`))+
+  geom_line(linewidth = 0.5) +
+  theme(legend.position = "bottom", 
+        legend.box.spacing = unit(0.5, "cm")) +
+  labs(title = "Major Re-Export Partners",
+       x = "",
+       y = "Trade Value (S$ Billion)",
+       color = "Country")
+```
+
+```{r}
+#| code-fold: true
+ggplot(data = imports_v4, 
+       aes(x = Date, 
+           y = Trade_Value/1e3))+
+  geom_line(linewidth = 0.5) +
+  facet_wrap(~ `Data Series`,
+             ncol = 3,
+             scales = "free_y") +
+  labs(title = "Major Import Partners",
+       x = "",
+       y = "Trade Value (S$ Billion)",
+       color = "Country") +
+  theme_bw()
+```
+
+```{r}
+#| code-fold: true
+ggplot(data = domestic_ex_v4, 
+       aes(x = Date, 
+           y = Trade_Value/1e3))+
+  geom_line(linewidth = 0.5) +
+  facet_wrap(~ `Data Series`,
+             ncol = 3,
+             scales = "free_y") +
+  labs(title = "Major Domestic Export Partners",
+       x = "",
+       y = "Trade Value (S$ Billion)",
+       color = "Country") +
+  theme_bw()
+```
+
+```{r}
+#| code-fold: true
+ggplot(data = re_ex_v4, 
+       aes(x = Date, 
+           y = Trade_Value/1e3))+
+  geom_line(linewidth = 0.5) +
+  facet_wrap(~ `Data Series`,
+             ncol = 3,
+             scales = "free_y") +
+  labs(title = "Major Re-Export Partners",
+       x = "",
+       y = "Trade Value (S$ Billion)",
+       color = "Country") +
+  theme_bw()
+```
+
+## Analysing the Time Series
+
+### Top 10 Import Partners
+
+```{r}
+import_longer %>%
+  filter(Country == "United States" |
+         Country == "China" |
+         Country == "Malaysia") %>% 
+  gg_season(Trade_Value) +
+  theme(
+    axis.text.y = element_blank()
+  )
+
+import_longer %>%
+  filter(Country == "Taiwan" |
+         Country == "Indonesia" |
+         Country == "Europe") %>% 
+  gg_season(Trade_Value) +
+  theme(
+    axis.text.y = element_blank()
+  )
+
+import_longer %>%
+  filter(Country == "Thailand" |
+         Country == "Korea, Rep Of" |
+         Country == "Hong Kong" |
+         Country == "Japan") %>% 
+  gg_season(Trade_Value) +
+  theme(
+    axis.text.y = element_blank()
+  )
+```
+
+### Top 10 Domestic Export Partners
+
+```{r}
+dom_ex_longer %>%
+  filter(Country == "United States" |
+         Country == "China" |
+         Country == "Malaysia") %>% 
+  gg_season(Trade_Value) +
+  theme(
+    axis.text.y = element_blank()
+  )
+
+dom_ex_longer %>%
+  filter(Country == "Taiwan" |
+         Country == "Indonesia" |
+         Country == "Europe") %>% 
+  gg_season(Trade_Value) +
+  theme(
+    axis.text.y = element_blank()
+  )
+
+dom_ex_longer %>%
+  filter(Country == "Thailand" |
+         Country == "Korea, Rep Of" |
+         Country == "Hong Kong" |
+         Country == "Japan") %>% 
+  gg_season(Trade_Value) +
+  theme(
+    axis.text.y = element_blank()
+  )
+```
+
+### Top 10 Re-Export Partners
+
+```{r}
+re_ex_longer %>%
+  filter(Country == "United States" |
+         Country == "China" |
+         Country == "Malaysia") %>% 
+  gg_season(Trade_Value) +
+  theme(
+    axis.text.y = element_blank()
+  )
+
+re_ex_longer %>%
+  filter(Country == "Taiwan" |
+         Country == "Indonesia" |
+         Country == "Europe") %>% 
+  gg_season(Trade_Value) +
+  theme(
+    axis.text.y = element_blank()
+  )
+
+re_ex_longer %>%
+  filter(Country == "Thailand" |
+         Country == "Korea, Rep Of" |
+         Country == "Hong Kong" |
+         Country == "Japan") %>% 
+  gg_season(Trade_Value) +
+  theme(
+    axis.text.y = element_blank()
+  )
+```
+
+## Comments on the visual and analytical results
+
+-   There was a sharp increase in exports, both domestic exports and re-exports, around 2020 to our ASEAN neighbours (Malaysia, Indonesia and Thailand).
+
+-   There has been an upward trend in imports in the last 5 years, particularly from Taiwan, the United States and Europe. Exports have been comparatively volatile.
+
+-   There were no seasonal patterns observed in any of the data. This is because we are looking at trade volume as a whole. Individual commodity sections may reveal seasonal patterns particularly with food products.
+
+-   Our top 5 trading partners are China, Europe, Malaysia, United States and Taiwan in that order.
+
+# References
+
+[R for Visual Analytics](https://r4va.netlify.app/chap19)
+
+[Merchandise Trade Data from Department of Statistics Singapore, DOS](https://www.singstat.gov.sg/find-data/search-by-theme/trade-and-investment/merchandise-trade/latest-data)
+
+[Singapore's International Trade Report](https://www.singstat.gov.sg/modules/infographics/singapore-international-trade)
