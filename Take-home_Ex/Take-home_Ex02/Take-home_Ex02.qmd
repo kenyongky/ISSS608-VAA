@@ -168,21 +168,6 @@ exports <- df3 %>%
 combined_trade <- bind_rows(imports, exports)
 ```
 
-### Calculate Total Trade Volume (Imports + Exports) and merge with combined_trade
-
-Since combined_trade contains both Imports and Exports, we need to group them by Country & Date and sum the values.
-
-```{r}
-total_trade <- combined_trade %>%
-  group_by(`Data Series`, Date) %>%
-  summarise(Trade_Value = sum(Trade_Value, na.rm = TRUE), .groups = "drop") %>%
-  mutate(Trade_Type = "Total Trade") 
-```
-
-```{r}
-final_trade <- bind_rows(combined_trade, total_trade)
-```
-
 ### Summarize Trade Value for the Whole Year of 2024
 
 ```{r}
