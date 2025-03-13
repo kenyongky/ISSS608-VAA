@@ -1685,5 +1685,47 @@
     "title": "Hands-on Exercise 8 (Part 1)",
     "section": "Mappping Spatial Object Meeting a Selection Criterion",
     "text": "Mappping Spatial Object Meeting a Selection Criterion\n\ntm_shape(mpsz_pop2020[mpsz_pop2020$REGION_N==\"CENTRAL REGION\", ])+\n  tm_fill(\"DEPENDENCY\", \n          style = \"quantile\", \n          palette = \"Blues\", \n          legend.hist = TRUE, \n          legend.is.portrait = TRUE,\n          legend.hist.z = 0.1) +\n  tm_layout(legend.outside = TRUE,\n            legend.height = 0.45, \n            legend.width = 5.0,\n            legend.position = c(\"right\", \"bottom\"),\n            frame = FALSE) +\n  tm_borders(alpha = 0.5)\n\n\n\n\n── tmap v3 code detected ───────────────────────────────────────────────────────\n\n\n[v3-&gt;v4] `tm_fill()`: instead of `style = \"quantile\"`, use fill.scale =\n`tm_scale_intervals()`.\nℹ Migrate the argument(s) 'style', 'palette' (rename to 'values') to\n  'tm_scale_intervals(&lt;HERE&gt;)'\n[v3-&gt;v4] `tm_fill()`: migrate the argument(s) related to the legend of the\nvisual variable `fill` namely 'legend.is.portrait' (rename to 'orientation') to\n'fill.legend = tm_legend(&lt;HERE&gt;)'\n[v3-&gt;v4] `tm_borders()`: use `fill_alpha` instead of `alpha`.\n[cols4all] color palettes: use palettes from the R package cols4all. Run\n`cols4all::c4a_gui()` to explore them. The old palette name \"Blues\" is named\n\"brewer.blues\"\nMultiple palettes called \"blues\" found: \"brewer.blues\", \"matplotlib.blues\". The first one, \"brewer.blues\", is returned."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08_2.html#data-import-and-preparation",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08_2.html#data-import-and-preparation",
+    "title": "Hands-on Exercise 8 (Part 2)",
+    "section": "Data Import and Preparation",
+    "text": "Data Import and Preparation\n\nsgpools &lt;- read_csv(\"data/aspatial/SGPools_svy21.csv\")\n\nRows: 306 Columns: 7\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (3): NAME, ADDRESS, OUTLET TYPE\ndbl (4): POSTCODE, XCOORD, YCOORD, Gp1Gp2 Winnings\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\n\n\n\nlist(sgpools) \n\n[[1]]\n# A tibble: 306 × 7\n   NAME           ADDRESS POSTCODE XCOORD YCOORD `OUTLET TYPE` `Gp1Gp2 Winnings`\n   &lt;chr&gt;          &lt;chr&gt;      &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;                     &lt;dbl&gt;\n 1 Livewire (Mar… 2 Bayf…    18972 30842. 29599. Branch                        5\n 2 Livewire (Res… 26 Sen…    98138 26704. 26526. Branch                       11\n 3 SportsBuzz (K… Lotus …   738078 20118. 44888. Branch                        0\n 4 SportsBuzz (P… 1 Sele…   188306 29777. 31382. Branch                       44\n 5 Prime Serango… Blk 54…   552542 32239. 39519. Branch                        0\n 6 Singapore Poo… 1A Woo…   731001 21012. 46987. Branch                        3\n 7 Singapore Poo… Blk 64…   370064 33990. 34356. Branch                       17\n 8 Singapore Poo… Blk 88…   370088 33847. 33976. Branch                       16\n 9 Singapore Poo… Blk 30…   540308 33910. 41275. Branch                       21\n10 Singapore Poo… Blk 20…   560202 29246. 38943. Branch                       25\n# ℹ 296 more rows"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08_2.html#creating-a-sf-data-frame-from-an-aspatial-data-frame",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08_2.html#creating-a-sf-data-frame-from-an-aspatial-data-frame",
+    "title": "Hands-on Exercise 8 (Part 2)",
+    "section": "Creating a sf data frame from an aspatial data frame",
+    "text": "Creating a sf data frame from an aspatial data frame\n\nsgpools_sf &lt;- st_as_sf(sgpools, \n                       coords = c(\"XCOORD\", \"YCOORD\"),\n                       crs= 3414)\n\n\nlist(sgpools_sf)\n\n[[1]]\nSimple feature collection with 306 features and 5 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: 7844.194 ymin: 26525.7 xmax: 45176.57 ymax: 47987.13\nProjected CRS: SVY21 / Singapore TM\n# A tibble: 306 × 6\n   NAME                         ADDRESS POSTCODE `OUTLET TYPE` `Gp1Gp2 Winnings`\n * &lt;chr&gt;                        &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt;                     &lt;dbl&gt;\n 1 Livewire (Marina Bay Sands)  2 Bayf…    18972 Branch                        5\n 2 Livewire (Resorts World Sen… 26 Sen…    98138 Branch                       11\n 3 SportsBuzz (Kranji)          Lotus …   738078 Branch                        0\n 4 SportsBuzz (PoMo)            1 Sele…   188306 Branch                       44\n 5 Prime Serangoon North        Blk 54…   552542 Branch                        0\n 6 Singapore Pools Woodlands C… 1A Woo…   731001 Branch                        3\n 7 Singapore Pools 64 Circuit … Blk 64…   370064 Branch                       17\n 8 Singapore Pools 88 Circuit … Blk 88…   370088 Branch                       16\n 9 Singapore Pools Anchorvale … Blk 30…   540308 Branch                       21\n10 Singapore Pools Ang Mo Kio … Blk 20…   560202 Branch                       25\n# ℹ 296 more rows\n# ℹ 1 more variable: geometry &lt;POINT [m]&gt;"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08_2.html#it-all-started-with-an-interactive-point-symbol-map",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08_2.html#it-all-started-with-an-interactive-point-symbol-map",
+    "title": "Hands-on Exercise 8 (Part 2)",
+    "section": "It all started with an interactive point symbol map",
+    "text": "It all started with an interactive point symbol map\n\ntm_shape(sgpools_sf)+\ntm_bubbles(col = \"red\",\n           size = 1,\n           border.col = \"black\",\n           border.lwd = 1)\n\n\n\n\n── tmap v3 code detected ───────────────────────────────────────────────────────\n\n\n[v3-&gt;v4] `tm_bubbles()`: use 'fill' for the fill color of polygons/symbols\n(instead of 'col'), and 'col' for the outlines (instead of 'border.col').\nThis message is displayed once every 8 hours."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08_2.html#lets-make-it-proportional",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08_2.html#lets-make-it-proportional",
+    "title": "Hands-on Exercise 8 (Part 2)",
+    "section": "Lets make it proportional",
+    "text": "Lets make it proportional\n\ntm_shape(sgpools_sf)+\ntm_bubbles(col = \"red\",\n           size = \"Gp1Gp2 Winnings\",\n           border.col = \"black\",\n           border.lwd = 1)\n\n\n\n\n── tmap v3 code detected ───────────────────────────────────────────────────────"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08_2.html#lets-give-it-a-different-colour",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08_2.html#lets-give-it-a-different-colour",
+    "title": "Hands-on Exercise 8 (Part 2)",
+    "section": "Lets give it a different colour",
+    "text": "Lets give it a different colour\n\ntm_shape(sgpools_sf)+\ntm_bubbles(col = \"OUTLET TYPE\", \n          size = \"Gp1Gp2 Winnings\",\n          border.col = \"black\",\n          border.lwd = 1)\n\n\n\n\n── tmap v3 code detected ───────────────────────────────────────────────────────"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08_2.html#i-have-a-pair-of-twin-brothers",
+    "href": "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08_2.html#i-have-a-pair-of-twin-brothers",
+    "title": "Hands-on Exercise 8 (Part 2)",
+    "section": "I have a pair of twin brothers :)",
+    "text": "I have a pair of twin brothers :)\n\ntm_shape(sgpools_sf) +\n  tm_bubbles(col = \"OUTLET TYPE\", \n          size = \"Gp1Gp2 Winnings\",\n          border.col = \"black\",\n          border.lwd = 1) +\n  tm_facets(by= \"OUTLET TYPE\",\n            nrow = 1,\n            sync = TRUE)\n\n\n\n\n── tmap v3 code detected ───────────────────────────────────────────────────────\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ntmap_mode(\"plot\")\n\nℹ tmap mode set to \"plot\"."
   }
 ]
