@@ -2077,5 +2077,12 @@
     "title": "Take-home Exercise 3",
     "section": "Step 4: Visualize the Data with facet_geo()",
     "text": "Step 4: Visualize the Data with facet_geo()\nAssuming your dataset is named weather_data and includes a Station, Date, and Mean Temperature (°C) column:\n\nggplot(weather_data, aes(x = Date, y = `Mean Temperature (°C)`)) +\n  geom_line(color = \"#2c3e50\") +\n  facet_geo(~ Station, grid = custom_grid) +\n  theme_minimal() +\n  labs(title = \"Mean Temperature Over Time by Station\",\n       x = \"Date\", y = \"Mean Temperature (°C)\")\n\nNote: You provided a user-specified grid. If this is a generally-useful\n  grid, please consider submitting it to become a part of the geofacet\n  package. You can do this easily by calling:\n  grid_submit(__grid_df_name__)\n\n\nWarning: Removed 731 rows containing missing values or values outside the scale range\n(`geom_line()`)."
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html#data-preparation",
+    "href": "Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html#data-preparation",
+    "title": "Take-home Exercise 3",
+    "section": "Data Preparation",
+    "text": "Data Preparation\nThe data preparation process is documented here."
   }
 ]
