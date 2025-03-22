@@ -1,0 +1,60 @@
+---
+title: "Take-home Exercise 3"
+author: "Kenneth Yong"
+---
+
+## Overview
+We use `geofacet` to visualize weather data for Singapore across multiple stations in a geographically meaningful layout.
+
+## Step 1: Load Required Packages
+
+```{r}
+pacman::p_load(tidyverse, geofacet, ggplot2, readr)
+```
+
+## Step 2: Import the Dataset
+
+```{r}
+weather_data <-read_csv("data/weather_data_clean.csv")
+```
+
+## Step 3: Prepare Custom Geofacet Grid
+We created a custom grid layout to approximate the geographical positioning of 19 weather stations in Singapore.
+
+```{r}
+custom_grid <- data.frame(
+  name = c("Admiralty", "Sembawang", "Seletar", "Pulau Ubin",
+           "Ang Mo Kio", "Newton", "Tai Seng", "Paya Lebar",
+           "Choa Chu Kang (South)", "Jurong (West)", "Clementi", "Tengah",
+           "Jurong Island", "Tuas South", "Sentosa Island", "Marina Barrage",
+           "Pasir Panjang", "East Coast Parkway", "Changi"),
+  code = c("Admiralty", "Sembawang", "Seletar", "Pulau Ubin",
+           "Ang Mo Kio", "Newton", "Tai Seng", "Paya Lebar",
+           "Choa Chu Kang (South)", "Jurong (West)", "Clementi", "Tengah",
+           "Jurong Island", "Tuas South", "Sentosa Island", "Marina Barrage",
+           "Pasir Panjang", "East Coast Parkway", "Changi"),
+  row = c(1, 1, 1, 1,
+          2, 2, 2, 2,
+          3, 3, 3, 3,
+          4, 4, 4, 4,
+          5, 5, 5),
+  col = c(2, 1, 3, 4,
+          2, 1, 3, 4,
+          1, 2, 3, 4,
+          1, 2, 3, 4,
+          1, 2, 3),
+  stringsAsFactors = FALSE
+)
+```
+
+## Step 4: Visualize the Data with `facet_geo()`
+Assuming your dataset is named `weather_data` and includes a `Station`, `Date`, and `Mean Temperature (°C)` column:
+
+```{r}
+ggplot(weather_data, aes(x = Date, y = `Mean Temperature (°C)`)) +
+  geom_line(color = "#2c3e50") +
+  facet_geo(~ Station, grid = custom_grid) +
+  theme_minimal() +
+  labs(title = "Mean Temperature Over Time by Station",
+       x = "Date", y = "Mean Temperature (°C)")
+```
