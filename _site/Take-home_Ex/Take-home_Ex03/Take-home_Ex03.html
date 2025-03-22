@@ -268,10 +268,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
   <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation">Data Preparation</a></li>
-  <li><a href="#step-1-load-required-packages" id="toc-step-1-load-required-packages" class="nav-link" data-scroll-target="#step-1-load-required-packages">Step 1: Load Required Packages</a></li>
-  <li><a href="#step-2-import-the-dataset" id="toc-step-2-import-the-dataset" class="nav-link" data-scroll-target="#step-2-import-the-dataset">Step 2: Import the Dataset</a></li>
-  <li><a href="#step-3-prepare-custom-geofacet-grid" id="toc-step-3-prepare-custom-geofacet-grid" class="nav-link" data-scroll-target="#step-3-prepare-custom-geofacet-grid">Step 3: Prepare Custom Geofacet Grid</a></li>
-  <li><a href="#step-4-visualize-the-data-with-facet_geo" id="toc-step-4-visualize-the-data-with-facet_geo" class="nav-link" data-scroll-target="#step-4-visualize-the-data-with-facet_geo">Step 4: Visualize the Data with <code>facet_geo()</code></a></li>
+  <li><a href="#load-required-packages" id="toc-load-required-packages" class="nav-link" data-scroll-target="#load-required-packages">Load Required Packages</a></li>
+  <li><a href="#import-the-dataset" id="toc-import-the-dataset" class="nav-link" data-scroll-target="#import-the-dataset">Import the Dataset</a></li>
+  <li><a href="#prepare-custom-geofacet-grid" id="toc-prepare-custom-geofacet-grid" class="nav-link" data-scroll-target="#prepare-custom-geofacet-grid">Prepare Custom Geofacet Grid</a></li>
+  <li><a href="#visualize-the-data-with-facet_geo" id="toc-visualize-the-data-with-facet_geo" class="nav-link" data-scroll-target="#visualize-the-data-with-facet_geo">Visualize the Data with <code>facet_geo()</code></a></li>
   </ul>
 </nav>
     </div>
@@ -311,14 +311,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="data-preparation">Data Preparation</h2>
 <p>The data preparation process is documented <a href="https://weatherxplore.netlify.app/data_prep">here</a>.</p>
 </section>
-<section id="step-1-load-required-packages" class="level2">
-<h2 class="anchored" data-anchor-id="step-1-load-required-packages">Step 1: Load Required Packages</h2>
+<section id="load-required-packages" class="level2">
+<h2 class="anchored" data-anchor-id="load-required-packages">Load Required Packages</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, geofacet, ggplot2, readr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="step-2-import-the-dataset" class="level2">
-<h2 class="anchored" data-anchor-id="step-2-import-the-dataset">Step 2: Import the Dataset</h2>
+<section id="import-the-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="import-the-dataset">Import the Dataset</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>weather_data <span class="ot">&lt;-</span><span class="fu">read_csv</span>(<span class="st">"data/weather_data_clean.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -334,8 +334,8 @@ date  (1): Date
 </div>
 </div>
 </section>
-<section id="step-3-prepare-custom-geofacet-grid" class="level2">
-<h2 class="anchored" data-anchor-id="step-3-prepare-custom-geofacet-grid">Step 3: Prepare Custom Geofacet Grid</h2>
+<section id="prepare-custom-geofacet-grid" class="level2">
+<h2 class="anchored" data-anchor-id="prepare-custom-geofacet-grid">Prepare Custom Geofacet Grid</h2>
 <p>We created a custom grid layout to approximate the geographical positioning of 19 weather stations in Singapore.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>custom_grid <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
@@ -363,8 +363,8 @@ date  (1): Date
 <span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="step-4-visualize-the-data-with-facet_geo" class="level2">
-<h2 class="anchored" data-anchor-id="step-4-visualize-the-data-with-facet_geo">Step 4: Visualize the Data with <code>facet_geo()</code></h2>
+<section id="visualize-the-data-with-facet_geo" class="level2">
+<h2 class="anchored" data-anchor-id="visualize-the-data-with-facet_geo">Visualize the Data with <code>facet_geo()</code></h2>
 <p>Assuming your dataset is named <code>weather_data</code> and includes a <code>Station</code>, <code>Date</code>, and <code>Mean Temperature (°C)</code> column:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(weather_data, <span class="fu">aes</span>(<span class="at">x =</span> Date, <span class="at">y =</span> <span class="st">`</span><span class="at">Mean Temperature (°C)</span><span class="st">`</span>)) <span class="sc">+</span></span>

@@ -11,19 +11,19 @@ We use `geofacet` to visualize weather data for Singapore across multiple statio
 
 The data preparation process is documented [here](https://weatherxplore.netlify.app/data_prep).
 
-## Step 1: Load Required Packages
+## Load Required Packages
 
 ```{r}
 pacman::p_load(tidyverse, geofacet, ggplot2, readr)
 ```
 
-## Step 2: Import the Dataset
+## Import the Dataset
 
 ```{r}
 weather_data <-read_csv("data/weather_data_clean.csv")
 ```
 
-## Step 3: Prepare Custom Geofacet Grid
+## Prepare Custom Geofacet Grid
 
 We created a custom grid layout to approximate the geographical positioning of 19 weather stations in Singapore.
 
@@ -53,7 +53,7 @@ custom_grid <- data.frame(
 )
 ```
 
-## Step 4: Visualize the Data with `facet_geo()`
+## Visualize the Data with `facet_geo()`
 
 Assuming your dataset is named `weather_data` and includes a `Station`, `Date`, and `Mean Temperature (°C)` column:
 
