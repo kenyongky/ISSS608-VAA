@@ -65,7 +65,7 @@ weather_monthly <- weather_data %>%
   summarise(`Mean Temperature (°C)` = mean(`Mean Temperature (°C)`, na.rm = TRUE), .groups = "drop")
 
 ggplot(weather_monthly, aes(x = Month, y = `Mean Temperature (°C)`, color = Region)) +
-  geom_line(size = 1) +  # simple, clean
+  geom_line(size = 1) +  
   facet_geo(~ Station, grid = custom_grid) +
   theme_minimal() +
   labs(title = "Monthly Mean Temperature by Station",
@@ -84,7 +84,7 @@ weather_yearly <- weather_data %>%
   summarise(`Mean Temperature (°C)` = mean(`Mean Temperature (°C)`, na.rm = TRUE), .groups = "drop")
 
 ggplot(weather_yearly, aes(x = Year, y = `Mean Temperature (°C)`, color = Region)) +
-  geom_line(size = 1) +  # simple, clean
+  geom_line(size = 1) +  
   facet_geo(~ Station, grid = custom_grid) +
   theme_minimal() +
   labs(title = "Yearly Mean Temperature by Station",
