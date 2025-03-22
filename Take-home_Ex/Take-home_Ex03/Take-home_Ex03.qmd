@@ -92,3 +92,23 @@ ggplot(weather_yearly, aes(x = Year, y = `Mean Temperature (°C)`, color = Regio
   theme(strip.text = element_text(size = 9, face = "bold"),
         axis.text.x = element_text(angle = 45, hjust = 1))
 ```
+
+```{r}
+# Filter for 2024 and aggregate to monthly means
+weather_2024_monthly <- weather_data %>%
+  filter(year(Date) == 2024) %>%
+  mutate(Month = floor_date(Date, "month")) %>%
+  group_by(Station, Region, Month) %>%
+  summarise(`Mean Temperature (°C)` = mean(`Mean Temperature (°C)`, na.rm = TRUE), .groups = "drop")
+
+# Geofacet plot for 2024
+ggplot(weather_2024_monthly, aes(x = Month, y = `Mean Temperature (°C)`, color = Region)) +
+  geom_line(size = 1) +
+  facet_geo(~ Station, grid = custom_grid) +
+  theme_minimal() +
+  labs(title = "Monthly Mean Temperature by Station (2024)",
+       x = "Month", y = "Mean Temperature (°C)") +
+  scale_x_date(date_labels = "%b", date_breaks = "1 month") +
+  theme(strip.text = element_text(size = 9, face = "bold"),
+        axis.text.x = element_text(angle = 45, hjust = 1))
+```
