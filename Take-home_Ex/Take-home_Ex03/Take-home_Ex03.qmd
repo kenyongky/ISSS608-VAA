@@ -55,13 +55,40 @@ custom_grid <- data.frame(
 
 ## Visualize the Data with `facet_geo()`
 
-Assuming your dataset is named `weather_data` and includes a `Station`, `Date`, and `Mean Temperature (°C)` column:
+### Monthly Mean Temperature:
 
 ```{r}
-ggplot(weather_data, aes(x = Date, y = `Mean Temperature (°C)`)) +
-  geom_line(color = "#2c3e50") +
+# Aggregate to monthly means
+weather_monthly <- weather_data %>%
+  mutate(Month = floor_date(Date, "month")) %>%
+  group_by(Station, Region, Month) %>%
+  summarise(`Mean Temperature (°C)` = mean(`Mean Temperature (°C)`, na.rm = TRUE), .groups = "drop")
+
+ggplot(weather_monthly, aes(x = Month, y = `Mean Temperature (°C)`, color = Region)) +
+  geom_line(size = 1) +  # simple, clean
   facet_geo(~ Station, grid = custom_grid) +
   theme_minimal() +
-  labs(title = "Mean Temperature Over Time by Station",
-       x = "Date", y = "Mean Temperature (°C)")
+  labs(title = "Monthly Mean Temperature by Station",
+       x = "Month", y = "Mean Temperature (°C)") +
+  theme(strip.text = element_text(size = 9, face = "bold"),
+        axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+### Yearly Mean Temperature:
+
+```{r}
+# Aggregate to yearly means
+weather_yearly <- weather_data %>%
+  mutate(Year = year(Date)) %>%
+  group_by(Station, Region, Year) %>%
+  summarise(`Mean Temperature (°C)` = mean(`Mean Temperature (°C)`, na.rm = TRUE), .groups = "drop")
+
+ggplot(weather_yearly, aes(x = Year, y = `Mean Temperature (°C)`, color = Region)) +
+  geom_line(size = 1) +  # simple, clean
+  facet_geo(~ Station, grid = custom_grid) +
+  theme_minimal() +
+  labs(title = "Yearly Mean Temperature by Station",
+       x = "Year", y = "Mean Temperature (°C)") +
+  theme(strip.text = element_text(size = 9, face = "bold"),
+        axis.text.x = element_text(angle = 45, hjust = 1))
 ```
