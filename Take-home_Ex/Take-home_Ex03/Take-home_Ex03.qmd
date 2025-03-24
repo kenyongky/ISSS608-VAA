@@ -74,6 +74,25 @@ ggplot(weather_monthly, aes(x = Month, y = `Mean Temperature (°C)`, color = Reg
         axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
+### Monthly Rainfall Total:
+
+```{r}
+# Aggregate to monthly means
+weather_monthly <- weather_data %>%
+  mutate(Month = floor_date(Date, "month")) %>%
+  group_by(Station, Region, Month) %>%
+  summarise(`Daily Rainfall Total (mm)` = mean(`Daily Rainfall Total (mm)`, na.rm = TRUE), .groups = "drop")
+
+ggplot(weather_monthly, aes(x = Month, y = `Daily Rainfall Total (mm)`, color = Region)) +
+  geom_line(size = 1) +  
+  facet_geo(~ Station, grid = custom_grid) +
+  theme_minimal() +
+  labs(title = "Monthly Rainfall Total by Station",
+       x = "Month", y = "Monthly Rainfall Total (mm)") +
+  theme(strip.text = element_text(size = 9, face = "bold"),
+        axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
 ### Yearly Mean Temperature:
 
 ```{r}
