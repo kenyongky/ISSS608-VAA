@@ -3,24 +3,24 @@ title: "Take-home Exercise 3"
 author: "Kenneth Yong"
 ---
 
-## Overview
+# Overview
 
 We use `geofacet` to visualize weather data for Singapore across multiple stations in a geographically meaningful layout.
 
-## Data Preparation
+# Data Preparation
 
 The data preparation process is documented [here](https://weatherxplore.netlify.app/data_prep).
 
 ## Load Required Packages
 
 ```{r}
-pacman::p_load(tidyverse, geofacet, ggplot2, readr)
+pacman::p_load(tidyverse, geofacet, ggplot2, readr, dplyr, sf, sp, gstat, stars, raster, tmap, lubridate)
 ```
 
 ## Import the Dataset
 
 ```{r}
-weather_data <-read_csv("data/weather_data_updated.csv")
+weather_data <-read_csv("data/weather_data_cleaned.csv")
 ```
 
 ## Prepare Custom Geofacet Grid
@@ -53,11 +53,11 @@ custom_grid <- data.frame(
 )
 ```
 
-## Visualize the Data with `facet_geo()`
+# Visualize the Data with `facet_geo()`
 
-Geofaceting with line graphs and bar charts. 
+Geofaceting with line graphs and bar charts.
 
-### Monthly Mean Temperature:
+## 1. Monthly Mean Temperature:
 
 ```{r}
 # Aggregate to monthly means
@@ -76,7 +76,7 @@ ggplot(weather_monthly, aes(x = Month, y = `Mean Temperature (°C)`, color = Reg
         axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-### Monthly Total Rainfall:
+## 2. Monthly Total Rainfall:
 
 ```{r}
 # Aggregate to monthly total rainfall
@@ -96,7 +96,7 @@ ggplot(rainfall_monthly, aes(x = Month, y = `Total Monthly Rainfall (mm)`, color
         axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-### Yearly Mean Temperature:
+## 3. Mean Temperature Trend (2020-2024):
 
 ```{r}
 # Aggregate to yearly means
@@ -115,7 +115,7 @@ ggplot(weather_yearly, aes(x = Year, y = `Mean Temperature (°C)`, color = Regio
         axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-### Yearly Total Rainfall:
+## 4. Total Rainfall Trend (2020-2024):
 
 ```{r}
 # Aggregate to yearly total rainfall
@@ -135,7 +135,9 @@ ggplot(rainfall_yearly, aes(x = factor(Year), y = `Total Yearly Rainfall (mm)`, 
         axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-### Monthly Mean Temperature by Station (2024)
+## 5. Mean Monthly Temperature by Station (2024)
+
+Filter for desired year (eg. 2024).
 
 ```{r}
 # Filter for 2024 and aggregate to monthly means
@@ -157,7 +159,9 @@ ggplot(weather_2024_monthly, aes(x = Month, y = `Mean Temperature (°C)`, color 
         axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-### Monthly Total Rainfall by Station (2024)
+## 6. Monthly Total Rainfall by Station (2024)
+
+Filter for desired year (eg. 2024).
 
 ```{r}
 # Aggregate to monthly total rainfall for 2024
@@ -198,3 +202,168 @@ ggplot(rainfall_2024, aes(x = Month, y = `Daily Rainfall Total (mm)`, fill = Reg
   theme(strip.text = element_text(size = 9, face = "bold"),
         axis.text.x = element_text(angle = 45, hjust = 1))
 ```
+
+## 7. Monthly Climatology (Average Across Years)
+
+This plot answers the question: "What’s a typical temperature like in each month for each part of Singapore?"
+
+```{r}
+weather_climatology <- weather_data %>%
+  filter(year(Date) %in% 2020:2024) %>%
+  mutate(Month_Label = month(Date, label = TRUE, abbr = TRUE)) %>%
+  group_by(Station, Region, Month_Label) %>%
+  summarise(`Avg Temp (2020–2024)` = mean(`Mean Temperature (°C)`, na.rm = TRUE), .groups = "drop")
+
+ggplot(weather_climatology, aes(x = Month_Label, y = `Avg Temp (2020–2024)`, fill = Region)) +
+  geom_col() +
+  facet_geo(~ Station, grid = custom_grid) +
+  theme_minimal() +
+  labs(title = "Monthly Climatology (2020–2024) by Station",
+       x = "Month", y = "Avg Temperature (°C)") +
+  theme(strip.text = element_text(size = 9, face = "bold"),
+        axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 7))
+```
+
+## 8. Extreme Rainfall Events Count
+
+Filter for 2024 (or a desired range), then define an extreme rainfall threshold (e.g., \> 80mm). This plot shows the frequency of days with heavy rainfall (\>80mm, for example).
+
+```{r}
+
+# Define threshold
+extreme_threshold <- 80
+
+# Prepare base data with month labels
+extreme_rainfall <- weather_data %>%
+  filter(year(Date) == 2024) %>%
+  mutate(Month = floor_date(Date, "month"),
+         Month_Label = factor(format(Month, "%b"), levels = month.abb)) %>%
+  filter(`Daily Rainfall Total (mm)` > extreme_threshold) %>%
+  group_by(Station, Region, Month_Label) %>%
+  summarise(`Extreme Rainfall Days` = n(), .groups = "drop") %>%
+  complete(Station, Region, Month_Label = factor(month.abb, levels = month.abb), fill = list(`Extreme Rainfall Days` = 0))
+
+# Plot
+ggplot(extreme_rainfall, aes(x = Month_Label, y = `Extreme Rainfall Days`, fill = Region)) +
+  geom_col() +
+  facet_geo(~ Station, grid = custom_grid) +
+  theme_minimal() +
+  labs(title = "Extreme Rainfall Events by Station (2024)",
+       subtitle = paste0("Days with rainfall > ", extreme_threshold, "mm"),
+       x = "Month", y = "Number of Extreme Rainfall Days") +
+  theme(strip.text = element_text(size = 9, face = "bold"),
+        axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 7))
+
+```
+
+## 9. Dry vs Wet Days Per Month
+
+```{r}
+# Categorize days as 'Dry' or 'Wet' and count per month
+dry_wet_days <- weather_data %>%
+  filter(year(Date) == 2024) %>%
+  mutate(Month = floor_date(Date, "month"),
+         Month_Label = factor(format(Month, "%b"), levels = month.abb),
+         RainType = ifelse(`Daily Rainfall Total (mm)` > 0, "Wet", "Dry")) %>%
+  group_by(Station, Region, Month_Label, RainType) %>%
+  summarise(Days = n(), .groups = "drop")
+
+# Geofacet stacked bar chart
+ggplot(dry_wet_days, aes(x = Month_Label, y = Days, fill = RainType)) +
+  geom_col() +
+  facet_geo(~ Station, grid = custom_grid) +
+  scale_fill_manual(values = c("Dry" = "skyblue", "Wet" = "steelblue")) +
+  theme_minimal() +
+  labs(title = "Dry vs Wet Days Per Month by Station (2024)",
+       x = "Month", y = "Number of Days", fill = "Day Type") +
+  theme(strip.text = element_text(size = 9, face = "bold"),
+        axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 7))
+
+```
+
+## 10. Rainfall Anomalies (Z-score) plot
+
+```{r}
+# Step 1: Aggregate to monthly total rainfall
+rainfall_monthly <- weather_data %>%
+  mutate(Year = year(Date),
+         Month = floor_date(Date, "month"),
+         Month_Label = month(Month, label = TRUE, abbr = TRUE)) %>%
+  group_by(Station, Region, Month, Year, Month_Label) %>%
+  summarise(`Monthly Rainfall (mm)` = sum(`Daily Rainfall Total (mm)`, na.rm = TRUE), .groups = "drop")
+
+# Step 2: Calculate monthly mean & SD for each Station + Month_Label (climatology)
+rainfall_stats <- rainfall_monthly %>%
+  group_by(Station, Month_Label) %>%
+  summarise(
+    Mean_Rainfall = mean(`Monthly Rainfall (mm)`, na.rm = TRUE),
+    SD_Rainfall = sd(`Monthly Rainfall (mm)`, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+# Step 3: Join and compute Z-score
+rainfall_anomalies <- rainfall_monthly %>%
+  left_join(rainfall_stats, by = c("Station", "Month_Label")) %>%
+  mutate(Z_Score = (`Monthly Rainfall (mm)` - Mean_Rainfall) / SD_Rainfall)
+
+# Step 4: Plot Z-scores for a specific year (e.g., 2024)
+rainfall_anomalies_2024 <- rainfall_anomalies %>%
+  filter(Year == 2024)
+
+# Plot
+ggplot(rainfall_anomalies_2024, aes(x = Month_Label, y = Z_Score, fill = Z_Score > 0)) +
+  geom_col() +
+  scale_fill_manual(values = c("TRUE" = "steelblue", "FALSE" = "tomato"), labels = c("Drier", "Wetter")) +
+  facet_geo(~ Station, grid = custom_grid) +
+  theme_minimal() +
+  labs(title = "Rainfall Anomalies by Station (2024)",
+       subtitle = "Z-score of Monthly Rainfall vs Historical Mean",
+       x = "Month", y = "Rainfall Z-score", fill = "Anomaly") +
+  theme(strip.text = element_text(size = 9, face = "bold"),
+        axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 7))
+```
+
+## 11. Hextile Map (Total Rainfall for 2024)
+
+```{r}
+rainfall_total_2024 <- weather_data %>%
+  filter(lubridate::year(Date) == 2024) %>%
+  group_by(Station, Region) %>%
+  summarise(`Total Rainfall (mm)` = sum(`Daily Rainfall Total (mm)`, na.rm = TRUE), .groups = "drop")
+
+ggplot(rainfall_total_2024, aes(x = 1, y = 1, fill = `Total Rainfall (mm)`)) +
+  geom_tile(color = "white") +
+  facet_geo(~ Station, grid = custom_grid) +
+  scale_fill_gradient(low = "lightblue", high = "darkblue") +
+  theme_void() +
+  labs(title = "Total Rainfall by Station (2024)",
+       fill = "Rainfall (mm)") +
+  theme(strip.text = element_text(size = 9, face = "bold"),
+        legend.position = "bottom")
+```
+
+## 12. Hextile Map (Mean Temperature for 2024)
+
+```{r}
+temperature_mean_2024 <- weather_data %>%
+  filter(lubridate::year(Date) == 2024) %>%
+  group_by(Station, Region) %>%
+  summarise(`Mean Temperature (°C)` = mean(`Mean Temperature (°C)`, na.rm = TRUE), .groups = "drop")
+
+library(ggplot2)
+library(geofacet)
+
+ggplot(temperature_mean_2024, aes(x = 1, y = 1, fill = `Mean Temperature (°C)`)) +
+  geom_tile(color = "white") +
+  facet_geo(~ Station, grid = custom_grid) +
+  scale_fill_gradient(low = "mistyrose", high = "darkred") +
+  theme_void() +
+  labs(title = "Mean Temperature by Station (2024)",
+       fill = "Temperature (°C)") +
+  theme(strip.text = element_text(size = 9, face = "bold"),
+        legend.position = "bottom")
+```
+
+# References
+
+<https://ryanhafen.com/blog/geofacet/>

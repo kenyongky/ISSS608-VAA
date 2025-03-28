@@ -271,19 +271,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
-  <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation">Data Preparation</a></li>
+  <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation">Data Preparation</a>
+  <ul class="collapse">
   <li><a href="#load-required-packages" id="toc-load-required-packages" class="nav-link" data-scroll-target="#load-required-packages">Load Required Packages</a></li>
   <li><a href="#import-the-dataset" id="toc-import-the-dataset" class="nav-link" data-scroll-target="#import-the-dataset">Import the Dataset</a></li>
   <li><a href="#prepare-custom-geofacet-grid" id="toc-prepare-custom-geofacet-grid" class="nav-link" data-scroll-target="#prepare-custom-geofacet-grid">Prepare Custom Geofacet Grid</a></li>
+  </ul></li>
   <li><a href="#visualize-the-data-with-facet_geo" id="toc-visualize-the-data-with-facet_geo" class="nav-link" data-scroll-target="#visualize-the-data-with-facet_geo">Visualize the Data with <code>facet_geo()</code></a>
   <ul class="collapse">
-  <li><a href="#monthly-mean-temperature" id="toc-monthly-mean-temperature" class="nav-link" data-scroll-target="#monthly-mean-temperature">Monthly Mean Temperature:</a></li>
-  <li><a href="#monthly-total-rainfall" id="toc-monthly-total-rainfall" class="nav-link" data-scroll-target="#monthly-total-rainfall">Monthly Total Rainfall:</a></li>
-  <li><a href="#yearly-mean-temperature" id="toc-yearly-mean-temperature" class="nav-link" data-scroll-target="#yearly-mean-temperature">Yearly Mean Temperature:</a></li>
-  <li><a href="#yearly-total-rainfall" id="toc-yearly-total-rainfall" class="nav-link" data-scroll-target="#yearly-total-rainfall">Yearly Total Rainfall:</a></li>
-  <li><a href="#monthly-mean-temperature-by-station-2024" id="toc-monthly-mean-temperature-by-station-2024" class="nav-link" data-scroll-target="#monthly-mean-temperature-by-station-2024">Monthly Mean Temperature by Station (2024)</a></li>
-  <li><a href="#monthly-total-rainfall-by-station-2024" id="toc-monthly-total-rainfall-by-station-2024" class="nav-link" data-scroll-target="#monthly-total-rainfall-by-station-2024">Monthly Total Rainfall by Station (2024)</a></li>
+  <li><a href="#monthly-mean-temperature" id="toc-monthly-mean-temperature" class="nav-link" data-scroll-target="#monthly-mean-temperature">1. Monthly Mean Temperature:</a></li>
+  <li><a href="#monthly-total-rainfall" id="toc-monthly-total-rainfall" class="nav-link" data-scroll-target="#monthly-total-rainfall">2. Monthly Total Rainfall:</a></li>
+  <li><a href="#mean-temperature-trend-2020-2024" id="toc-mean-temperature-trend-2020-2024" class="nav-link" data-scroll-target="#mean-temperature-trend-2020-2024">3. Mean Temperature Trend (2020-2024):</a></li>
+  <li><a href="#total-rainfall-trend-2020-2024" id="toc-total-rainfall-trend-2020-2024" class="nav-link" data-scroll-target="#total-rainfall-trend-2020-2024">4. Total Rainfall Trend (2020-2024):</a></li>
+  <li><a href="#mean-monthly-temperature-by-station-2024" id="toc-mean-monthly-temperature-by-station-2024" class="nav-link" data-scroll-target="#mean-monthly-temperature-by-station-2024">5. Mean Monthly Temperature by Station (2024)</a></li>
+  <li><a href="#monthly-total-rainfall-by-station-2024" id="toc-monthly-total-rainfall-by-station-2024" class="nav-link" data-scroll-target="#monthly-total-rainfall-by-station-2024">6. Monthly Total Rainfall by Station (2024)</a></li>
+  <li><a href="#monthly-climatology-average-across-years" id="toc-monthly-climatology-average-across-years" class="nav-link" data-scroll-target="#monthly-climatology-average-across-years">7. Monthly Climatology (Average Across Years)</a></li>
+  <li><a href="#extreme-rainfall-events-count" id="toc-extreme-rainfall-events-count" class="nav-link" data-scroll-target="#extreme-rainfall-events-count">8. Extreme Rainfall Events Count</a></li>
+  <li><a href="#dry-vs-wet-days-per-month" id="toc-dry-vs-wet-days-per-month" class="nav-link" data-scroll-target="#dry-vs-wet-days-per-month">9. Dry vs Wet Days Per Month</a></li>
+  <li><a href="#rainfall-anomalies-z-score-plot" id="toc-rainfall-anomalies-z-score-plot" class="nav-link" data-scroll-target="#rainfall-anomalies-z-score-plot">10. Rainfall Anomalies (Z-score) plot</a></li>
+  <li><a href="#hextile-map-total-rainfall-for-2024" id="toc-hextile-map-total-rainfall-for-2024" class="nav-link" data-scroll-target="#hextile-map-total-rainfall-for-2024">11. Hextile Map (Total Rainfall for 2024)</a></li>
+  <li><a href="#hextile-map-mean-temperature-for-2024" id="toc-hextile-map-mean-temperature-for-2024" class="nav-link" data-scroll-target="#hextile-map-mean-temperature-for-2024">12. Hextile Map (Mean Temperature for 2024)</a></li>
   </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
     </div>
@@ -315,31 +324,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="overview" class="level2">
-<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<section id="overview" class="level1">
+<h1>Overview</h1>
 <p>We use <code>geofacet</code> to visualize weather data for Singapore across multiple stations in a geographically meaningful layout.</p>
 </section>
-<section id="data-preparation" class="level2">
-<h2 class="anchored" data-anchor-id="data-preparation">Data Preparation</h2>
+<section id="data-preparation" class="level1">
+<h1>Data Preparation</h1>
 <p>The data preparation process is documented <a href="https://weatherxplore.netlify.app/data_prep">here</a>.</p>
-</section>
 <section id="load-required-packages" class="level2">
 <h2 class="anchored" data-anchor-id="load-required-packages">Load Required Packages</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, geofacet, ggplot2, readr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, geofacet, ggplot2, readr, dplyr, sf, sp, gstat, stars, raster, tmap, lubridate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="import-the-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="import-the-dataset">Import the Dataset</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>weather_data <span class="ot">&lt;-</span><span class="fu">read_csv</span>(<span class="st">"data/weather_data_updated.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>weather_data <span class="ot">&lt;-</span><span class="fu">read_csv</span>(<span class="st">"data/weather_data_cleaned.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Rows: 30532 Columns: 14
+<pre><code>Rows: 30532 Columns: 9
 ── Column specification ────────────────────────────────────────────────────────
 Delimiter: ","
-chr   (2): Region, Station
-dbl  (11): Daily Rainfall Total (mm), Highest 30 min Rainfall (mm), Highest ...
-date  (1): Date
+chr  (2): Region, Station
+dbl  (6): Daily Rainfall Total (mm), Mean Temperature (°C), Maximum Temperat...
+date (1): Date
 
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
@@ -375,11 +383,12 @@ date  (1): Date
 <span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="visualize-the-data-with-facet_geo" class="level2">
-<h2 class="anchored" data-anchor-id="visualize-the-data-with-facet_geo">Visualize the Data with <code>facet_geo()</code></h2>
+</section>
+<section id="visualize-the-data-with-facet_geo" class="level1">
+<h1>Visualize the Data with <code>facet_geo()</code></h1>
 <p>Geofaceting with line graphs and bar charts.</p>
-<section id="monthly-mean-temperature" class="level3">
-<h3 class="anchored" data-anchor-id="monthly-mean-temperature">Monthly Mean Temperature:</h3>
+<section id="monthly-mean-temperature" class="level2">
+<h2 class="anchored" data-anchor-id="monthly-mean-temperature">1. Monthly Mean Temperature:</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate to monthly means</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>weather_monthly <span class="ot">&lt;-</span> weather_data <span class="sc">%&gt;%</span></span>
@@ -405,10 +414,6 @@ date  (1): Date
   package. You can do this easily by calling:
   grid_submit(__grid_df_name__)</code></pre>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Removed 36 rows containing missing values or values outside the scale range
-(`geom_line()`).</code></pre>
-</div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -418,24 +423,24 @@ date  (1): Date
 </div>
 </div>
 </section>
-<section id="monthly-total-rainfall" class="level3">
-<h3 class="anchored" data-anchor-id="monthly-total-rainfall">Monthly Total Rainfall:</h3>
+<section id="monthly-total-rainfall" class="level2">
+<h2 class="anchored" data-anchor-id="monthly-total-rainfall">2. Monthly Total Rainfall:</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate to monthly total rainfall</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>rainfall_monthly <span class="ot">&lt;-</span> weather_data <span class="sc">%&gt;%</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Month =</span> <span class="fu">floor_date</span>(Date, <span class="st">"month"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Station, Region, Month) <span class="sc">%&gt;%</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">`</span><span class="at">Total Monthly Rainfall (mm)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">Daily Rainfall Total (mm)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Geofacet plot</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(rainfall_monthly, <span class="fu">aes</span>(<span class="at">x =</span> Month, <span class="at">y =</span> <span class="st">`</span><span class="at">Total Monthly Rainfall (mm)</span><span class="st">`</span>, <span class="at">color =</span> Region)) <span class="sc">+</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_geo</span>(<span class="sc">~</span> Station, <span class="at">grid =</span> custom_grid) <span class="sc">+</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Total Monthly Rainfall by Station"</span>,</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Month"</span>, <span class="at">y =</span> <span class="st">"Total Monthly Rainfall (mm)"</span>) <span class="sc">+</span></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate to monthly total rainfall</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>rainfall_monthly <span class="ot">&lt;-</span> weather_data <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Month =</span> <span class="fu">floor_date</span>(Date, <span class="st">"month"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Station, Region, Month) <span class="sc">%&gt;%</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">`</span><span class="at">Total Monthly Rainfall (mm)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">Daily Rainfall Total (mm)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Geofacet plot</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(rainfall_monthly, <span class="fu">aes</span>(<span class="at">x =</span> Month, <span class="at">y =</span> <span class="st">`</span><span class="at">Total Monthly Rainfall (mm)</span><span class="st">`</span>, <span class="at">color =</span> Region)) <span class="sc">+</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_geo</span>(<span class="sc">~</span> Station, <span class="at">grid =</span> custom_grid) <span class="sc">+</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Total Monthly Rainfall by Station"</span>,</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Month"</span>, <span class="at">y =</span> <span class="st">"Total Monthly Rainfall (mm)"</span>) <span class="sc">+</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Note: You provided a user-specified grid. If this is a generally-useful
   grid, please consider submitting it to become a part of the geofacet
@@ -451,32 +456,28 @@ date  (1): Date
 </div>
 </div>
 </section>
-<section id="yearly-mean-temperature" class="level3">
-<h3 class="anchored" data-anchor-id="yearly-mean-temperature">Yearly Mean Temperature:</h3>
+<section id="mean-temperature-trend-2020-2024" class="level2">
+<h2 class="anchored" data-anchor-id="mean-temperature-trend-2020-2024">3. Mean Temperature Trend (2020-2024):</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate to yearly means</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>weather_yearly <span class="ot">&lt;-</span> weather_data <span class="sc">%&gt;%</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Year =</span> <span class="fu">year</span>(Date)) <span class="sc">%&gt;%</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Station, Region, Year) <span class="sc">%&gt;%</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">`</span><span class="at">Mean Temperature (°C)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">mean</span>(<span class="st">`</span><span class="at">Mean Temperature (°C)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(weather_yearly, <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> <span class="st">`</span><span class="at">Mean Temperature (°C)</span><span class="st">`</span>, <span class="at">color =</span> Region)) <span class="sc">+</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span>  </span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_geo</span>(<span class="sc">~</span> Station, <span class="at">grid =</span> custom_grid) <span class="sc">+</span></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Yearly Mean Temperature by Station"</span>,</span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Year"</span>, <span class="at">y =</span> <span class="st">"Mean Temperature (°C)"</span>) <span class="sc">+</span></span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate to yearly means</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>weather_yearly <span class="ot">&lt;-</span> weather_data <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Year =</span> <span class="fu">year</span>(Date)) <span class="sc">%&gt;%</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Station, Region, Year) <span class="sc">%&gt;%</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">`</span><span class="at">Mean Temperature (°C)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">mean</span>(<span class="st">`</span><span class="at">Mean Temperature (°C)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(weather_yearly, <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> <span class="st">`</span><span class="at">Mean Temperature (°C)</span><span class="st">`</span>, <span class="at">color =</span> Region)) <span class="sc">+</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span>  </span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_geo</span>(<span class="sc">~</span> Station, <span class="at">grid =</span> custom_grid) <span class="sc">+</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Yearly Mean Temperature by Station"</span>,</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Year"</span>, <span class="at">y =</span> <span class="st">"Mean Temperature (°C)"</span>) <span class="sc">+</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Note: You provided a user-specified grid. If this is a generally-useful
   grid, please consider submitting it to become a part of the geofacet
   package. You can do this easily by calling:
   grid_submit(__grid_df_name__)</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Removed 3 rows containing missing values or values outside the scale range
-(`geom_line()`).</code></pre>
 </div>
 <div class="cell-output-display">
 <div>
@@ -487,24 +488,24 @@ date  (1): Date
 </div>
 </div>
 </section>
-<section id="yearly-total-rainfall" class="level3">
-<h3 class="anchored" data-anchor-id="yearly-total-rainfall">Yearly Total Rainfall:</h3>
+<section id="total-rainfall-trend-2020-2024" class="level2">
+<h2 class="anchored" data-anchor-id="total-rainfall-trend-2020-2024">4. Total Rainfall Trend (2020-2024):</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate to yearly total rainfall</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>rainfall_yearly <span class="ot">&lt;-</span> weather_data <span class="sc">%&gt;%</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Year =</span> <span class="fu">year</span>(Date)) <span class="sc">%&gt;%</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Station, Region, Year) <span class="sc">%&gt;%</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">`</span><span class="at">Total Yearly Rainfall (mm)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">Daily Rainfall Total (mm)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Geofacet bar chart of yearly total rainfall</span></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(rainfall_yearly, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(Year), <span class="at">y =</span> <span class="st">`</span><span class="at">Total Yearly Rainfall (mm)</span><span class="st">`</span>, <span class="at">fill =</span> Region)) <span class="sc">+</span></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_geo</span>(<span class="sc">~</span> Station, <span class="at">grid =</span> custom_grid) <span class="sc">+</span></span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Yearly Total Rainfall by Station"</span>,</span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Year"</span>, <span class="at">y =</span> <span class="st">"Total Rainfall (mm)"</span>) <span class="sc">+</span></span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate to yearly total rainfall</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>rainfall_yearly <span class="ot">&lt;-</span> weather_data <span class="sc">%&gt;%</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Year =</span> <span class="fu">year</span>(Date)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Station, Region, Year) <span class="sc">%&gt;%</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">`</span><span class="at">Total Yearly Rainfall (mm)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">Daily Rainfall Total (mm)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Geofacet bar chart of yearly total rainfall</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(rainfall_yearly, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(Year), <span class="at">y =</span> <span class="st">`</span><span class="at">Total Yearly Rainfall (mm)</span><span class="st">`</span>, <span class="at">fill =</span> Region)) <span class="sc">+</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_geo</span>(<span class="sc">~</span> Station, <span class="at">grid =</span> custom_grid) <span class="sc">+</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Yearly Total Rainfall by Station"</span>,</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Year"</span>, <span class="at">y =</span> <span class="st">"Total Rainfall (mm)"</span>) <span class="sc">+</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Note: You provided a user-specified grid. If this is a generally-useful
   grid, please consider submitting it to become a part of the geofacet
@@ -520,26 +521,27 @@ date  (1): Date
 </div>
 </div>
 </section>
-<section id="monthly-mean-temperature-by-station-2024" class="level3">
-<h3 class="anchored" data-anchor-id="monthly-mean-temperature-by-station-2024">Monthly Mean Temperature by Station (2024)</h3>
+<section id="mean-monthly-temperature-by-station-2024" class="level2">
+<h2 class="anchored" data-anchor-id="mean-monthly-temperature-by-station-2024">5. Mean Monthly Temperature by Station (2024)</h2>
+<p>Filter for desired year (eg. 2024).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter for 2024 and aggregate to monthly means</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>weather_2024_monthly <span class="ot">&lt;-</span> weather_data <span class="sc">%&gt;%</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">year</span>(Date) <span class="sc">==</span> <span class="dv">2024</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Month =</span> <span class="fu">floor_date</span>(Date, <span class="st">"month"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Station, Region, Month) <span class="sc">%&gt;%</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">`</span><span class="at">Mean Temperature (°C)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">mean</span>(<span class="st">`</span><span class="at">Mean Temperature (°C)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Geofacet plot for 2024</span></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(weather_2024_monthly, <span class="fu">aes</span>(<span class="at">x =</span> Month, <span class="at">y =</span> <span class="st">`</span><span class="at">Mean Temperature (°C)</span><span class="st">`</span>, <span class="at">color =</span> Region)) <span class="sc">+</span></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_geo</span>(<span class="sc">~</span> Station, <span class="at">grid =</span> custom_grid) <span class="sc">+</span></span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Monthly Mean Temperature by Station (2024)"</span>,</span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Month"</span>, <span class="at">y =</span> <span class="st">"Mean Temperature (°C)"</span>) <span class="sc">+</span></span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_date</span>(<span class="at">date_labels =</span> <span class="st">"%b"</span>, <span class="at">date_breaks =</span> <span class="st">"1 month"</span>) <span class="sc">+</span></span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter for 2024 and aggregate to monthly means</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>weather_2024_monthly <span class="ot">&lt;-</span> weather_data <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">year</span>(Date) <span class="sc">==</span> <span class="dv">2024</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Month =</span> <span class="fu">floor_date</span>(Date, <span class="st">"month"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Station, Region, Month) <span class="sc">%&gt;%</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">`</span><span class="at">Mean Temperature (°C)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">mean</span>(<span class="st">`</span><span class="at">Mean Temperature (°C)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Geofacet plot for 2024</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(weather_2024_monthly, <span class="fu">aes</span>(<span class="at">x =</span> Month, <span class="at">y =</span> <span class="st">`</span><span class="at">Mean Temperature (°C)</span><span class="st">`</span>, <span class="at">color =</span> Region)) <span class="sc">+</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_geo</span>(<span class="sc">~</span> Station, <span class="at">grid =</span> custom_grid) <span class="sc">+</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Monthly Mean Temperature by Station (2024)"</span>,</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Month"</span>, <span class="at">y =</span> <span class="st">"Mean Temperature (°C)"</span>) <span class="sc">+</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_date</span>(<span class="at">date_labels =</span> <span class="st">"%b"</span>, <span class="at">date_breaks =</span> <span class="st">"1 month"</span>) <span class="sc">+</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Note: You provided a user-specified grid. If this is a generally-useful
   grid, please consider submitting it to become a part of the geofacet
@@ -555,8 +557,41 @@ date  (1): Date
 </div>
 </div>
 </section>
-<section id="monthly-total-rainfall-by-station-2024" class="level3">
-<h3 class="anchored" data-anchor-id="monthly-total-rainfall-by-station-2024">Monthly Total Rainfall by Station (2024)</h3>
+<section id="monthly-total-rainfall-by-station-2024" class="level2">
+<h2 class="anchored" data-anchor-id="monthly-total-rainfall-by-station-2024">6. Monthly Total Rainfall by Station (2024)</h2>
+<p>Filter for desired year (eg. 2024).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate to monthly total rainfall for 2024</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>rainfall_2024 <span class="ot">&lt;-</span> weather_data <span class="sc">%&gt;%</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">year</span>(Date) <span class="sc">==</span> <span class="dv">2024</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Month =</span> <span class="fu">floor_date</span>(Date, <span class="st">"month"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Station, Region, Month) <span class="sc">%&gt;%</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">`</span><span class="at">Daily Rainfall Total (mm)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">Daily Rainfall Total (mm)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Geofacet bar chart with abbreviated month labels</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(rainfall_2024, <span class="fu">aes</span>(<span class="at">x =</span> Month, <span class="at">y =</span> <span class="st">`</span><span class="at">Daily Rainfall Total (mm)</span><span class="st">`</span>, <span class="at">color =</span> Region)) <span class="sc">+</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_geo</span>(<span class="sc">~</span> Station, <span class="at">grid =</span> custom_grid) <span class="sc">+</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Monthly Total Rainfall by Station (2024)"</span>,</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Month"</span>, <span class="at">y =</span> <span class="st">"Total Rainfall (mm)"</span>) <span class="sc">+</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_date</span>(<span class="at">date_labels =</span> <span class="st">"%b"</span>, <span class="at">date_breaks =</span> <span class="st">"1 month"</span>) <span class="sc">+</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Note: You provided a user-specified grid. If this is a generally-useful
+  grid, please consider submitting it to become a part of the geofacet
+  package. You can do this easily by calling:
+  grid_submit(__grid_df_name__)</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Take-home_Ex03_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate to monthly total rainfall for 2024</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>rainfall_2024 <span class="ot">&lt;-</span> weather_data <span class="sc">%&gt;%</span></span>
@@ -566,8 +601,8 @@ date  (1): Date
 <span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">`</span><span class="at">Daily Rainfall Total (mm)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">Daily Rainfall Total (mm)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
 <span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Geofacet bar chart with abbreviated month labels</span></span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(rainfall_2024, <span class="fu">aes</span>(<span class="at">x =</span> Month, <span class="at">y =</span> <span class="st">`</span><span class="at">Daily Rainfall Total (mm)</span><span class="st">`</span>, <span class="at">color =</span> Region)) <span class="sc">+</span></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(rainfall_2024, <span class="fu">aes</span>(<span class="at">x =</span> Month, <span class="at">y =</span> <span class="st">`</span><span class="at">Daily Rainfall Total (mm)</span><span class="st">`</span>, <span class="at">fill =</span> Region)) <span class="sc">+</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
 <span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_geo</span>(<span class="sc">~</span> Station, <span class="at">grid =</span> custom_grid) <span class="sc">+</span></span>
 <span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
 <span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Monthly Total Rainfall by Station (2024)"</span>,</span>
@@ -584,29 +619,30 @@ date  (1): Date
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Take-home_Ex03_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Take-home_Ex03_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
+</section>
+<section id="monthly-climatology-average-across-years" class="level2">
+<h2 class="anchored" data-anchor-id="monthly-climatology-average-across-years">7. Monthly Climatology (Average Across Years)</h2>
+<p>This plot answers the question: “What’s a typical temperature like in each month for each part of Singapore?”</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate to monthly total rainfall for 2024</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>rainfall_2024 <span class="ot">&lt;-</span> weather_data <span class="sc">%&gt;%</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">year</span>(Date) <span class="sc">==</span> <span class="dv">2024</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Month =</span> <span class="fu">floor_date</span>(Date, <span class="st">"month"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Station, Region, Month) <span class="sc">%&gt;%</span></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">`</span><span class="at">Daily Rainfall Total (mm)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">Daily Rainfall Total (mm)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Geofacet bar chart with abbreviated month labels</span></span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(rainfall_2024, <span class="fu">aes</span>(<span class="at">x =</span> Month, <span class="at">y =</span> <span class="st">`</span><span class="at">Daily Rainfall Total (mm)</span><span class="st">`</span>, <span class="at">fill =</span> Region)) <span class="sc">+</span></span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_geo</span>(<span class="sc">~</span> Station, <span class="at">grid =</span> custom_grid) <span class="sc">+</span></span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Monthly Total Rainfall by Station (2024)"</span>,</span>
-<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Month"</span>, <span class="at">y =</span> <span class="st">"Total Rainfall (mm)"</span>) <span class="sc">+</span></span>
-<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_date</span>(<span class="at">date_labels =</span> <span class="st">"%b"</span>, <span class="at">date_breaks =</span> <span class="st">"1 month"</span>) <span class="sc">+</span></span>
-<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>weather_climatology <span class="ot">&lt;-</span> weather_data <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">year</span>(Date) <span class="sc">%in%</span> <span class="dv">2020</span><span class="sc">:</span><span class="dv">2024</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Month_Label =</span> <span class="fu">month</span>(Date, <span class="at">label =</span> <span class="cn">TRUE</span>, <span class="at">abbr =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Station, Region, Month_Label) <span class="sc">%&gt;%</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">`</span><span class="at">Avg Temp (2020–2024)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">mean</span>(<span class="st">`</span><span class="at">Mean Temperature (°C)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(weather_climatology, <span class="fu">aes</span>(<span class="at">x =</span> Month_Label, <span class="at">y =</span> <span class="st">`</span><span class="at">Avg Temp (2020–2024)</span><span class="st">`</span>, <span class="at">fill =</span> Region)) <span class="sc">+</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_geo</span>(<span class="sc">~</span> Station, <span class="at">grid =</span> custom_grid) <span class="sc">+</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Monthly Climatology (2020–2024) by Station"</span>,</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Month"</span>, <span class="at">y =</span> <span class="st">"Avg Temperature (°C)"</span>) <span class="sc">+</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">7</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Note: You provided a user-specified grid. If this is a generally-useful
   grid, please consider submitting it to become a part of the geofacet
@@ -616,14 +652,219 @@ date  (1): Date
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Take-home_Ex03_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Take-home_Ex03_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-
-
 </section>
+<section id="extreme-rainfall-events-count" class="level2">
+<h2 class="anchored" data-anchor-id="extreme-rainfall-events-count">8. Extreme Rainfall Events Count</h2>
+<p>Filter for 2024 (or a desired range), then define an extreme rainfall threshold (e.g., &gt; 80mm). This plot shows the frequency of days with heavy rainfall (&gt;80mm, for example).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define threshold</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>extreme_threshold <span class="ot">&lt;-</span> <span class="dv">80</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare base data with month labels</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>extreme_rainfall <span class="ot">&lt;-</span> weather_data <span class="sc">%&gt;%</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">year</span>(Date) <span class="sc">==</span> <span class="dv">2024</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Month =</span> <span class="fu">floor_date</span>(Date, <span class="st">"month"</span>),</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">Month_Label =</span> <span class="fu">factor</span>(<span class="fu">format</span>(Month, <span class="st">"%b"</span>), <span class="at">levels =</span> month.abb)) <span class="sc">%&gt;%</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Daily Rainfall Total (mm)</span><span class="st">`</span> <span class="sc">&gt;</span> extreme_threshold) <span class="sc">%&gt;%</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Station, Region, Month_Label) <span class="sc">%&gt;%</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">`</span><span class="at">Extreme Rainfall Days</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">complete</span>(Station, Region, <span class="at">Month_Label =</span> <span class="fu">factor</span>(month.abb, <span class="at">levels =</span> month.abb), <span class="at">fill =</span> <span class="fu">list</span>(<span class="st">`</span><span class="at">Extreme Rainfall Days</span><span class="st">`</span> <span class="ot">=</span> <span class="dv">0</span>))</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(extreme_rainfall, <span class="fu">aes</span>(<span class="at">x =</span> Month_Label, <span class="at">y =</span> <span class="st">`</span><span class="at">Extreme Rainfall Days</span><span class="st">`</span>, <span class="at">fill =</span> Region)) <span class="sc">+</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_geo</span>(<span class="sc">~</span> Station, <span class="at">grid =</span> custom_grid) <span class="sc">+</span></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Extreme Rainfall Events by Station (2024)"</span>,</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="fu">paste0</span>(<span class="st">"Days with rainfall &gt; "</span>, extreme_threshold, <span class="st">"mm"</span>),</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Month"</span>, <span class="at">y =</span> <span class="st">"Number of Extreme Rainfall Days"</span>) <span class="sc">+</span></span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">7</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Note: You provided a user-specified grid. If this is a generally-useful
+  grid, please consider submitting it to become a part of the geofacet
+  package. You can do this easily by calling:
+  grid_submit(__grid_df_name__)</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Take-home_Ex03_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="dry-vs-wet-days-per-month" class="level2">
+<h2 class="anchored" data-anchor-id="dry-vs-wet-days-per-month">9. Dry vs Wet Days Per Month</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Categorize days as 'Dry' or 'Wet' and count per month</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>dry_wet_days <span class="ot">&lt;-</span> weather_data <span class="sc">%&gt;%</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">year</span>(Date) <span class="sc">==</span> <span class="dv">2024</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Month =</span> <span class="fu">floor_date</span>(Date, <span class="st">"month"</span>),</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">Month_Label =</span> <span class="fu">factor</span>(<span class="fu">format</span>(Month, <span class="st">"%b"</span>), <span class="at">levels =</span> month.abb),</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">RainType =</span> <span class="fu">ifelse</span>(<span class="st">`</span><span class="at">Daily Rainfall Total (mm)</span><span class="st">`</span> <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="st">"Wet"</span>, <span class="st">"Dry"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Station, Region, Month_Label, RainType) <span class="sc">%&gt;%</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Days =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Geofacet stacked bar chart</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dry_wet_days, <span class="fu">aes</span>(<span class="at">x =</span> Month_Label, <span class="at">y =</span> Days, <span class="at">fill =</span> RainType)) <span class="sc">+</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_geo</span>(<span class="sc">~</span> Station, <span class="at">grid =</span> custom_grid) <span class="sc">+</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Dry"</span> <span class="ot">=</span> <span class="st">"skyblue"</span>, <span class="st">"Wet"</span> <span class="ot">=</span> <span class="st">"steelblue"</span>)) <span class="sc">+</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Dry vs Wet Days Per Month by Station (2024)"</span>,</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Month"</span>, <span class="at">y =</span> <span class="st">"Number of Days"</span>, <span class="at">fill =</span> <span class="st">"Day Type"</span>) <span class="sc">+</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">7</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Note: You provided a user-specified grid. If this is a generally-useful
+  grid, please consider submitting it to become a part of the geofacet
+  package. You can do this easily by calling:
+  grid_submit(__grid_df_name__)</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Take-home_Ex03_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="rainfall-anomalies-z-score-plot" class="level2">
+<h2 class="anchored" data-anchor-id="rainfall-anomalies-z-score-plot">10. Rainfall Anomalies (Z-score) plot</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Aggregate to monthly total rainfall</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>rainfall_monthly <span class="ot">&lt;-</span> weather_data <span class="sc">%&gt;%</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Year =</span> <span class="fu">year</span>(Date),</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">Month =</span> <span class="fu">floor_date</span>(Date, <span class="st">"month"</span>),</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">Month_Label =</span> <span class="fu">month</span>(Month, <span class="at">label =</span> <span class="cn">TRUE</span>, <span class="at">abbr =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Station, Region, Month, Year, Month_Label) <span class="sc">%&gt;%</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">`</span><span class="at">Monthly Rainfall (mm)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">Daily Rainfall Total (mm)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Calculate monthly mean &amp; SD for each Station + Month_Label (climatology)</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>rainfall_stats <span class="ot">&lt;-</span> rainfall_monthly <span class="sc">%&gt;%</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Station, Month_Label) <span class="sc">%&gt;%</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mean_Rainfall =</span> <span class="fu">mean</span>(<span class="st">`</span><span class="at">Monthly Rainfall (mm)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">SD_Rainfall =</span> <span class="fu">sd</span>(<span class="st">`</span><span class="at">Monthly Rainfall (mm)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 3: Join and compute Z-score</span></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>rainfall_anomalies <span class="ot">&lt;-</span> rainfall_monthly <span class="sc">%&gt;%</span></span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(rainfall_stats, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"Station"</span>, <span class="st">"Month_Label"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Z_Score =</span> (<span class="st">`</span><span class="at">Monthly Rainfall (mm)</span><span class="st">`</span> <span class="sc">-</span> Mean_Rainfall) <span class="sc">/</span> SD_Rainfall)</span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 4: Plot Z-scores for a specific year (e.g., 2024)</span></span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>rainfall_anomalies_2024 <span class="ot">&lt;-</span> rainfall_anomalies <span class="sc">%&gt;%</span></span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Year <span class="sc">==</span> <span class="dv">2024</span>)</span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
+<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(rainfall_anomalies_2024, <span class="fu">aes</span>(<span class="at">x =</span> Month_Label, <span class="at">y =</span> Z_Score, <span class="at">fill =</span> Z_Score <span class="sc">&gt;</span> <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"TRUE"</span> <span class="ot">=</span> <span class="st">"steelblue"</span>, <span class="st">"FALSE"</span> <span class="ot">=</span> <span class="st">"tomato"</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Drier"</span>, <span class="st">"Wetter"</span>)) <span class="sc">+</span></span>
+<span id="cb26-31"><a href="#cb26-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_geo</span>(<span class="sc">~</span> Station, <span class="at">grid =</span> custom_grid) <span class="sc">+</span></span>
+<span id="cb26-32"><a href="#cb26-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb26-33"><a href="#cb26-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Rainfall Anomalies by Station (2024)"</span>,</span>
+<span id="cb26-34"><a href="#cb26-34" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Z-score of Monthly Rainfall vs Historical Mean"</span>,</span>
+<span id="cb26-35"><a href="#cb26-35" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Month"</span>, <span class="at">y =</span> <span class="st">"Rainfall Z-score"</span>, <span class="at">fill =</span> <span class="st">"Anomaly"</span>) <span class="sc">+</span></span>
+<span id="cb26-36"><a href="#cb26-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb26-37"><a href="#cb26-37" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">7</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Note: You provided a user-specified grid. If this is a generally-useful
+  grid, please consider submitting it to become a part of the geofacet
+  package. You can do this easily by calling:
+  grid_submit(__grid_df_name__)</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Take-home_Ex03_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="hextile-map-total-rainfall-for-2024" class="level2">
+<h2 class="anchored" data-anchor-id="hextile-map-total-rainfall-for-2024">11. Hextile Map (Total Rainfall for 2024)</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>rainfall_total_2024 <span class="ot">&lt;-</span> weather_data <span class="sc">%&gt;%</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(lubridate<span class="sc">::</span><span class="fu">year</span>(Date) <span class="sc">==</span> <span class="dv">2024</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Station, Region) <span class="sc">%&gt;%</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">`</span><span class="at">Total Rainfall (mm)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">Daily Rainfall Total (mm)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(rainfall_total_2024, <span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">1</span>, <span class="at">y =</span> <span class="dv">1</span>, <span class="at">fill =</span> <span class="st">`</span><span class="at">Total Rainfall (mm)</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_geo</span>(<span class="sc">~</span> Station, <span class="at">grid =</span> custom_grid) <span class="sc">+</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> <span class="st">"lightblue"</span>, <span class="at">high =</span> <span class="st">"darkblue"</span>) <span class="sc">+</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Total Rainfall by Station (2024)"</span>,</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">"Rainfall (mm)"</span>) <span class="sc">+</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Note: You provided a user-specified grid. If this is a generally-useful
+  grid, please consider submitting it to become a part of the geofacet
+  package. You can do this easily by calling:
+  grid_submit(__grid_df_name__)</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Take-home_Ex03_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="hextile-map-mean-temperature-for-2024" class="level2">
+<h2 class="anchored" data-anchor-id="hextile-map-mean-temperature-for-2024">12. Hextile Map (Mean Temperature for 2024)</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>temperature_mean_2024 <span class="ot">&lt;-</span> weather_data <span class="sc">%&gt;%</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(lubridate<span class="sc">::</span><span class="fu">year</span>(Date) <span class="sc">==</span> <span class="dv">2024</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Station, Region) <span class="sc">%&gt;%</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">`</span><span class="at">Mean Temperature (°C)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">mean</span>(<span class="st">`</span><span class="at">Mean Temperature (°C)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(geofacet)</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(temperature_mean_2024, <span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">1</span>, <span class="at">y =</span> <span class="dv">1</span>, <span class="at">fill =</span> <span class="st">`</span><span class="at">Mean Temperature (°C)</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_geo</span>(<span class="sc">~</span> Station, <span class="at">grid =</span> custom_grid) <span class="sc">+</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> <span class="st">"mistyrose"</span>, <span class="at">high =</span> <span class="st">"darkred"</span>) <span class="sc">+</span></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Mean Temperature by Station (2024)"</span>,</span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">"Temperature (°C)"</span>) <span class="sc">+</span></span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Note: You provided a user-specified grid. If this is a generally-useful
+  grid, please consider submitting it to become a part of the geofacet
+  package. You can do this easily by calling:
+  grid_submit(__grid_df_name__)</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Take-home_Ex03_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="references" class="level1">
+<h1>References</h1>
+<p><a href="https://ryanhafen.com/blog/geofacet/" class="uri">https://ryanhafen.com/blog/geofacet/</a></p>
+
+
 </section>
 
 </main> <!-- /main -->
