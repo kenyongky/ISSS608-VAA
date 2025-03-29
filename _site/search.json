@@ -2342,6 +2342,20 @@
     "href": "Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html#visualising-the-data",
     "title": "Take-home Exercise 3",
     "section": "Visualising the data",
-    "text": "Visualising the data\n\ntmap_mode(\"view\")\n\nℹ tmap mode set to \"view\".\n\ntm_shape(rfdata_sf) +\n  tm_dots(fill = \"red\")"
+    "text": "Visualising the data\n\ntmap_mode(\"view\")\n\nℹ tmap mode set to \"view\".\n\ntm_shape(rfdata_sf) +\n  tm_dots(fill = \"red\")\n\n\n\n\n\n\ntmap_mode(\"view\")\n\nℹ tmap mode set to \"view\".\n\ntm_shape(mpsz2019) +\n  tm_borders() +\ntm_shape(rfdata_sf) +\n  tm_dots(fill = 'MONTHSUM')"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html#inverse-distance-weighted-idw",
+    "href": "Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html#inverse-distance-weighted-idw",
+    "title": "Take-home Exercise 3",
+    "section": "Inverse Distance Weighted (IDW)",
+    "text": "Inverse Distance Weighted (IDW)\n\nrfdata_sf &lt;- st_transform(rfdata_sf, crs = 3414)\n\n\n# Create a grid raster over the study area\ngrid &lt;- terra::rast(mpsz2019, nrows = 690, ncols = 1075)\n\n# Generate coordinates for each grid cell\nxy &lt;- terra::xyFromCell(grid, 1:ncell(grid))\n\n# Convert coordinates to sf points\ncoop &lt;- st_as_sf(as.data.frame(xy), coords = c(\"x\", \"y\"), crs = 3414)\n\n# Clip grid to area inside mpsz2019\ncoop &lt;- st_filter(coop, mpsz2019)\n\n\nidw_model &lt;- gstat(formula = MONTHSUM ~ 1,\n                   locations = rfdata_sf,\n                   nmax = 5,           \n                   set = list(idp = 2)) # Inverse distance power\n\n# Predict rainfall at grid points\ncoop &lt;- st_transform(coop, crs = st_crs(rfdata_sf))  \nidw_result &lt;- predict(idw_model, coop)\n\n[inverse distance weighted interpolation]\n\n\n\nidw_result$x &lt;- st_coordinates(idw_result)[, 1]\nidw_result$y &lt;- st_coordinates(idw_result)[, 2]\nidw_result$pred &lt;- idw_result$var1.pred\n\n# Rasterize predicted values back to the grid\nidw_raster &lt;- terra::rasterize(idw_result, grid, field = \"pred\", fun = \"mean\")\n\n\ntmap_mode(\"plot\")\n\nℹ tmap mode set to \"plot\".\n\ntm_shape(idw_raster) +\n  tm_raster(\n    col = \"mean\",  \n    col.scale = tm_scale_continuous(values = \"brewer.blues\"),\n    col.alpha = 0.7,\n    col.legend = tm_legend(title = \"Rainfall (mm)\")\n  ) +\n  tm_shape(mpsz2019) +\n  tm_borders() +\n  tm_title(\"IDW Interpolation of Feb 2024 Rainfall\") +\n  tm_layout(legend.outside = TRUE)\n\n[tm_raster()] Argument `col.alpha` unknown."
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html#kriging",
+    "href": "Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html#kriging",
+    "title": "Take-home Exercise 3",
+    "section": "Kriging",
+    "text": "Kriging\n\n# Create a gstat object\ng &lt;- gstat(formula = MONTHSUM ~ 1, data = rfdata_sf)\n\n# Compute experimental variogram\nv_emp &lt;- variogram(g)\n\n# Fit a theoretical variogram model \nv_model &lt;- fit.variogram(v_emp, model = vgm(\"Sph\"))  \n\nWarning in fit.variogram(v_emp, model = vgm(\"Sph\")): singular model in\nvariogram fit\n\n\n\n# Create Kriging model using fitted variogram\nkrig_model &lt;- gstat(formula = MONTHSUM ~ 1, \n                    data = rfdata_sf, \n                    model = v_model)\n\n# Predict on grid points (coop)\nkrig_result &lt;- predict(krig_model, coop)\n\n[using ordinary kriging]\n\n\n\nkrig_result$x &lt;- st_coordinates(krig_result)[, 1]\nkrig_result$y &lt;- st_coordinates(krig_result)[, 2]\nkrig_result$pred &lt;- krig_result$var1.pred\n\n# Rasterize to match the `grid` object\nkrig_raster &lt;- terra::rasterize(krig_result, grid, field = \"pred\", fun = \"mean\")\nnames(krig_raster) &lt;- \"kriged_rainfall\"\n\n\ntmap_mode(\"plot\")\n\nℹ tmap mode set to \"plot\".\n\ntm_shape(krig_raster) +\n  tm_raster(\n    col = \"kriged_rainfall\",\n    col.scale = tm_scale_continuous(values = \"brewer.blues\"),\n    col.legend = tm_legend(title = \"Rainfall (mm)\")\n  ) +\n  tm_shape(mpsz2019) +\n  tm_borders() +\n  tm_title(\"Kriging Interpolation of Feb 2024 Rainfall\") +\n  tm_layout(legend.outside = TRUE)"
   }
 ]

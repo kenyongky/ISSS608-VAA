@@ -5,7 +5,7 @@ author: "Kenneth Yong"
 
 # Overview
 
-To effectively explore and compare weather patterns across different locations in Singapore, this module leverages both geofacet and spatial interpolation techniques. 
+To effectively explore and compare weather patterns across different locations in Singapore, this module leverages both geofacet and spatial interpolation techniques.
 
 # Data Preparation
 
@@ -410,12 +410,10 @@ rfdata <- left_join(rain_summary, station_coords, by = "Station")
 
 ```
 
-
 ```{r}
 glimpse(rfdata)
 
 ```
-
 
 ## Convert to Geospatial Data
 
@@ -431,6 +429,131 @@ tm_shape(rfdata_sf) +
   tm_dots(fill = "red")
 ```
 
+```{r}
+tmap_mode("view")
+tm_shape(mpsz2019) +
+  tm_borders() +
+tm_shape(rfdata_sf) +
+  tm_dots(fill = 'MONTHSUM')
+```
+
+## Inverse Distance Weighted (IDW)
+
+```{r}
+rfdata_sf <- st_transform(rfdata_sf, crs = 3414)
+```
+
+```{r}
+
+# Create a grid raster over the study area
+grid <- terra::rast(mpsz2019, nrows = 690, ncols = 1075)
+
+# Generate coordinates for each grid cell
+xy <- terra::xyFromCell(grid, 1:ncell(grid))
+
+# Convert coordinates to sf points
+coop <- st_as_sf(as.data.frame(xy), coords = c("x", "y"), crs = 3414)
+
+# Clip grid to area inside mpsz2019
+coop <- st_filter(coop, mpsz2019)
+
+```
+
+```{r}
+idw_model <- gstat(formula = MONTHSUM ~ 1,
+                   locations = rfdata_sf,
+                   nmax = 5,           
+                   set = list(idp = 2)) # Inverse distance power
+
+# Predict rainfall at grid points
+coop <- st_transform(coop, crs = st_crs(rfdata_sf))  
+idw_result <- predict(idw_model, coop)
+
+```
+
+```{r}
+idw_result$x <- st_coordinates(idw_result)[, 1]
+idw_result$y <- st_coordinates(idw_result)[, 2]
+idw_result$pred <- idw_result$var1.pred
+
+# Rasterize predicted values back to the grid
+idw_raster <- terra::rasterize(idw_result, grid, field = "pred", fun = "mean")
+
+```
+
+```{r}
+
+tmap_mode("plot")
+
+tm_shape(idw_raster) +
+  tm_raster(
+    col = "mean",  
+    col.scale = tm_scale_continuous(values = "brewer.blues"),
+    col.alpha = 0.7,
+    col.legend = tm_legend(title = "Rainfall (mm)")
+  ) +
+  tm_shape(mpsz2019) +
+  tm_borders() +
+  tm_title("IDW Interpolation of Feb 2024 Rainfall") +
+  tm_layout(legend.outside = TRUE)
+
+```
+
+## Kriging
+
+```{r}
+
+# Create a gstat object
+g <- gstat(formula = MONTHSUM ~ 1, data = rfdata_sf)
+
+# Compute experimental variogram
+v_emp <- variogram(g)
+
+# Fit a theoretical variogram model 
+v_model <- fit.variogram(v_emp, model = vgm("Sph"))  
+
+```
+
+```{r}
+# Create Kriging model using fitted variogram
+krig_model <- gstat(formula = MONTHSUM ~ 1, 
+                    data = rfdata_sf, 
+                    model = v_model)
+
+# Predict on grid points (coop)
+krig_result <- predict(krig_model, coop)
+
+```
+
+```{r}
+krig_result$x <- st_coordinates(krig_result)[, 1]
+krig_result$y <- st_coordinates(krig_result)[, 2]
+krig_result$pred <- krig_result$var1.pred
+
+# Rasterize to match the `grid` object
+krig_raster <- terra::rasterize(krig_result, grid, field = "pred", fun = "mean")
+names(krig_raster) <- "kriged_rainfall"
+
+```
+
+```{r}
+tmap_mode("plot")
+
+tm_shape(krig_raster) +
+  tm_raster(
+    col = "kriged_rainfall",
+    col.scale = tm_scale_continuous(values = "brewer.blues"),
+    col.legend = tm_legend(title = "Rainfall (mm)")
+  ) +
+  tm_shape(mpsz2019) +
+  tm_borders() +
+  tm_title("Kriging Interpolation of Feb 2024 Rainfall") +
+  tm_layout(legend.outside = TRUE)
+
+```
+
 # References
 
 <https://ryanhafen.com/blog/geofacet/>
+
+<https://r4va.netlify.app/chap24>
