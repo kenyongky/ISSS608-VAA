@@ -2041,7 +2041,7 @@
     "href": "Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html",
     "title": "Take-home Exercise 3",
     "section": "",
-    "text": "We use geofacet to visualize weather data for Singapore across multiple stations in a geographically meaningful layout."
+    "text": "To effectively explore and compare weather patterns across different locations in Singapore, this module leverages both geofacet and spatial interpolation techniques."
   },
   {
     "objectID": "Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html#overview",
@@ -2328,7 +2328,7 @@
     "href": "Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html#user-defined-variables",
     "title": "Take-home Exercise 3",
     "section": "User-defined variables",
-    "text": "User-defined variables\nIn this example, we compute the total monthly rainfall from Daily Rainfall Total (mm) field for Feb 2024. On the shiny app, users will be able to select the variable and the month and year.\n\n# Summarise rainfall\nrain_summary &lt;- weather_data %&gt;%\n  mutate(Date = ymd(Date)) %&gt;%\n  filter(month(Date) == 2 & year(Date) == 2024) %&gt;%\n  group_by(Station) %&gt;%\n  summarise(MONTHSUM = sum(`Daily Rainfall Total (mm)`, na.rm = TRUE)) %&gt;%\n  ungroup()\n\n# Extract station coordinates\nstation_coords &lt;- weather_data %&gt;%\n  select(Station, Latitude, Longitude) %&gt;%\n  distinct()\n\n# Join rainfall summary with coordinates\nrfdata &lt;- left_join(rain_summary, station_coords, by = \"Station\")\n\n\nglimpse(rfdata)\n\nRows: 17\nColumns: 4\n$ Station   &lt;chr&gt; \"Admiralty\", \"Ang Mo Kio\", \"Changi\", \"Choa Chu Kang (South)\"…\n$ MONTHSUM  &lt;dbl&gt; 153.8, 150.0, 60.2, 207.8, 163.4, 70.6, 141.0, 156.4, 181.6,…\n$ Latitude  &lt;dbl&gt; 1.4439, 1.3793, 1.3678, 1.3729, 1.3318, 1.3133, 1.3458, 1.25…\n$ Longitude &lt;dbl&gt; 103.7854, 103.8500, 103.9823, 103.7224, 103.7762, 103.9620, …"
+    "text": "User-defined variables\nIn this prototype, we compute the total monthly rainfall from Daily Rainfall Total (mm) field for Feb 2024. On the shiny app, users will be able to select the variable and the month and year.\n\n# Summarise rainfall\nrain_summary &lt;- weather_data %&gt;%\n  mutate(Date = ymd(Date)) %&gt;%\n  filter(month(Date) == 2 & year(Date) == 2024) %&gt;%\n  group_by(Station) %&gt;%\n  summarise(MONTHSUM = sum(`Daily Rainfall Total (mm)`, na.rm = TRUE)) %&gt;%\n  ungroup()\n\n# Extract station coordinates\nstation_coords &lt;- weather_data %&gt;%\n  select(Station, Latitude, Longitude) %&gt;%\n  distinct()\n\n# Join rainfall summary with coordinates\nrfdata &lt;- left_join(rain_summary, station_coords, by = \"Station\")\n\n\nglimpse(rfdata)\n\nRows: 17\nColumns: 4\n$ Station   &lt;chr&gt; \"Admiralty\", \"Ang Mo Kio\", \"Changi\", \"Choa Chu Kang (South)\"…\n$ MONTHSUM  &lt;dbl&gt; 153.8, 150.0, 60.2, 207.8, 163.4, 70.6, 141.0, 156.4, 181.6,…\n$ Latitude  &lt;dbl&gt; 1.4439, 1.3793, 1.3678, 1.3729, 1.3318, 1.3133, 1.3458, 1.25…\n$ Longitude &lt;dbl&gt; 103.7854, 103.8500, 103.9823, 103.7224, 103.7762, 103.9620, …"
   },
   {
     "objectID": "Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html#convert-to-geospatial-data",
