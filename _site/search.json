@@ -2090,7 +2090,7 @@
     "href": "Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html#load-required-packages",
     "title": "Take-home Exercise 3",
     "section": "Load Required Packages",
-    "text": "Load Required Packages\n\npacman::p_load(tidyverse, geofacet, ggplot2, readr, dplyr, sf, sp, gstat, stars, raster, tmap, lubridate)"
+    "text": "Load Required Packages\n\npacman::p_load(tidyverse, geofacet, ggplot2, readr, sf, terra, gstat, automap, tmap, viridis, dplyr, lubridate)"
   },
   {
     "objectID": "Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html#import-the-dataset",
@@ -2308,5 +2308,40 @@
     "title": "Take-home Exercise 3",
     "section": "12. Hextile Map (Mean Temperature for 2024)",
     "text": "12. Hextile Map (Mean Temperature for 2024)\n\ntemperature_mean_2024 &lt;- weather_data %&gt;%\n  filter(lubridate::year(Date) == 2024) %&gt;%\n  group_by(Station, Region) %&gt;%\n  summarise(`Mean Temperature (°C)` = mean(`Mean Temperature (°C)`, na.rm = TRUE), .groups = \"drop\")\n\nlibrary(ggplot2)\nlibrary(geofacet)\n\nggplot(temperature_mean_2024, aes(x = 1, y = 1, fill = `Mean Temperature (°C)`)) +\n  geom_tile(color = \"white\") +\n  facet_geo(~ Station, grid = custom_grid) +\n  scale_fill_gradient(low = \"mistyrose\", high = \"darkred\") +\n  theme_void() +\n  labs(title = \"Mean Temperature by Station (2024)\",\n       fill = \"Temperature (°C)\") +\n  theme(strip.text = element_text(size = 9, face = \"bold\"),\n        legend.position = \"bottom\")\n\nNote: You provided a user-specified grid. If this is a generally-useful\n  grid, please consider submitting it to become a part of the geofacet\n  package. You can do this easily by calling:\n  grid_submit(__grid_df_name__)"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html#additional-preparation-for-spatial-interpolation",
+    "href": "Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html#additional-preparation-for-spatial-interpolation",
+    "title": "Take-home Exercise 3",
+    "section": "Additional Preparation for Spatial Interpolation",
+    "text": "Additional Preparation for Spatial Interpolation\nDownload KML file Master Plan 2019 Subzone Boundary (No Sea) (KML) from data.gov.sg and convert to SHP.\nlibrary(sf)\nkml_data &lt;- st_read(\"data/geospatial/MPSZ-2019.kml\")\nst_write(kml_data, \"data/geospatial/MPSZ-2019.shp\")"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html#importing-shapefile",
+    "href": "Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html#importing-shapefile",
+    "title": "Take-home Exercise 3",
+    "section": "Importing Shapefile",
+    "text": "Importing Shapefile\n\nmpsz2019 &lt;- st_read(dsn = \"data/geospatial\", \n                    layer = \"MPSZ-2019\") %&gt;%\n  st_transform(crs = 3414)\n\nReading layer `MPSZ-2019' from data source \n  `C:\\kenyongky\\ISSS608-VAA\\Take-home_Ex\\Take-home_Ex03\\data\\geospatial' \n  using driver `ESRI Shapefile'\nSimple feature collection with 332 features and 2 fields\nGeometry type: MULTIPOLYGON\nDimension:     XY\nBounding box:  xmin: 103.6057 ymin: 1.158699 xmax: 104.0885 ymax: 1.470775\nGeodetic CRS:  WGS 84"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html#user-defined-variables",
+    "href": "Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html#user-defined-variables",
+    "title": "Take-home Exercise 3",
+    "section": "User-defined variables",
+    "text": "User-defined variables\nIn this example, we compute the total monthly rainfall from Daily Rainfall Total (mm) field for Feb 2024. On the shiny app, users will be able to select the variable and the month and year.\n\n# Summarise rainfall\nrain_summary &lt;- weather_data %&gt;%\n  mutate(Date = ymd(Date)) %&gt;%\n  filter(month(Date) == 2 & year(Date) == 2024) %&gt;%\n  group_by(Station) %&gt;%\n  summarise(MONTHSUM = sum(`Daily Rainfall Total (mm)`, na.rm = TRUE)) %&gt;%\n  ungroup()\n\n# Extract station coordinates\nstation_coords &lt;- weather_data %&gt;%\n  select(Station, Latitude, Longitude) %&gt;%\n  distinct()\n\n# Join rainfall summary with coordinates\nrfdata &lt;- left_join(rain_summary, station_coords, by = \"Station\")\n\n\nglimpse(rfdata)\n\nRows: 17\nColumns: 4\n$ Station   &lt;chr&gt; \"Admiralty\", \"Ang Mo Kio\", \"Changi\", \"Choa Chu Kang (South)\"…\n$ MONTHSUM  &lt;dbl&gt; 153.8, 150.0, 60.2, 207.8, 163.4, 70.6, 141.0, 156.4, 181.6,…\n$ Latitude  &lt;dbl&gt; 1.4439, 1.3793, 1.3678, 1.3729, 1.3318, 1.3133, 1.3458, 1.25…\n$ Longitude &lt;dbl&gt; 103.7854, 103.8500, 103.9823, 103.7224, 103.7762, 103.9620, …"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html#convert-to-geospatial-data",
+    "href": "Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html#convert-to-geospatial-data",
+    "title": "Take-home Exercise 3",
+    "section": "Convert to Geospatial Data",
+    "text": "Convert to Geospatial Data\n\nrfdata_sf &lt;- st_as_sf(rfdata, coords = c(\"Longitude\", \"Latitude\"), crs = 4326)"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html#visualising-the-data",
+    "href": "Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html#visualising-the-data",
+    "title": "Take-home Exercise 3",
+    "section": "Visualising the data",
+    "text": "Visualising the data\n\ntmap_mode(\"view\")\n\nℹ tmap mode set to \"view\".\n\ntm_shape(rfdata_sf) +\n  tm_dots(fill = \"red\")"
   }
 ]

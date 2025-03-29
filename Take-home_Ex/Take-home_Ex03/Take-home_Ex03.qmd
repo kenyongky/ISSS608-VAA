@@ -5,16 +5,26 @@ author: "Kenneth Yong"
 
 # Overview
 
-We use `geofacet` to visualize weather data for Singapore across multiple stations in a geographically meaningful layout.
+To effectively explore and compare weather patterns across different locations in Singapore, this module leverages both geofacet and spatial interpolation techniques. 
 
 # Data Preparation
 
 The data preparation process is documented [here](https://weatherxplore.netlify.app/data_prep).
 
+## Additional Preparation for Spatial Interpolation
+
+Download KML file Master Plan 2019 Subzone Boundary (No Sea) (KML) from data.gov.sg and convert to SHP.
+
+``` r
+library(sf)
+kml_data <- st_read("data/geospatial/MPSZ-2019.kml")
+st_write(kml_data, "data/geospatial/MPSZ-2019.shp")
+```
+
 ## Load Required Packages
 
 ```{r}
-pacman::p_load(tidyverse, geofacet, ggplot2, readr, dplyr, sf, sp, gstat, stars, raster, tmap, lubridate)
+pacman::p_load(tidyverse, geofacet, ggplot2, readr, sf, terra, gstat, automap, tmap, viridis, dplyr, lubridate)
 ```
 
 ## Import the Dataset
@@ -53,9 +63,9 @@ custom_grid <- data.frame(
 )
 ```
 
-# Visualize the Data with `facet_geo()`
+# Geofacet
 
-Geofaceting with line graphs and bar charts.
+Geofacet is a visualization technique that arranges multiple small charts in a grid that mirrors the geographic layout of regions, making it easier to compare data across locations while preserving spatial context. In this module, we use geofacet to visualize monthly rainfall patterns and temperature across various weather stations in Singapore. Each panel represents a station's total rainfall or mean temperature, positioned approximately according to its actual location, allowing users to intuitively observe spatial differences and trends.
 
 ## 1. Monthly Mean Temperature:
 
@@ -362,6 +372,63 @@ ggplot(temperature_mean_2024, aes(x = 1, y = 1, fill = `Mean Temperature (°C)`)
        fill = "Temperature (°C)") +
   theme(strip.text = element_text(size = 9, face = "bold"),
         legend.position = "bottom")
+```
+
+# Spatial Interpolation
+
+Spatial interpolation is a technique used to estimate unknown values at specific geographic locations based on known values from surrounding areas. In this module, we apply spatial interpolation to predict rainfall at locations where no weather stations are present, using data from nearby stations. This allows us to generate a continuous surface of estimated rainfall across Singapore, filling in spatial gaps and providing a more comprehensive view of rainfall distribution. By integrating spatial interpolation into our visual analytics application, users can gain deeper insights into localized weather patterns and better understand the spatial dynamics of rainfall.
+
+## Importing Shapefile
+
+```{r}
+mpsz2019 <- st_read(dsn = "data/geospatial", 
+                    layer = "MPSZ-2019") %>%
+  st_transform(crs = 3414)
+```
+
+## User-defined variables
+
+In this prototype, we compute the total monthly rainfall from Daily Rainfall Total (mm) field for Feb 2024. On the shiny app, users will be able to select the variable and the month and year.
+
+```{r}
+# Summarise rainfall
+rain_summary <- weather_data %>%
+  mutate(Date = ymd(Date)) %>%
+  filter(month(Date) == 2 & year(Date) == 2024) %>%
+  group_by(Station) %>%
+  summarise(MONTHSUM = sum(`Daily Rainfall Total (mm)`, na.rm = TRUE)) %>%
+  ungroup()
+
+# Extract station coordinates
+station_coords <- weather_data %>%
+  select(Station, Latitude, Longitude) %>%
+  distinct()
+
+# Join rainfall summary with coordinates
+rfdata <- left_join(rain_summary, station_coords, by = "Station")
+
+
+```
+
+
+```{r}
+glimpse(rfdata)
+
+```
+
+
+## Convert to Geospatial Data
+
+```{r}
+rfdata_sf <- st_as_sf(rfdata, coords = c("Longitude", "Latitude"), crs = 4326)
+```
+
+## Visualising the data
+
+```{r}
+tmap_mode("view")
+tm_shape(rfdata_sf) +
+  tm_dots(fill = "red")
 ```
 
 # References
